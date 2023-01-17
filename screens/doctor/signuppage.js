@@ -136,18 +136,16 @@ const Signuppageview = ({navigation}) => {
     setPasswordtoggle(!passwordtoggle);
   };
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={styles.container}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View
           style={{
+            flex:1,
             alignItems: 'center',
-            justifyContent: 'center',
+            justifyContent: 'flex-start',
             flexDirection: 'column',
             backgroundColor: 'white',
           }}>
-          <View style={{...styles.container, height: '30%'}}>
+          <View style={{...styles.container}}>
             <Image
               source={require('../../resources/images/headmain.png')}
               resizeMode="cover"
@@ -192,7 +190,7 @@ const Signuppageview = ({navigation}) => {
           )}
         </View>
       </TouchableWithoutFeedback>
-    </KeyboardAvoidingView>
+    
   );
 };
 
