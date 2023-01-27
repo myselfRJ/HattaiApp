@@ -3,6 +3,7 @@ import { Provider, Modal,Text,Button,Portal,List} from 'react-native-paper';
 import { Pressable, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { horizontalScale, verticalScale } from '../screens/dim';
+import OtpComponent from './otpcomponent';
 const SelectModal=(props)=>{
 
     const containerStyle = {backgroundColor: 'white',
@@ -10,7 +11,7 @@ const SelectModal=(props)=>{
     bottom:0,
     left:0,
     width:"100%",
-    height:'40%',
+    height:verticalScale(660),
     justifyContent:'flex-start',
     alignItems:'center',
     borderTopLeftRadius:8,
@@ -24,22 +25,20 @@ padding:20};
 
           <Modal visible={props.visible} onDismiss={props.hideModal} 
           contentContainerStyle={containerStyle}>
-            <Text>Select Speciality</Text>
-            <View>
-           <TouchableOpacity style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',height:verticalScale(80),width:horizontalScale(240),padding:horizontalScale(20)}}>
-            <Icon name='rocket' size={40} color='#456743'/>
-            <Text>General Physician</Text>
-           </TouchableOpacity>
-           <TouchableOpacity style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',height:verticalScale(80),width:horizontalScale(400),padding:horizontalScale(20)}}>
-            <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
-            <Icon name='rocket' size={40} color='#4BA5FA'/>
-            <Text>General Physician</Text>
+           {
+            props.mode='otp'?  <OtpComponent phone={props.phone} 
+            signupserver={props.signupserver}
+            loading={props.loading}
+            setloading={props.loading}
+            
+            
+            />:null
+          
+           }
+            
+            
 
-            </View>
-            <Icon name='check' size={40} color='#158F22'/>
-           </TouchableOpacity>
-
-            </View>
+         
           
           </Modal>
 
