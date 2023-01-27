@@ -1,13 +1,14 @@
 import React from "react";
 import {StyleSheet} from 'react-native';
 import {Button} from 'react-native-paper';
+import {horizontalScale,verticalScale,moderateScale} from '../screens/dim';
 const Btn=(props)=>{
     return(
         <Button 
-        style={styles.BtnBG} 
+        style={props.BtnBG?props.BtnBG:styles.BtnBG} 
         mode="contained"
         labelStyle={props.labelStyle?props.labelStyle:styles.BtnText} 
-        contentStyle={styles.contentstyle}
+        contentStyle={props.contentStyle?props.contentStyle:styles.contentstyle}
       
         onPress={props.action}>
             {props.label}
@@ -31,18 +32,18 @@ const styles = StyleSheet.create({
         backgroundColor: '#4BA5FA',
         borderRadius:4,
         
-        height: 80,
-        width: 240
+        height:verticalScale(80),
+        width: horizontalScale(240)
     },
-    contentstyle:{
-        height: 80,
-        width: 240,
+    contentstyle:{  
+      height:verticalScale(80),
+      width: horizontalScale(240)
         
     },
     BtnText: {
     
   
-        fontSize: 24,
+        fontSize: moderateScale(24),
         lineHeight:32,
         fontWeight: 500,
         color: 'white',

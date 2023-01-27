@@ -1,11 +1,8 @@
 import * as React from 'react';
 import {
-  TextInput,
   Image,
-  StyleSheet,
   Text,
   View,
-  TouchableOpacity,
 } from 'react-native';
 import styles from './signupss';
 import Btn from './btn';
@@ -38,21 +35,23 @@ const SignupComponent = props => {
     <View style={styles.child}>
     <Inp 
         placeholder="Password"
-        password={true}
         contextMenuHidden={!props.passwordtoggle}
         value={props.password}
         secureTextEntry={!props.passwordtoggle}
         onChangeText={text => props.setPassword(text)}
+        pwdtoggle={()=>props.pwdtoggle()}
+        passwordtoggle={props.passwordtoggle}
         maxLength={20}
     />
     </View>
 
     <View style={styles.child}>
       <Inp placeholder="Renter Password"
-      password={true}
       value={props.password2}
       onChangeText={text => props.setPassword2(text)}
       maxLength={20}
+      pwdtoggle={()=>props.pwdtoggle()}
+      passwordtoggle={props.passwordtoggle}
       />
 
     </View>

@@ -3,7 +3,6 @@ import {
   Image,
   StyleSheet,
   View,
-  KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
@@ -11,6 +10,8 @@ import axios from 'axios';
 import LoginComponent from '../../components/logincomponent';
 import OtpComponent from '../../components/otpcomponent';
 import SignupComponent from '../../components/signupcomponent';
+import { pwdCheck } from '../../auth/pwdauth';
+import { horizontalScale, verticalScale } from '../dim';
 
 const Signuppageview = ({navigation}) => {
   const [phone, setPhone] = React.useState('');
@@ -35,38 +36,42 @@ const Signuppageview = ({navigation}) => {
     setPwdcolor(color_list[1]);
     setloading(false);
   };
-  const otpbtn = async () => {
-    //2 steps 1. display otp component 2. send post request
-    if (password === password2 && password && phone) {
-      setloading(!loading);
-      const data = await axios
-        .post(
-          'http://192.168.29.6:8000/api/v1/signup/doctor',
-          {
-            phone: phone,
-            password: password,
-            password2: password2,
-          },
-          {headers},
-        )
-        .then(function (response) {
-          console.log(response.data);
-          if (response.status === 201) {
-            setloading(false);
-            setPagenum(1);
-          } else {
-            erroredResponsse();
-            console.warn(response.data.message);
-          }
-        })
-        .catch(function (error) {
-          console.log(error);
-          erroredResponsse();
-        });
-    } else {
-      erroredResponsse();
-    }
-  };
+  const otpbtn=()=>{
+    var check=pwdCheck(password,password2)
+    console.log(check)
+  }
+  // const otpbtn = async () => {
+  //   //2 steps 1. display otp component 2. send post request
+  //   if (password === password2 && password && phone) {
+  //     setloading(!loading);
+  //     const data = await axios
+  //       .post(
+  //         'http://192.168.29.6:8000/api/v1/signup/doctor',
+  //         {
+  //           phone: phone,
+  //           password: password,
+  //           password2: password2,
+  //         },
+  //         {headers},
+  //       )
+  //       .then(function (response) {
+  //         console.log(response.data);
+  //         if (response.status === 201) {
+  //           setloading(false);
+  //           setPagenum(1);
+  //         } else {
+  //           erroredResponsse();
+  //           console.warn(response.data.message);
+  //         }
+  //       })
+  //       .catch(function (error) {
+  //         console.log(error);
+  //         erroredResponsse();
+  //       });
+  //   } else {
+  //     erroredResponsse();
+  //   }
+  // };
   const loginbtn = () => {
     setPagenum(3);
   };
@@ -148,7 +153,7 @@ const Signuppageview = ({navigation}) => {
           <View style={{...styles.container}}>
             <Image
               source={require('../../resources/images/headmain.png')}
-              resizeMode="cover"
+              style={{height:verticalScale(387),width:horizontalScale(834)}}
             />
           </View>
 
@@ -183,6 +188,8 @@ const Signuppageview = ({navigation}) => {
               phone={phone}
               password={password}
               setPassword={setPassword}
+              pwdtoggle={pwdtoggle}
+              passwordtoggle={passwordtoggle}
               setPhone={setPhone}
             />
           ) : (

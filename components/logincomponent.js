@@ -4,7 +4,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import styles from './signupss'
+import styles from './signupss';
 import Btn from './btn';
 import Inp from './inp';
 const LoginComponent = props => {
@@ -21,12 +21,16 @@ const LoginComponent = props => {
       </View>
    
       <View style={styles.child}>
-      <Inp placeholder="8218513243" />
+      <Inp placeholder="8218513243" 
+      onChangeText={text => props.setPhone(text)}
+      />
 
       </View>
       <View style={styles.child}>
       <Inp placeholder="Password"
-      password={true}/>
+      pwdtoggle={()=>props.pwdtoggle()}
+      onChangeText={text => props.setPassword(text)}
+      passwordtoggle={props.passwordtoggle}/>
 
       </View>
      <View style={styles.child}>
@@ -36,10 +40,9 @@ const LoginComponent = props => {
      </View>
      <Text style={styles.child}>
      Don’t have an account?
-     <Text style={{...styles.text2,fontWeight:'700'}} onPress={props.signupbtn}
-     > Signup </Text>
-    
-
+     <Text style={{...styles.text2,fontWeight:'700'}} onPress={props.signupbtn}>
+       Signup 
+       </Text>
      </Text>
    
    

@@ -1,41 +1,53 @@
-import React from 'react';
+import { useLinkProps } from '@react-navigation/native';
+import React,{useState}from 'react';
 import {View,Text,ScrollView, TouchableOpacity} from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import { horizontalScale, moderateScale, verticalScale } from '../screens/dim';
+import Addbtn from './addbtn';
 import Btn from './btn';
+import Datebtn from './datebtn';
 import DaySym from './daysym';
 import Inp from './inp';
 import styles from './signupss';
 
-const Adduser=()=>{
+const Adduser=(props)=>{
+  const [name,setName]=useState();
+  const [phone,setPhone]=useState();
+  const [email,setEmail]=useState();
+  const [role,setRole]=useState();
+  const [clinic,setClinic]=useState();
 
     return (
-        <View style={{margin:16}}>
+        <View style={styles.editprofile}>
         <ScrollView>
-        <Text style={{...styles.text,textAlign:'left',marginHorizontal:16}}>
+        <Text style={{...styles.text,textAlign:'left',marginTop:verticalScale(40)}}>
             Add User
         </Text>
         
         <View style={{justifyContent:'flex-start'}}>
            <View style={styles.child}>
-             <Inp placeholder='Full Name'/>
+             <Inp textAlign='left' placeholder='Full Name'/>
            </View>
            <View style={styles.child}>
-             <Inp placeholder='Phone Number'/>
+             <Inp textAlign='left' placeholder='Phone Number'/>
            </View>
           
            <View style={styles.child}>
-             <Inp placeholder='Email'/>
+             <Inp textAlign='left' placeholder='Email'/>
            </View>
            
            <View style={{...styles.child}}>
             
             
-            <Inp placeholder='Role'/>
+           <Datebtn name='account' text='Role' 
+           action={props.showModal}/>
          
             </View>
             <View style={{...styles.child}}>
             
             
-            <Inp placeholder='Clinic'/>
+            <Datebtn name='medical-bag' text='Clinic' 
+           action={props.showModal}/>
          
             </View>
            
@@ -45,15 +57,15 @@ const Adduser=()=>{
                 <Btn 
                 label='Skip'/>
                  <Btn 
-                label='Save'/>
+                label='Save' 
+                action={()=>{props.setComplete([true,true,true]);
+                  props.setMark('1111')}}/>
            </View>
            
           
         </View>
-        <TouchableOpacity style={{position:'absolute',right:80,top:400,height:80,width:80,borderRadius:40,backgroundColor:'#4BA5FA',justifyContent:'center',alignItems:'center'}}>
-<Text>Add</Text>
-        </TouchableOpacity>
-
+        <Addbtn text='Add user'/>
+      
         </ScrollView>
         </View>
     )

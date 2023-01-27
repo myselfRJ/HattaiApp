@@ -1,24 +1,30 @@
 import React from 'react';
 import { TextInput } from 'react-native-paper';
 import {StyleSheet} from 'react-native';
+import { verticalScale,horizontalScale,moderateScale} from '../screens/dim';
 
 const Inp=(props)=>{
   
     return(
         
         <TextInput 
-            style={styles.input}
+            style={{...styles.input,textAlign:props.textAlign?props.textAlign:'center'}}
             placeholder={props.placeholder}
             keyboardType={props.keyboardType}
             value={props.value}
             onChangeText={props.onChangeText}
             inputMode={props.inputMode}
-            maxLength={10}
+            maxLength={props.maxLength?props.maxLength:10}
             mode='outlined'
-            outlineColor='#000000'
+            placeholderTextColor='#797B7E'
+            outlineColor='#4BA5FA'
             activeOutlineColor='#4BA5FA'
-            secureTextEntry={ props.password?true:false}
-            right={props.password?<TextInput.Icon icon='eye'/>:null}
+            secureTextEntry={ props.passwordtoggle}
+            right={props.pwdtoggle?
+            <TextInput.Icon 
+            style={{fontSize:24}} 
+            onPress={props.pwdtoggle} 
+            icon={props.passwordtoggle?'eye':'eye-off'}/>:null}
         >
 
         </TextInput>
@@ -29,11 +35,10 @@ const styles = StyleSheet.create({
     
    
     input: {
-      height: 78,
-      width: 480,
+      height:verticalScale(78),
+      width: horizontalScale(480),
       borderRadius: 4,
-      textAlign:'center',
-      fontSize: 24,
+      fontSize: moderateScale(24),
       lineHeight:32,
       borderColor: '#4BA5FA',
 
