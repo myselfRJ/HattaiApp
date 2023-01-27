@@ -8,6 +8,7 @@ import ProfilePage from './screens/profile';
 import Editprofile from './screens/doctor/editprofile';
 import Dashboard from './screens/doctor/dashboard';
 import BookingApp from './screens/doctor/appointment';
+import Prescription from './screens/doctor/prescription';
 
 const Stack = createNativeStackNavigator();
 
@@ -17,6 +18,7 @@ function App(){
       <Stack.Navigator screenOptions={{
     headerShown: false
   }}>
+    <Stack.Screen name='Prescription' component={Prescription}/>
     {/* <Stack.Screen name="BookApp" component={BookingApp} /> */}
     {/* <Stack.Screen name="EditProfile" component={Editprofile} /> */}
     <Stack.Screen name="Signup" component={Signuppageview} />
