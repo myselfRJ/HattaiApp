@@ -12,6 +12,7 @@ import OtpComponent from '../../components/otpcomponent';
 import SignupComponent from '../../components/signupcomponent';
 import { pwdCheck } from '../../auth/pwdauth';
 import { horizontalScale, verticalScale } from '../dim';
+import SelectModal from '../../components/selectmodal';
 
 const Signuppageview = ({navigation}) => {
   const [phone, setPhone] = React.useState('');
@@ -19,9 +20,12 @@ const Signuppageview = ({navigation}) => {
   const [passwordtoggle, setPasswordtoggle] = React.useState(false);
   const [password2, setPassword2] = React.useState('');
   const [pagenum, setPagenum] = React.useState(0); //[0,1,2,3]=signup,otp,success,login
+  const [visible, setVisible] = React.useState(false);
   const [loading, setloading] = React.useState(false);
   color_list = ['#4BA5FA', 'red'];
   const [pwdcolor, setPwdcolor] = React.useState(color_list[0]);
+  const showModal = () => setVisible(true);
+  const hideModal = () => setVisible(false);
   React.useEffect(() => {
     console.log(pagenum);
     setloading(false);
@@ -39,6 +43,11 @@ const Signuppageview = ({navigation}) => {
   const otpbtn=()=>{
     var check=pwdCheck(password,password2)
     console.log(check)
+    if(check){
+      // setPagenum(1);
+      setVisible(!visible)
+
+    }
   }
   // const otpbtn = async () => {
   //   //2 steps 1. display otp component 2. send post request
@@ -142,6 +151,8 @@ const Signuppageview = ({navigation}) => {
   };
   return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+  
+         
         <View
           style={{
             flex:1,
@@ -150,6 +161,7 @@ const Signuppageview = ({navigation}) => {
             flexDirection: 'column',
             backgroundColor: 'white',
           }}>
+        
           <View style={{...styles.container}}>
             <Image
               source={require('../../resources/images/headmain.png')}
@@ -195,6 +207,20 @@ const Signuppageview = ({navigation}) => {
           ) : (
             <></>
           )}
+          <SelectModal visible={visible} 
+               mode='otp'
+              phone={phone} signupserver={signupserver}
+              loading={loading}
+              setloading={setloading}
+              showModal={showModal} 
+              hideModal={hideModal}/>
+          <SelectModal visible={visible} 
+               mode='login'
+              phone={phone} signupserver={signupserver}
+              loading={loading}
+              setloading={setloading}
+              showModal={showModal} 
+              hideModal={hideModal}/>
         </View>
       </TouchableWithoutFeedback>
     
