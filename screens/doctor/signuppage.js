@@ -154,6 +154,7 @@ const Signuppageview = ({navigation}) => {
             <Image
               source={require('../../resources/images/headmain.png')}
               style={{height:verticalScale(387),width:horizontalScale(834)}}
+              resizeMode="contain"
             />
           </View>
 
@@ -204,12 +205,13 @@ const Signuppageview = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    borderWidth:1
   },
   image: {
     flex: 1,
-    justifyContent: 'center',
+    // justifyContent: 'center',
   },
   text: {
     color: 'black',

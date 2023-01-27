@@ -50,7 +50,6 @@ const SignupComponent = props => {
       value={props.password2}
       onChangeText={text => props.setPassword2(text)}
       maxLength={20}
-      pwdtoggle={()=>props.pwdtoggle()}
       passwordtoggle={props.passwordtoggle}
       />
 

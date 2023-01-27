@@ -18,8 +18,9 @@ function App(){
     headerShown: false
   }}>
     {/* <Stack.Screen name="BookApp" component={BookingApp} /> */}
-    {/* <Stack.Screen name="EditProfile" component={Editprofile} /> */}
+ 
     <Stack.Screen name="Signup" component={Signuppageview} />
+       <Stack.Screen name="EditProfile" component={Editprofile} />
     <Stack.Screen name="Dashboard" component={Dashboard} />
 
     
