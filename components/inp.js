@@ -8,7 +8,10 @@ const Inp=(props)=>{
     return(
         
         <TextInput 
-            style={{...styles.input,textAlign:props.textAlign?props.textAlign:'center'}}
+            style={{...styles.input,
+                height:props.height?verticalScale(props.height):verticalScale(78),
+                width:props.width?horizontalScale(props.width):horizontalScale(480),
+                textAlign:props.textAlign?props.textAlign:'center'}}
             placeholder={props.placeholder}
             keyboardType={props.keyboardType}
             value={props.value}
@@ -35,8 +38,7 @@ const styles = StyleSheet.create({
     
    
     input: {
-      height:verticalScale(78),
-      width: horizontalScale(480),
+   
       borderRadius: 4,
       fontSize: moderateScale(24),
       lineHeight:32,
