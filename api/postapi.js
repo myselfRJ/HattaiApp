@@ -8,10 +8,8 @@ const PostApi = async (url,req_data) => {
  JSON.stringify(req_data),{headers}
     );
     console.log(result.status)
-    data = await result.json();
     // console.log(data);
-    data["status"]=result.status
   
-    return data;
+    return result;
   };
   export default PostApi;

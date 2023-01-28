@@ -23,13 +23,13 @@ padding:20};
     return (
 
 
-          <Modal visible={props.visible} onDismiss={props.hideModal} 
+          <Modal dismissable={true} visible={props.visible} onDismiss={props.hideModal} 
           contentContainerStyle={containerStyle}>
            {
             props.mode='otp'?  <OtpComponent phone={props.phone} 
             signupserver={props.signupserver}
             loading={props.loading}
-            setloading={props.loading}
+            setloading={props.setloading}
             
             
             />:null

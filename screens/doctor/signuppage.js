@@ -4,15 +4,16 @@ import {
   StyleSheet,
   View,
   TouchableWithoutFeedback,
-  Keyboard,
+  Keyboard
 } from 'react-native';
 import axios from 'axios';
 import LoginComponent from '../../components/logincomponent';
 import OtpComponent from '../../components/otpcomponent';
 import SignupComponent from '../../components/signupcomponent';
-import { pwdCheck } from '../../auth/pwdauth';
-import { horizontalScale, verticalScale } from '../dim';
+import {pwdCheck} from '../../auth/pwdauth';
+import {horizontalScale, verticalScale} from '../dim';
 import SelectModal from '../../components/selectmodal';
+import PostApi from '../../api/postapi';
 
 const Signuppageview = ({navigation}) => {
   const [phone, setPhone] = React.useState('');
@@ -22,117 +23,94 @@ const Signuppageview = ({navigation}) => {
   const [pagenum, setPagenum] = React.useState(0); //[0,1,2,3]=signup,otp,success,login
   const [visible, setVisible] = React.useState(false);
   const [loading, setloading] = React.useState(false);
-  color_list = ['#4BA5FA', 'red'];
-  const [pwdcolor, setPwdcolor] = React.useState(color_list[0]);
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
   React.useEffect(() => {
     console.log(pagenum);
     setloading(false);
     setPassword('');
-    setPwdcolor(color_list[0]);
+    setPassword2('');
   }, [pagenum]);
 
-  const headers = {
-    'Content-Type': 'application/json',
-  };
-  const erroredResponsse = () => {
-    setPwdcolor(color_list[1]);
+  const requestFailed = () => {
+    console.log('error');
     setloading(false);
   };
-  const otpbtn=()=>{
-    var check=pwdCheck(password,password2)
-    console.log(check)
-    if(check){
+  //function to call when signup button pressed on signup component and navigate to otp component
+  const otpbtn = () => {
+    var check = pwdCheck(password, password2);
+    console.log(check);
+    if (check) {
       // setPagenum(1);
-      setVisible(!visible)
-
+      data = {
+        phone: phone,
+        password: password,
+        password2: password2,
+      };
+      setloading(!loading);
+      PostApi('signup/doctor', data)
+        .then(function (response) {
+          console.log(response.data);
+          if (response.status === 201) {
+            setloading(false);
+            setVisible(!visible);
+          } else {
+            requestFailed();
+          }
+        })
+        .catch(function (error) {
+          requestFailed();
+          console.log(error.response.data, 'l');
+        });
     }
-  }
-  // const otpbtn = async () => {
-  //   //2 steps 1. display otp component 2. send post request
-  //   if (password === password2 && password && phone) {
-  //     setloading(!loading);
-  //     const data = await axios
-  //       .post(
-  //         'http://192.168.29.6:8000/api/v1/signup/doctor',
-  //         {
-  //           phone: phone,
-  //           password: password,
-  //           password2: password2,
-  //         },
-  //         {headers},
-  //       )
-  //       .then(function (response) {
-  //         console.log(response.data);
-  //         if (response.status === 201) {
-  //           setloading(false);
-  //           setPagenum(1);
-  //         } else {
-  //           erroredResponsse();
-  //           console.warn(response.data.message);
-  //         }
-  //       })
-  //       .catch(function (error) {
-  //         console.log(error);
-  //         erroredResponsse();
-  //       });
-  //   } else {
-  //     erroredResponsse();
-  //   }
-  // };
+  };
+ // login text press function in signupcomponent to enable logincomponent
   const loginbtn = () => {
     setPagenum(3);
   };
+  // signup text press function in logincomponent to enable signupcomponent
   const signupbtn = () => {
     setPagenum(0);
   };
+  //function to make login request to server to fetch tokens
   const loginserver = async () => {
     setloading(!loading);
     {
       phone && password
-        ? await axios
-            .post(
-              'http://192.168.29.6:8000/api/v1/signup/token/',
+        ? PostApi('signup/token/',
               {
                 phone_number: phone,
                 password: password,
-              },
-              {headers},
+              }
             )
             .then(function (response) {
               console.log(response.data);
               setloading(false);
-              setPwdcolor(color_list[0]);
               navigation.navigate('Profile', {name: 'Jane'});
             })
             .catch(function (error) {
               console.log(error);
-              erroredResponsse();
+              requestFailed();
             })
-        : erroredResponsse();
+        : requestFailed();
     }
     //
   };
   const signupserver = async (phone, otp) => {
     setloading(!loading);
-    console.log(phone,otp)
+    console.log(phone, otp, 'phone otp');
     {
       phone && otp
-        ? await axios
-            .post(
-              'http://192.168.29.6:8000/api/v1/signup/otp',
+        ? PostApi('signup/otp',
               {
                 phone: phone,
                 otp: otp,
-              },
-              {headers},
+              }
             )
             .then(function (response) {
               console.log(response.data);
               if (response.data['status'] === 'success') {
                 setloading(false);
-                setPwdcolor(color_list[0]);
                 navigation.navigate('Profile', {name: 'Jane'});
               } else {
                 console.warn(response.data.message);
@@ -140,9 +118,9 @@ const Signuppageview = ({navigation}) => {
             })
             .catch(function (error) {
               console.log(error);
-              erroredResponsse();
+              requestFailed();
             })
-        : erroredResponsse();
+        : requestFailed();
     }
     //
   };
@@ -150,81 +128,75 @@ const Signuppageview = ({navigation}) => {
     setPasswordtoggle(!passwordtoggle);
   };
   return (
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-  
-         
-        <View
-          style={{
-            flex:1,
-            alignItems: 'center',
-            justifyContent: 'flex-start',
-            flexDirection: 'column',
-            backgroundColor: 'white',
-          }}>
-        
-          <View style={{...styles.container}}>
-            <Image
-              source={require('../../resources/images/headmain.png')}
-              style={{height:verticalScale(387),width:horizontalScale(834)}}
-              resizeMode="contain"
-            />
-          </View>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View
+        style={{
+          flex: 1,
+          alignItems: 'center',
+          justifyContent: 'flex-start',
+          flexDirection: 'column',
+          backgroundColor: 'white',
+        }}>
+        <View style={{...styles.container}}>
+          <Image
+            source={require('../../resources/images/headmain.png')}
+            style={{height: verticalScale(387), width: horizontalScale(834)}}
+            resizeMode="contain"
+          />
+        </View>
 
-          {pagenum === 0 ? (
-            <SignupComponent
-              phone={phone}
-              password={password}
-              setPassword={setPassword}
-              setPhone={setPhone}
-              password2={password2}
-              setPassword2={setPassword2}
-              loginbtn={loginbtn}
-              pwdcolor={pwdcolor}
-              otpbtn={otpbtn}
-              pwdtoggle={pwdtoggle}
-              passwordtoggle={passwordtoggle}
-            />
-          ) : (
-            <></>
-          )}
-          {pagenum === 1 ? (
-            <OtpComponent phone={phone} signupserver={signupserver} />
-          ) : (
-            <></>
-          )}
-          {pagenum === 3 ? (
-            <LoginComponent
-              signupbtn={signupbtn}
-              loginserver={loginserver}
-              loading={loading}
-              pwdcolor={pwdcolor}
-              phone={phone}
-              password={password}
-              setPassword={setPassword}
-              pwdtoggle={pwdtoggle}
-              passwordtoggle={passwordtoggle}
-              setPhone={setPhone}
-            />
-          ) : (
-            <></>
-          )}
-          <SelectModal visible={visible} 
-               mode='otp'
-              phone={phone} signupserver={signupserver}
-              loading={loading}
-              setloading={setloading}
-              showModal={showModal} 
-              hideModal={hideModal}/>
-          <SelectModal visible={visible} 
+        {pagenum === 0 ? (
+          <SignupComponent
+            phone={phone}
+            loading={loading}
+            password={password}
+            setPassword={setPassword}
+            setPhone={setPhone}
+            password2={password2}
+            setPassword2={setPassword2}
+            loginbtn={loginbtn}
+            otpbtn={otpbtn}
+            pwdtoggle={pwdtoggle}
+            passwordtoggle={passwordtoggle}
+          />
+        ) : (
+          <></>
+        )}
+
+        {pagenum === 3 ? (
+          <LoginComponent
+            signupbtn={signupbtn}
+            loginserver={loginserver}
+            loading={loading}
+            phone={phone}
+            password={password}
+            setPassword={setPassword}
+            pwdtoggle={pwdtoggle}
+            passwordtoggle={passwordtoggle}
+            setPhone={setPhone}
+          />
+        ) : (
+          <></>
+        )}
+        <SelectModal
+          visible={visible}
+          mode="otp"
+          phone={phone}
+          signupserver={signupserver}
+          loading={loading}
+          setloading={setloading}
+          showModal={showModal}
+          hideModal={hideModal}
+        />
+        {/* <SelectModal visible={visible} 
                mode='login'
               phone={phone} signupserver={signupserver}
               loading={loading}
               setloading={setloading}
               showModal={showModal} 
-              hideModal={hideModal}/>
-        </View>
-      </TouchableWithoutFeedback>
-    
+              hideModal={hideModal}/> */}
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -233,7 +205,8 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
-    borderWidth:1
+    borderWidth: 1,
+    backgroundColor:'#4BA5FA'
   },
   image: {
     flex: 1,

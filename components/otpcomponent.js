@@ -13,7 +13,7 @@ import Inp from './inp';
 
 const OtpComponent = props => {
   const [otp, setOtp] = React.useState('');
-  const [counter, setCounter] = React.useState(45);
+  const [counter, setCounter] = React.useState(5);
   {
     counter > 0
       ? setTimeout(() => {
@@ -77,15 +77,11 @@ const OtpComponent = props => {
           
         </View>
         <View style={{alignItems:"center"}}>
-        <Btn label='Send' action={() => {
+        {props.loading?<ActivityIndicator size={32} color='#4BA5FA'/>:<Btn label='Send' action={() => {
           console.log('pressed');
           props.signupserver(props.phone, otp);
-        }}/>
+        }}/>}
 
-        
-        </View>
-        <View style={{marginVertical:verticalScale(16)}}>
-        {props.loading?<ActivityIndicator size={32} color='#4BA5FA'/>:null}
         </View>
         
        
