@@ -4,6 +4,7 @@ import { Pressable, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { horizontalScale, verticalScale } from '../screens/dim';
 import OtpComponent from './otpcomponent';
+import DrugsName from './drugselection';
 const SelectModal=(props)=>{
 
     const containerStyle = {backgroundColor: 'white',
@@ -26,14 +27,17 @@ padding:20};
           <Modal visible={props.visible} onDismiss={props.hideModal} 
           contentContainerStyle={containerStyle}>
            {
-            props.mode='otp'?  <OtpComponent phone={props.phone} 
+            props.mode=='otp'? <OtpComponent phone={props.phone} 
             signupserver={props.signupserver}
             loading={props.loading}
             setloading={props.loading}
             
             
-            />:null
+            />:<></>
           
+           }
+           {
+            props.mode=='drug'?<DrugsName/>:null
            }
             
             
