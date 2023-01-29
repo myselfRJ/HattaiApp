@@ -38,12 +38,14 @@ padding:20};
           
            }
            {
-            props.mode=='drug'&&<DrugsName/>
+            props.mode=='drug'?
+            <DrugsName index={props.index}
+                hideModal={props.hideModal}
+                medication={props.medication}
+                setMedication={props.setMedication}
+            />:null
            }
-           {
-            props.mode=='timing'&&<ClinicTiming onTimeSelect={props.onTimeSelect}/>
-           }
-            
+            { props.mode=='timing'&&<ClinicTiming onTimeSelect={props.onTimeSelect}/>}
             
 
          
