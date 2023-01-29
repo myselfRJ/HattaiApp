@@ -9,6 +9,7 @@ const Btn=(props)=>{
         mode="contained"
         labelStyle={props.labelStyle?props.labelStyle:styles.BtnText} 
         contentStyle={props.contentStyle?props.contentStyle:styles.contentstyle}
+        icon={props.icon?props.icon:null}
       
         onPress={props.action}>
             {props.label}

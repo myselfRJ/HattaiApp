@@ -18,16 +18,18 @@ function App(){
       <Stack.Navigator screenOptions={{
     headerShown: false
   }}>
-    <Stack.Screen name='Prescription' component={Prescription}/>
+      {/* <Stack.Screen name="EditProfile" component={Editprofile} /> */}
+     {/* <Stack.Screen name="Dashboard" component={Dashboard} /> */}
+      <Stack.Screen name='Prescription' component={Prescription}/>
     {/* <Stack.Screen name="BookApp" component={BookingApp} /> */}
  
-    <Stack.Screen name="Signup" component={Signuppageview} />
-       <Stack.Screen name="EditProfile" component={Editprofile} />
-    <Stack.Screen name="Dashboard" component={Dashboard} />
+      <Stack.Screen name="Signup" component={Signuppageview} />
+     
+   
 
     
     
-  <Stack.Screen name="Profile" component={ProfilePage} />
+    <Stack.Screen name="Profile" component={ProfilePage} />
 
   </Stack.Navigator>
   </NavigationContainer>

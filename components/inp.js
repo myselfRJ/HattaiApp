@@ -11,6 +11,7 @@ const Inp=(props)=>{
             style={{...styles.input,
                 height:props.height?verticalScale(props.height):verticalScale(78),
                 width:props.width?horizontalScale(props.width):horizontalScale(480),
+                fontSize: props.fontSize?moderateScale(props.fontSize):moderateScale(24),
                 textAlign:props.textAlign?props.textAlign:'center'}}
             placeholder={props.placeholder}
             keyboardType={props.keyboardType}
@@ -40,7 +41,7 @@ const styles = StyleSheet.create({
     input: {
    
       borderRadius: 4,
-      fontSize: moderateScale(24),
+      
       lineHeight:32,
       borderColor: '#4BA5FA',
 

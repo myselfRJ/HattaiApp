@@ -9,7 +9,7 @@ const MuInp=(props)=>{
         mode='outlined'
         style={styles.textinp}
         multiline={true}
-        placeholder='Diagnosis'
+        placeholder={props.placeholder}
         outlineColor='#4BA5FA'
             activeOutlineColor='#4BA5FA'
         />

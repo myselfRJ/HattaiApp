@@ -37,7 +37,12 @@ padding:20};
           
            }
            {
-            props.mode=='drug'?<DrugsName/>:null
+            props.mode=='drug'?
+            <DrugsName index={props.index}
+                hideModal={props.hideModal}
+                medication={props.medication}
+                setMedication={props.setMedication}
+            />:null
            }
             
             
