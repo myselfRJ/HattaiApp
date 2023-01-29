@@ -6,6 +6,7 @@ import { horizontalScale, verticalScale } from '../screens/dim';
 import OtpComponent from './otpcomponent';
 import DrugsName from './drugselection';
 import Refers from './refers';
+import ClinicTiming from './clinictimeselection';
 const SelectModal=(props)=>{
 
     const containerStyle = {backgroundColor: 'white',
@@ -28,30 +29,31 @@ padding:20};
           <Modal dismissable={true} visible={props.visible} onDismiss={props.hideModal} 
           contentContainerStyle={containerStyle}>
            {
-            props.mode=='otp'? <OtpComponent phone={props.phone} 
+            props.mode=='otp'&& <OtpComponent phone={props.phone} 
             signupserver={props.signupserver}
             loading={props.loading}
             setloading={props.setloading}
             
             
-            />:<></>
+            />
           
            }
            {
-            props.mode=='drug'?
+            props.mode=='drug'&&
             <DrugsName index={props.index}
                 hideModal={props.hideModal}
                 medication={props.medication}
                 setMedication={props.setMedication}
-            />:null
+            />
            }
-           {props.mode=='Doctor'?
+           {props.mode=='Doctor'&&
            <Refers
            index={props.index}
             hideModal={props.hideModal}/>
-            :null
+           
            }
             
+            { props.mode=='timing'&&<ClinicTiming onTimeSelect={props.onTimeSelect}/>}
             
 
          

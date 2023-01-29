@@ -6,7 +6,6 @@ import {
   TouchableWithoutFeedback,
   Keyboard
 } from 'react-native';
-import axios from 'axios';
 import LoginComponent from '../../components/logincomponent';
 import OtpComponent from '../../components/otpcomponent';
 import SignupComponent from '../../components/signupcomponent';
@@ -14,8 +13,10 @@ import {pwdCheck} from '../../auth/pwdauth';
 import {horizontalScale, verticalScale} from '../dim';
 import SelectModal from '../../components/selectmodal';
 import PostApi from '../../api/postapi';
+import EncryptedStorage from 'react-native-encrypted-storage';
 
 const Signuppageview = ({navigation}) => {
+  
   const [phone, setPhone] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [passwordtoggle, setPasswordtoggle] = React.useState(false);
@@ -48,7 +49,7 @@ const Signuppageview = ({navigation}) => {
         password2: password2,
       };
       setloading(!loading);
-      PostApi('signup/doctor', data)
+      PostApi('signup/doctor', data,false)
         .then(function (response) {
           console.log(response.data);
           if (response.status === 201) {
@@ -75,18 +76,37 @@ const Signuppageview = ({navigation}) => {
   //function to make login request to server to fetch tokens
   const loginserver = async () => {
     setloading(!loading);
+    async function storeUserSession(data,phone) {
+      try {
+          await EncryptedStorage.setItem(
+              "user_session",
+              JSON.stringify({
+                  refresh : data["refresh"],
+                  token : data["access"],
+                  phone : phone,
+                  languages : ["fr", "en", "de"]
+              })
+          );
+  
+          // Congrats! You've just stored your first value!
+      } catch (error) {
+          // There was an error on the native side
+      }
+  }
     {
       phone && password
         ? PostApi('signup/token/',
               {
                 phone_number: phone,
                 password: password,
-              }
+              },false
             )
             .then(function (response) {
               console.log(response.data);
+              if (response.status===200){
               setloading(false);
-              navigation.navigate('Profile', {name: 'Jane'});
+              storeUserSession(response.data,phone);
+              navigation.navigate('Profile', {name: 'Jane'});}
             })
             .catch(function (error) {
               console.log(error);
@@ -105,7 +125,7 @@ const Signuppageview = ({navigation}) => {
               {
                 phone: phone,
                 otp: otp,
-              }
+              },false
             )
             .then(function (response) {
               console.log(response.data);

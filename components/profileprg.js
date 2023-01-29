@@ -12,7 +12,7 @@ const Profileprg=(props)=>{
             <View style={{...styles.circle,
                 borderWidth:props.mark==='100'?null:2,
                 borderColor:'#4BA5FA',
-                backgroundColor:props.mark==='100'||props.complete?"#4BA5FA":"#ffff"}}>  
+                backgroundColor:props.mark==='100'||props.complete[0]?"#4BA5FA":"#ffff"}}>  
                 {props.complete[0]?<Icon name='check' size={24} color="#fff" />:null}
             </View>
 
@@ -27,7 +27,7 @@ const Profileprg=(props)=>{
         style={{...styles.circle,
             borderWidth:props.mark==='110'?null:2,
             borderColor:'#4BA5FA',
-            backgroundColor:props.mark==='110'||props.complete?"#4BA5FA":"#ffff"}}>
+            backgroundColor:props.mark==='110'||props.complete[1]?"#4BA5FA":"#ffff"}}>
                  {props.complete[1]?<Icon name='check' size={24} color="#fff" />:null}
 
         </View>
@@ -47,7 +47,7 @@ const Profileprg=(props)=>{
             <Text style={props.style}>Add User</Text>
             <View style={{...styles.circle, borderWidth:props.mark==='111'?null:2,
         borderColor:'#4BA5FA',
-        backgroundColor:props.mark==='111'?"#4BA5FA":"#ffff"}}>
+        backgroundColor:props.mark==='111'||props.complete[2]?"#4BA5FA":"#ffff"}}>
 
             {props.complete[2]?<Icon name='check' size={24} color="#fff" />:null}
         </View>

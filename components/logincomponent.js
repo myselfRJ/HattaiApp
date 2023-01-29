@@ -8,6 +8,7 @@ import styles from './signupss';
 import Btn from './btn';
 import Inp from './inp';
 const LoginComponent = props => {
+  console.log(global.user_session,"user")
   return (
     <View style={styles.main}>
       <View style={styles.child}>
@@ -35,7 +36,7 @@ const LoginComponent = props => {
       </View>
      <View style={styles.child}>
      <Btn label='Login'
-     action={()=>props.signupbtn}/>
+     action={()=>props.loginserver()}/>
 
      </View>
      <Text style={styles.child}>

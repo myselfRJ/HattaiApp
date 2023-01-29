@@ -1,12 +1,12 @@
 import { useLinkProps } from "@react-navigation/native";
-import { StyleSheet,Pressabl, Pressable,Text } from "react-native";
+import { StyleSheet, Pressable,Text } from "react-native";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { horizontalScale, verticalScale, moderateScale } from "../screens/dim";
 
 const Datebtn=(props)=>{
 
     return (
-        <Pressable  onPress={props.action} style={{...styles.bg,width:props.width?props.width: horizontalScale(480)}}
+        <Pressable  onPress={()=>{props.action();console.log("pressed")}} style={{...styles.bg,width:props.width?props.width: horizontalScale(480)}}
        
         >
             <Text style={styles.text}>
