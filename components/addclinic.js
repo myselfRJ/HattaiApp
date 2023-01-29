@@ -1,7 +1,9 @@
 import { useLinkProps } from '@react-navigation/native';
 import React,{useEffect, useState} from 'react';
-import {View,Text,ScrollView, TouchableOpacity} from 'react-native';
+import {View,Text,ScrollView, TouchableOpacity,Image,Pressable,FlatList} from 'react-native';
+import { launchImageLibrary} from 'react-native-image-picker';
 import { verticalScale ,horizontalScale,moderateScale} from '../screens/dim';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ProfilePage from '../screens/profile';
 import Addbtn from './addbtn';
 import Btn from './btn';
@@ -9,14 +11,16 @@ import Datebtn from './datebtn';
 import DaySym from './daysym';
 import Inp from './inp';
 import styles from './signupss';
+import { IconButton } from 'react-native-paper';
 
 const Addclinic=(props)=>{
-  const [clinic,setClinic]=useState();
-  const [address,setAddress]=useState();
-  const [ctiming,setCtiming]=useState();
-  const [cfess,setCfess]=useState();
-  const [speciality,setSpeciality]=useState();
-  const [experience,setExperience]=useState();
+    const [clinicMulti,setclinicMulti] = useState([])
+    const [clinicName,setclinicName] = useState()
+    const [clinicAddress,setclinicAddress] = useState()
+    const [clinicTiming,setclinicTiming] = useState([])
+    const [clinicWeekEndTiming,setclinicWeekEndTiming] = useState([])
+    const [clinicFees,setclinicFees] = useState()
+    const [photo, setPhoto] = React.useState([]);
   const [daySelect,setDay]=useState([{day:'M',select:false},
                                       {day:'T',select:false},
                                       {day:'W',select:false},
@@ -30,7 +34,43 @@ const Addclinic=(props)=>{
     console.log('Hello world')
 
   },[daySelect])
-  
+
+
+
+  const handleChoosePhoto = () => {
+    launchImageLibrary({ noData: true }, (response) => {
+      console.log(response,"response");
+      if (response) {
+        console.log(photo,"photo1",response.assets[0].uri)
+        data =photo
+        data.push(response.assets[0].uri)
+        console.log(data)
+        setPhoto(data);
+      }
+      console.log(photo.length,"photo")
+    });
+  };
+  const renderMultipleImages=(item)=>{
+    console.log(item.item,"item")
+    return(<>
+    <Image
+      source={{ uri: item.item}}
+      style={styles.img}
+    />
+    <IconButton
+    style={{position:"absolute",top:0,right:-15}}
+    icon="delete"
+    iconColor="red"
+    size={20}
+    onPress={() => {var index = photo.indexOf(item.item);
+      const data = photo;
+      if (index !== -1) {
+        data.splice(index, 1);
+        setPhoto(data)
+      }}}
+  />
+    </>)
+  }
     return (
         <View style={styles.editprofile}>
         <ScrollView>
@@ -40,10 +80,12 @@ const Addclinic=(props)=>{
         
         <View style={{justifyContent:'flex-start'}}>
            <View style={styles.child}>
-             <Inp textAlign='left' placeholder='Clinic Name'/>
+             <Inp textAlign='left' placeholder='Clinic Name' value={clinicName}
+              onChangeText={setclinicName} />
            </View>
            <View style={styles.child}>
-             <Inp textAlign='left' placeholder='Address'/>
+             <Inp textAlign='left' placeholder='Address' value={clinicAddress}
+              onChangeText={setclinicAddress} />
            </View>
            <View style={styles.child}>
            <Text style={{...styles.text,fontSize:moderateScale(24),textAlign:'left'}}>
@@ -74,7 +116,8 @@ const Addclinic=(props)=>{
            <View style={{...styles.child}}>
             
             
-            <Inp textAlign='left' placeholder='Clinic Fees' />
+            <Inp textAlign='left' placeholder='Clinic Fees' value={clinicFees}
+              onChangeText={setclinicFees} />
          
             </View>
             <View style={{...styles.child}}>
@@ -82,9 +125,22 @@ const Addclinic=(props)=>{
             Add Photo
         </Text>
         </View>
-            <View style={styles.img}>
-             
-           </View>
+        <View style={{flexDirection:"row",justifyContent:"flex-start",alignItems:"flex-start"}} >
+          {photo.length>0 ? (
+          <>
+          <Pressable  onPress={()=>{console.log("i am pressed"); handleChoosePhoto()}}style={styles.img}>
+      <Icon name='image-plus' size={40} color="#4BA5FA"/>
+    </Pressable >
+          <FlatList
+          data={photo}
+          renderItem={renderMultipleImages}
+          horizontal={true}
+          keyExtractor={(item, index) => index}
+        />
+      </>):<><Pressable  onPress={()=>{console.log("i am pressed"); handleChoosePhoto()}}style={styles.img}>
+      <Icon name='image-plus' size={40} color="#4BA5FA"/>
+    </Pressable ></>}
+    </View>
 
            
            <View style={{...styles.child,justifyContent:'center',alignItems:'center'}}>
