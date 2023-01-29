@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { horizontalScale, verticalScale } from '../screens/dim';
 import OtpComponent from './otpcomponent';
 import DrugsName from './drugselection';
+import Refers from './refers';
 const SelectModal=(props)=>{
 
     const containerStyle = {backgroundColor: 'white',
@@ -43,6 +44,12 @@ padding:20};
                 medication={props.medication}
                 setMedication={props.setMedication}
             />:null
+           }
+           {props.mode=='Doctor'?
+           <Refers
+           index={props.index}
+            hideModal={props.hideModal}/>
+            :null
            }
             
             

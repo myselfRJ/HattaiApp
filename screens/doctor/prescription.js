@@ -31,6 +31,8 @@ const Prescription = () => {
     showModal();
   };
 
+
+
   const handleDialog =(id,ind) => {
     setGrp(id);
     setInd(ind);
@@ -107,11 +109,11 @@ const setQuant=(text,ind)=>{
         </View>
         <Text style={styles.subhead}>Diagnosis / Consultation Notes</Text>
         <View style={{flexDirection: 'row'}}>
-          <MuInp placeholder='Diagnosis / Consultation Notes'/>
+          <MuInp placeholder='Diagnosis / Consultation Notes' onChangeText={setDiagnosis} />
           <View
             style={{
               flexDirection: 'row',
-              borderWidth: 0.5,
+             
               justifyContent: 'center',
               alignItems: 'center',
               paddingHorizontal: horizontalScale(16),
@@ -286,7 +288,8 @@ const setQuant=(text,ind)=>{
         <View style={{flexDirection:'row'}}>
          {refers.map((value,index)=>{
           return(
-            <Pressable key={index} style={{flexDirection:'row',justifyContent:'center',alignItems:'center',marginRight:horizontalScale(16),paddingHorizontal:horizontalScale(8),paddingVertical:verticalScale(8),borderRadius:4,borderColor:'#4BA5FA',borderWidth:0.5}}
+            <Pressable onPress={()=>handleModal(value.type,index)} key={index} 
+            style={{flexDirection:'row',justifyContent:'center',alignItems:'center',marginRight:horizontalScale(16),paddingHorizontal:horizontalScale(8),paddingVertical:verticalScale(8),borderRadius:4,borderColor:'#4BA5FA',borderWidth:0.5}}
             >
                <Icon name={value.icon} size={16} color="#4BA5FA"/>
               <Text>
