@@ -56,26 +56,16 @@ const Addclinic=(props)=>{
       .then(function (response) {
         console.log(response.data);
         if (response.data['status'] === 'success') {
-          console.log("inside success",photo.length)
+          console.log("inside success",photo)
           if (photo){
             console.log("inside phor=to")
             for (let i = 0; i < photo.length; i++) {
+              console.log(photo[i]["uri"],"url  bb")
             var FormData = require('form-data');
             var data = new FormData();
-            console.log(i,photo[i],photo[i]
-              .split('/')
-              .pop()
-              .split('.')
-              .pop())
-            data.append('contentType', `image/${photo[i]
-              .split('/')
-              .pop()
-              .split('.')
-              .pop()}`);
+            data.append('contentType', photo[i]["type"]);
             data.append('language', 'en-US');
-            data.append('url', {
-              url: photo[i], //Your Image File Path
-            });
+            data.append('url', photo[i]);
             console.log(data)
             PostForm('clinic/images/' + response.data['data']['id'], data)
               .then(function (response) {
@@ -85,8 +75,8 @@ const Addclinic=(props)=>{
                 console.log(error);
               });
           }}
-          props.setComplete([true, false, false]);
-          props.setMark('110');
+          props.setComplete([true, true, false]);
+          props.setMark('111');
         } else {
           console.warn(response.data.message);
         }
@@ -103,7 +93,7 @@ const Addclinic=(props)=>{
       if (response) {
         console.log(photo,"photo1",response.assets[0].uri)
         data =photo
-        data.push(response.assets[0].uri)
+        data.push(response.assets[0])
         console.log(data)
         setPhoto(data);
       }
@@ -114,7 +104,7 @@ const Addclinic=(props)=>{
     console.log(item.item,"item")
     return(<>
     <Image
-      source={{ uri: item.item}}
+      source={{ uri: item.item.uri}}
       style={styles.img}
     />
     <IconButton
@@ -206,8 +196,7 @@ const Addclinic=(props)=>{
            <View style={{...styles.child,justifyContent:'center',alignItems:'center'}}>
                 <Btn 
                 label='Save'
-                action={()=>{props.setComplete([true,true,false]);
-                  props.setMark('111')
+                action={()=>{saveClinic()
                 }}/>
            </View>
            

@@ -333,7 +333,7 @@ const Fillprofile = props => {
             <Btn
               label="Save"
               action={() => {
-                props.setComplete([true, false, false]);
+               props.setComplete([true, false, false]);
           props.setMark('110');
                 //saveProfile();
               }}
