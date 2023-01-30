@@ -12,13 +12,14 @@ import DaySym from './daysym';
 import Inp from './inp';
 import styles from './signupss';
 import { IconButton } from 'react-native-paper';
+import { PostApi ,PostForm} from '../api/postapi';
 
 const Addclinic=(props)=>{
     const [clinicMulti,setclinicMulti] = useState([])
     const [clinicName,setclinicName] = useState()
     const [clinicAddress,setclinicAddress] = useState()
-    const [clinicTiming,setclinicTiming] = useState([])
-    const [clinicWeekEndTiming,setclinicWeekEndTiming] = useState([])
+    const [clinicTiming,setclinicTiming] = useState(props.parentclinicTiming["weekday"])
+    const [clinicWeekEndTiming,setclinicWeekEndTiming] = useState(props.parentclinicTiming["weekend"])
     const [clinicFees,setclinicFees] = useState()
     const [photo, setPhoto] = React.useState([]);
   const [daySelect,setDay]=useState([{day:'M',select:false},
@@ -33,8 +34,67 @@ const Addclinic=(props)=>{
   useEffect(()=>{
     console.log('Hello world')
 
-  },[daySelect])
+  },[daySelect,photo.length,props])
+  const saveClinic = () => {
 
+    const clinic = {
+      clinic_name: clinicName,
+      clinic_address: clinicAddress,
+      fees:clinicFees
+    };
+    const slot={
+      "weekday_list":props.parentclinicTiming["weekday"],
+      "weekend_list":props.parentclinicTiming["weekend"],
+      "daySelect":daySelect
+    }
+    const data={
+      clinic:clinic,
+      slot:slot
+    }
+    console.log(data);
+    PostApi('clinic/save', data, true)
+      .then(function (response) {
+        console.log(response.data);
+        if (response.data['status'] === 'success') {
+          console.log("inside success",photo.length)
+          if (photo){
+            console.log("inside phor=to")
+            for (let i = 0; i < photo.length; i++) {
+            var FormData = require('form-data');
+            var data = new FormData();
+            console.log(i,photo[i],photo[i]
+              .split('/')
+              .pop()
+              .split('.')
+              .pop())
+            data.append('contentType', `image/${photo[i]
+              .split('/')
+              .pop()
+              .split('.')
+              .pop()}`);
+            data.append('language', 'en-US');
+            data.append('url', {
+              url: photo[i], //Your Image File Path
+            });
+            console.log(data)
+            PostForm('clinic/images/' + response.data['data']['id'], data)
+              .then(function (response) {
+                console.log('image saved');
+              })
+              .catch(function (error) {
+                console.log(error);
+              });
+          }}
+          props.setComplete([true, false, false]);
+          props.setMark('110');
+        } else {
+          console.warn(response.data.message);
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
 
 
   const handleChoosePhoto = () => {
@@ -109,7 +169,7 @@ const Addclinic=(props)=>{
            </View>
            
            <View style={styles.child}>
-           <Datebtn name='clock' text='Clinic Timings' 
+           <Datebtn name='clock' text='Clinic Timings' mode={"add clinic page"} timelist={props.parentclinicTiming["weekday"]}
            action={props.showModal}/>
            </View>
            
@@ -153,7 +213,7 @@ const Addclinic=(props)=>{
            
           
         </View>
-        <Addbtn text='Add Clinic'/>
+        <Addbtn text='Add Clinic' onPress={saveClinic} />
 
         </ScrollView>
         

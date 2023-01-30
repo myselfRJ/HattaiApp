@@ -42,8 +42,6 @@ const styles = StyleSheet.create({
         
     },
     BtnText: {
-    
-  
         fontSize: moderateScale(24),
         lineHeight:32,
         fontWeight: 500,

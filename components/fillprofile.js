@@ -134,7 +134,7 @@ const Fillprofile = props => {
           if (photo) {
             var FormData = require('form-data');
             var data = new FormData();
-            data.append('contentType', `image/+${photo.assets[0].uri
+            data.append('contentType', `image/${photo.assets[0].uri
               .split('/')
               .pop()
               .split('.')

@@ -45,8 +45,11 @@ padding:20};
                 setMedication={props.setMedication}
             />:null
            }
-            { props.mode=='timing'&&<ClinicTiming onTimeSelect={props.onTimeSelect}/>}
-            
+            { props.mode=='timing'&&<ClinicTiming onTimeSelect={props.onTimeSelect} 
+                          parentclincTiming={props.parentclincTiming}
+                          setparentclinicTiming={props.setparentclinicTiming}
+            hideModal={props.hideModal}/>}
+           
 
          
           

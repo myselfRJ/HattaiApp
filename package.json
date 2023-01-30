@@ -13,6 +13,7 @@
     "@react-navigation/native": "*",
     "@react-navigation/native-stack": "*",
     "axios": "^1.2.5",
+    "moment": "^2.29.4",
     "react": "18.2.0",
     "react-native": "0.71.0",
     "react-native-date-picker": "^4.2.6",

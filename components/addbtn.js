@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { verticalScale,horizontalScale,moderateScale } from "../screens/dim";
  const Addbtn=(props)=>{
     return(
-        <TouchableOpacity style={{position:'absolute',right:horizontalScale(16),top:verticalScale(300),justifyContent:'center',alignItems:'center'}}>
+        <TouchableOpacity onPress={props.onPress} style={{position:'absolute',right:horizontalScale(16),top:verticalScale(300),justifyContent:'center',alignItems:'center'}}>
         < View style={{height:verticalScale(80),width:verticalScale(80),borderRadius:verticalScale(40),backgroundColor:'#4BA5FA',justifyContent:'center',alignItems:'center'}}>
         <Icon name='add' size={moderateScale(48)} color='#fff'/>
         </View>

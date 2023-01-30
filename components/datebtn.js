@@ -1,18 +1,27 @@
 import { useLinkProps } from "@react-navigation/native";
 import { StyleSheet, Pressable,Text } from "react-native";
+import { Chip } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { horizontalScale, verticalScale, moderateScale } from "../screens/dim";
 
 const Datebtn=(props)=>{
+console.log(props.timelist,"btn date")
+let Arr = props.timelist!==undefined&&props.timelist.length>0?props.timelist.map((a, i) => {
+    console.log(a,"a")
+    return (
+        <Chip  mode="outlined" style={{height:30}} compact={true} onPress={() => console.log('Pressed')}>{a.toString().replace(",","-")}</Chip>
+    )}):(<Text style={styles.text}>
+        {props.text}
+        </Text>)
 
     return (
         <Pressable  onPress={()=>{props.action();console.log("pressed")}} style={{...styles.bg,width:props.width?props.width: horizontalScale(480)}}
-       
         >
-            <Text style={styles.text}>
+           {props.mode==="add clinic page"?<>
+            {Arr}
+           </> :<Text style={styles.text}>
             {props.text}
-
-            </Text>
+            </Text>}
             <Icon name={props.name} size={verticalScale(40)} color='#4BA5FA'/>
             
         </Pressable>

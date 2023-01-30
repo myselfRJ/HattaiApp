@@ -47,10 +47,12 @@ const prevComponent=(val)=>{
     setMark(current[indexofVal-1])
     console.log(mark,indexofVal,"val")
 }
-const [parentclincTiming,setparentclinicTiming]=useState([])
-const onTimeSelect=(data)=>{
-console.log(data.toTimeString());
-setparentclinicTiming(data);
+
+const [parentclincTiming,setparentclinicTiming]=useState({})
+const onTimeSelect=(weekdaydata,weekenddata)=>{
+console.log(weekdaydata,"we")
+console.log(weekenddata)
+setparentclinicTiming({...parentclincTiming,"weekday":weekdaydata,"weekend":weekenddata});
 }
     return(
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -73,6 +75,7 @@ setparentclinicTiming(data);
             
             />):null}
             {mark==="110"?<Addclinic
+            parentclinicTiming={parentclincTiming}
             setMark={setMark}
             visible={visible}
             showModal={showModal}
@@ -100,10 +103,13 @@ setparentclinicTiming(data);
               {mark==="110"&&<SelectModal visible={visible} 
               showModal={showModal} 
               hideModal={hideModal}
+              parentclincTiming={parentclincTiming}
+              setparentclinicTiming={setparentclinicTiming}
               mode="timing" onTimeSelect={onTimeSelect}/>}
               {mark==="111"&&<SelectModal visible={visible} 
               showModal={showModal} 
               hideModal={hideModal}
+              
               mode="drug"/>}
      
         </View>
