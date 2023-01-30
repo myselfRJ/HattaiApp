@@ -1,7 +1,16 @@
 import {useState} from 'react';
-import {View, Image, Text, Pressable, StyleSheet, TextInput} from 'react-native';
-import {Chip, DataTable, Button, Dialog, RadioButton} from 'react-native-paper';
+import {
+  View,
+  Image,
+  Text,
+  Pressable,
+  StyleSheet,
+  TextInput,
+} from 'react-native';
+import {Chip, DataTable, Button, Dialog, RadioButton, Checkbox} from 'react-native-paper';
+import DatePicker from 'react-native-date-picker';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import '../globlevariable';
 import Btn from '../../components/btn';
 import DashHead from '../../components/dashhead';
 import Datebtn from '../../components/datebtn';
@@ -13,27 +22,47 @@ import SelectModal from '../../components/selectmodal';
 import TimeGroup from '../../components/timegp';
 import {horizontalScale, moderateScale, verticalScale} from '../dim';
 const Prescription = () => {
-  const refers=[{type:'Doctor',icon:'medical-bag'},{type:'Labs',icon:'flask'},{type:'Scan',icon:'radiology-box'},{type:'Hospital',icon:'hospital-building'}]
-  const med={medicine:'Choose Med',dose:'dose',time:'time',frequency:'frequency',duration:[false,false,false]};
+  const refers = [
+    {type: 'Doctor', icon: 'medical-bag'},
+    {type: 'Labs', icon: 'flask'},
+    {type: 'Scan', icon: 'radiology-box'},
+    {type: 'Hospital', icon: 'hospital-building'},
+  ];
+  const med = {
+    medicine: 'Choose Med',
+    dose: 'dose',
+    time: 'time',
+    frequency: 'frequency',
+    duration: [false, false, false],
+  };
+  const [date, setDate] = useState(new Date());
+  const [open, setOpen] = useState(false);
+  const [opentm, setOpentm] = useState(false);
+  const [time, setTime] = useState(new Date());
   const [grp, setGrp] = useState(null);
-  const [ind,setInd]=useState(null)
-  const [diagnosis,setDiagnosis]=useState()
-  const [medication,setMedication] =useState([med])
+  const [ind, setInd] = useState(null);
+  const [diagnosis, setDiagnosis] = useState();
+  const [medication, setMedication] = useState([med]);
   const [visible, setVisible] = useState(false);
   const [visibledia, setDia] = useState(false);
+  const [shareDialog,setShare]=useState(false);
+  const [checked, setChecked] = useState([false,false]);
+
+
   const [id, SetId] = useState(null);
   const showModal = () => setVisible(true);
-  const hideModal = () => {setInd(null);setVisible(false);}
-  const handleModal = (id,ind)=> {
-    console.log(id,ind);
+  const hideModal = () => {
+    setInd(null);
+    setVisible(false);
+  };
+  const handleModal = (id, ind) => {
+    console.log(id, ind);
     setInd(ind);
     SetId(id);
     showModal();
   };
 
-
-
-  const handleDialog =(id,ind) => {
+  const handleDialog = (id, ind) => {
     setGrp(id);
     setInd(ind);
     showDialog();
@@ -42,34 +71,38 @@ const Prescription = () => {
   const showDialog = () => setDia(true);
 
   const hideDialog = () => setDia(false);
+  const showShare = () => setShare(true);
 
-  const Addmed=()=>{
+  const hideShare = () => setShare(false);
 
-    setMedication([...medication,med]);
-    
-  }
-  const Removemed=(id)=>{
-    var med=[...medication]
-    med.splice(id,1)
-    console.log(med)
-    setMedication([...med])
-  }
-  const selectDur=(index,idx,value)=>{
-    var medi=[...medication];
-    medi[index].duration[idx]=value;
+
+  const Addmed = () => {
+    setMedication([...medication, med]);
+  };
+  const Removemed = id => {
+    var med = [...medication];
+    med.splice(id, 1);
+    console.log(med);
+    setMedication([...med]);
+  };
+  const selectDur = (index, idx, value) => {
+    var medi = [...medication];
+    medi[index].duration[idx] = value;
     console.log(medi);
     setMedication(medi);
-   
-}
-const setQuant=(text,ind)=>{
-    console.log(text,ind)
-    var medi=[...medication];
-    medi[ind].quantity=text;
+  };
+  const setQuant = (text, ind) => {
+    console.log(text, ind);
+    var medi = [...medication];
+    medi[ind].quantity = text;
     console.log(medi);
     setMedication(medi);
+  };
 
-}
-
+  const Sharehandle=(value)=>{
+    SetId(value);
+    showDialog();
+  }
   return (
     <View style={{flex: 1, alignItems: 'center'}}>
       <DashHead />
@@ -109,48 +142,37 @@ const setQuant=(text,ind)=>{
         </View>
         <Text style={styles.subhead}>Diagnosis / Consultation Notes</Text>
         <View style={{flexDirection: 'row'}}>
-          <MuInp placeholder='Diagnosis / Consultation Notes' onChangeText={setDiagnosis} />
+          <MuInp
+            placeholder="Diagnosis / Consultation Notes"
+            onChangeText={setDiagnosis}
+          />
           <View
             style={{
               flexDirection: 'row',
-             
+
               justifyContent: 'center',
               alignItems: 'center',
               paddingHorizontal: horizontalScale(16),
             }}>
             <View style={{marginRight: horizontalScale(16)}}>
-              <Inp 
-                placeholder="BP" 
-                textAlign="left" 
-                height={56} 
-                width={120} />
-              <Inp 
-                placeholder="SPO2" 
-                textAlign="left" 
-                height={56} 
-                width={120} />
-              <Inp 
-                placeholder="LMP" 
-                textAlign="left" 
-                height={56} 
-                width={120} />
+              <Inp placeholder="BP" textAlign="left" height={56} width={120} />
+              <Inp
+                placeholder="SPO2"
+                textAlign="left"
+                height={56}
+                width={120}
+              />
+              <Inp placeholder="LMP" textAlign="left" height={56} width={120} />
             </View>
             <View>
-              <Inp 
-                placeholder="PR" 
-                textAlign="left" 
-                height={56} 
-                width={120} />
-              <Inp 
-                placeholder="TEMP" 
-                textAlign="left" 
-                height={56} 
-                width={120} />
-              <Inp 
-                placeholder="EDD" 
-                textAlign="left" 
-                height={56} 
-                width={120} />
+              <Inp placeholder="PR" textAlign="left" height={56} width={120} />
+              <Inp
+                placeholder="TEMP"
+                textAlign="left"
+                height={56}
+                width={120}
+              />
+              <Inp placeholder="EDD" textAlign="left" height={56} width={120} />
             </View>
           </View>
         </View>
@@ -194,135 +216,188 @@ const setQuant=(text,ind)=>{
               Add/Remove
             </Text>
           </View>
-          {
-            medication.map((value,index)=>{
-                return(
-                    <View key={index}
-                    style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      paddingVertical:verticalScale(8)
-                    }}>
-                    <Pressable
-                      onPress={() => handleModal('drug',index)}
-                      style={{...styles.press, width: horizontalScale(144)}}>
-                      <Text>{value.medicine}</Text>
-                    </Pressable>
-                    <Pressable
-                      onPress={() => handleDialog('dose',index)}
-                      style={{...styles.press, width: horizontalScale(60)}}>
-                      <Text>{value.dose}</Text>
-                    </Pressable>
-                    <Pressable
-                      onPress={() => handleDialog('time',index)}
-                      style={{...styles.press, width: horizontalScale(60)}}>
-                      <Text>{value.time}</Text>
-                    </Pressable>
-                    <Pressable
-                      onPress={() => handleDialog('freq',index)}
-                      style={{...styles.press, width: horizontalScale(80)}}>
-                      <Text>{value.frequency}</Text>
-                    </Pressable>
-                    <View
-                      style={{
-                        ...styles.press,
-                        flexDirection: 'row',
-                        width: horizontalScale(120),
-                      }}>
-                        {value.duration.map((val,idx)=>{
-                            return(
-                                <RadioButton 
-                                key={idx} 
-                                idx={idx}
-                                onPress={()=>selectDur(index,idx,!val)} 
-                                status={val?"checked":'unchecked'} />
-
-                            )
-                        })}
-                      
-                
-                    </View>
-                    <TextInput
-                    //   onPress={() => handleDialog('quant',index)}
-                    keyboardType='numeric'
-                    onChange={({nativeEvent: {eventCount, target, text}}) =>setQuant(text,index)}
-                    // onFocus={()=>setInd(index)}
-                      style={{...styles.press, width: horizontalScale(56)}}
-                    //   onChangeText={}
-                    value={value.quantity}
-                      >
-                    
-                    </TextInput>
-                    <View style={{padding:8}}>
-                    <Icon onPress={()=>Removemed(index)} name="delete" size={24} color='#FF0505'/>
-                    </View>
-                    
-                  </View>
-        
-
-                )
-            })
-          }
+          {medication.map((value, index) => {
+            return (
+              <View
+                key={index}
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  paddingVertical: verticalScale(8),
+                }}>
+                <Pressable
+                  onPress={() => handleModal('drug', index)}
+                  style={{...styles.press, width: horizontalScale(144)}}>
+                  <Text>{value.medicine}</Text>
+                </Pressable>
+                <Pressable
+                  onPress={() => handleDialog('dose', index)}
+                  style={{...styles.press, width: horizontalScale(60)}}>
+                  <Text>{value.dose}</Text>
+                </Pressable>
+                <Pressable
+                  onPress={() => handleDialog('time', index)}
+                  style={{...styles.press, width: horizontalScale(60)}}>
+                  <Text>{value.time}</Text>
+                </Pressable>
+                <Pressable
+                  onPress={() => handleDialog('freq', index)}
+                  style={{...styles.press, width: horizontalScale(80)}}>
+                  <Text>{value.frequency}</Text>
+                </Pressable>
+                <View
+                  style={{
+                    ...styles.press,
+                    flexDirection: 'row',
+                    width: horizontalScale(120),
+                  }}>
+                  {value.duration.map((val, idx) => {
+                    return (
+                      <RadioButton
+                        key={idx}
+                        idx={idx}
+                        onPress={() => selectDur(index, idx, !val)}
+                        status={val ? 'checked' : 'unchecked'}
+                      />
+                    );
+                  })}
+                </View>
+                <TextInput
+                  //   onPress={() => handleDialog('quant',index)}
+                  keyboardType="numeric"
+                  onChange={({nativeEvent: {eventCount, target, text}}) =>
+                    setQuant(text, index)
+                  }
+                  // onFocus={()=>setInd(index)}
+                  style={{...styles.press, width: horizontalScale(56)}}
+                  //   onChangeText={}
+                  value={value.quantity}></TextInput>
+                <View style={{padding: 8}}>
+                  <Icon
+                    onPress={() => Removemed(index)}
+                    name="delete"
+                    size={24}
+                    color="#FF0505"
+                  />
+                </View>
+              </View>
+            );
+          })}
 
           <View
             style={{
               position: 'absolute',
               bottom: verticalScale(4),
-              backgroundColor:'#4BA5FA',
-              borderRadius:horizontalScale(48),
+              backgroundColor: '#4BA5FA',
+              borderRadius: horizontalScale(48),
               right: 0,
             }}>
-            <Icon  name="plus" size={40} color="#ffffff"onPress={Addmed} />
+            <Icon name="plus" size={40} color="#ffffff" onPress={Addmed} />
           </View>
-         
-        </View>
-        <View >
-      <Text
-          style={{
-            ...styles.subhead,
-            marginTop: verticalScale(16),
-            marginBottom: verticalScale(8),
-          }}>
-          Referrals
-        </Text>
-        <View style={{flexDirection:'row'}}>
-         {refers.map((value,index)=>{
-          return(
-            <Pressable onPress={()=>handleModal(value.type,index)} key={index} 
-            style={{flexDirection:'row',justifyContent:'center',alignItems:'center',marginRight:horizontalScale(16),paddingHorizontal:horizontalScale(8),paddingVertical:verticalScale(8),borderRadius:4,borderColor:'#4BA5FA',borderWidth:0.5}}
-            >
-               <Icon name={value.icon} size={16} color="#4BA5FA"/>
-              <Text>
-            {value.type}</Text>
-            </Pressable>
-
-          )
-         }) }
-
-       
-         
         </View>
         <View>
-        <Text
-          style={{
-            ...styles.subhead,
-            marginTop: verticalScale(16),
-            marginBottom: verticalScale(8),
-          }}>
-          Next Visit
-        </Text>
-        <Datebtn name='calendar' text={new Date().toLocaleDateString()}/>
+          <Text
+            style={{
+              ...styles.subhead,
+              marginTop: verticalScale(16),
+              marginBottom: verticalScale(8),
+            }}>
+            Referrals
+          </Text>
+          <View style={{flexDirection: 'row'}}>
+            {refers.map((value, index) => {
+              return (
+                <Pressable
+                  onPress={() => handleModal(value.type, index)}
+                  key={index}
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    marginRight: horizontalScale(16),
+                    paddingHorizontal: horizontalScale(8),
+                    paddingVertical: verticalScale(8),
+                    borderRadius: 4,
+                    borderColor: '#4BA5FA',
+                    borderWidth: 0.5,
+                  }}>
+                  <Icon name={value.icon} size={16} color="#4BA5FA" />
+                  <Text>{value.type}</Text>
+                </Pressable>
+              );
+            })}
+          </View>
+          <View>
+            <Text
+              style={{
+                ...styles.subhead,
+                marginTop: verticalScale(16),
+                marginBottom: verticalScale(8),
+              }}>
+              Next Visit
+            </Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                marginTop: verticalScale(8),
+                width: horizontalScale(480),
+                alignItems: 'flex-end',
+              }}>
+              <Datebtn
+                action={() => setOpentm(!opentm)}
+                name="timer"
+                text={time.toLocaleTimeString()}
+                width={horizontalScale(232)}
+              />
+              <Datebtn
+                action={() => setOpen(!open)}
+                name="calendar"
+                text={date.toLocaleDateString()}
+                width={horizontalScale(232)}
+              />
+            </View>
+            <DatePicker
+              mode="date"
+              modal
+              minDate={new Date()}
+              open={open}
+              date={date}
+              onConfirm={date => {
+                setOpen(false);
+                setDate(date);
+              }}
+              onCancel={() => {
+                setOpen(false);
+              }}
+            />
+            <DatePicker
+              mode="time"
+              modal
+              open={opentm}
+              date={time}
+              onConfirm={date => {
+                setOpentm(false);
+                setTime(date);
+              }}
+              onCancel={() => {
+                setOpentm(false);
+              }}
+            />
+          </View>
+              <View style={{marginTop:verticalScale(8),marginBottom:verticalScale(8)}}>
+              <Inp placeholder="Fees" textAlign="left" />
+
+
+              </View>
+              <View style={{alignItems:'flex-end',marginTop:verticalScale(8),marginBottom:verticalScale(8)}}>
+              <Btn label="Share"  action={()=>showShare(!shareDialog)}/>
+
+              </View>
+        
           
         </View>
-
-            <Inp placeholder='Fees' textAlign='left'/>
-
-          <Btn label='Share' />
-       
       </View>
-       
-      </View>
-      
 
       <Dialog
         style={{width: horizontalScale(240), height: verticalScale(320)}}
@@ -332,11 +407,10 @@ const setQuant=(text,ind)=>{
           <>
             <Dialog.Title>Dose</Dialog.Title>
             <Dialog.Content>
-              <DoseGroup 
-              index={ind}
-              medication={medication}
-              setMedication={setMedication}
-
+              <DoseGroup
+                index={ind}
+                medication={medication}
+                setMedication={setMedication}
               />
             </Dialog.Content>
           </>
@@ -345,7 +419,7 @@ const setQuant=(text,ind)=>{
           <>
             <Dialog.Title>Time</Dialog.Title>
             <Dialog.Content>
-              <TimeGroup 
+              <TimeGroup
                 index={ind}
                 medication={medication}
                 setMedication={setMedication}
@@ -357,7 +431,7 @@ const setQuant=(text,ind)=>{
           <>
             <Dialog.Title>Frequency</Dialog.Title>
             <Dialog.Content>
-              <FreqGroup 
+              <FreqGroup
                 index={ind}
                 medication={medication}
                 setMedication={setMedication}
@@ -370,6 +444,54 @@ const setQuant=(text,ind)=>{
           <Button onPress={hideDialog}>Done</Button>
         </Dialog.Actions>
       </Dialog>
+      <Dialog
+      visible={shareDialog}
+      onDismiss={showShare}
+      >
+        <Dialog.Title>
+          Share With
+        </Dialog.Title>
+        <Dialog.Content>
+          <View style={{flexDirection:'row',alignItems:'center'}}>
+        
+          
+          <Checkbox
+            color={global.themecolor}
+            status={checked[0] ? 'checked' : 'unchecked'}
+            onPress={() => {
+              setChecked([true,false]);
+              }}
+          />
+            <Text>
+            Share world
+          </Text>
+
+          </View>
+          <View style={{flexDirection:'row',alignItems:'center'}}>
+        
+          
+        <Checkbox
+          color={global.themecolor}
+          status={checked[1] ? 'checked' : 'unchecked'}
+          onPress={() => {
+            setChecked([true,false]);
+            }}
+        />
+          <Text>
+          Share world
+        </Text>
+
+        </View>
+        
+        </Dialog.Content>
+        <Dialog.Actions>
+          <Button color={global.themecolor} icon='whatsapp' onPress={hideShare}>
+            Share
+          </Button>
+        </Dialog.Actions>
+
+
+      </Dialog>
       <SelectModal
         index={ind}
         mode={id}
@@ -379,8 +501,6 @@ const setQuant=(text,ind)=>{
         medication={medication}
         setMedication={setMedication}
       />
-      
-    
     </View>
   );
 };
@@ -397,7 +517,7 @@ const styles = StyleSheet.create({
   press: {
     height: verticalScale(40),
     marginRight: horizontalScale(12),
-  
+
     borderRadius: 4,
     borderWidth: 0.5,
     borderColor: '#4BA5FA',

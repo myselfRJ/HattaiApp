@@ -7,6 +7,7 @@ import OtpComponent from './otpcomponent';
 import DrugsName from './drugselection';
 import Refers from './refers';
 import ClinicTiming from './clinictimeselection';
+import ClinicList from './cliniclist';
 const SelectModal=(props)=>{
 
     const containerStyle = {backgroundColor: 'white',
@@ -46,14 +47,18 @@ padding:20};
                 setMedication={props.setMedication}
             />
            }
-           {props.mode=='Doctor'&&
+           {props.mode=='Doctor'||props.mode=='Labs'||props.mode=='Scan'||props.mode=='Hospital'?
            <Refers
            index={props.index}
-            hideModal={props.hideModal}/>
+        hideModal={props.hideModal}/>:null
            
            }
             
             { props.mode=='timing'&&<ClinicTiming onTimeSelect={props.onTimeSelect}/>}
+            {props.mode=='cliniclist'&&<ClinicList clinicname={props.clinicname}
+                                                    setClinic={props.setClinic}
+                                                    hideModal={props.hideModal}
+            />}
             
 
          
