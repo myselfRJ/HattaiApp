@@ -12,6 +12,7 @@ const MuInp=(props)=>{
         placeholder={props.placeholder}
         outlineColor='#4BA5FA'
             activeOutlineColor='#4BA5FA'
+        onChangeText={props.onChangeText}
         />
 
     )

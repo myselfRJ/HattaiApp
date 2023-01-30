@@ -5,7 +5,9 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { horizontalScale, verticalScale } from '../screens/dim';
 import OtpComponent from './otpcomponent';
 import DrugsName from './drugselection';
+import Refers from './refers';
 import ClinicTiming from './clinictimeselection';
+import ClinicList from './cliniclist';
 const SelectModal=(props)=>{
 
     const containerStyle = {backgroundColor: 'white',
@@ -38,18 +40,31 @@ padding:20};
           
            }
            {
-            props.mode=='drug'?
+            props.mode=='drug'&&
             <DrugsName index={props.index}
                 hideModal={props.hideModal}
                 medication={props.medication}
                 setMedication={props.setMedication}
-            />:null
+            />
            }
             { props.mode=='timing'&&<ClinicTiming onTimeSelect={props.onTimeSelect} 
                           parentclincTiming={props.parentclincTiming}
                           setparentclinicTiming={props.setparentclinicTiming}
             hideModal={props.hideModal}/>}
            
+           {props.mode=='Doctor'||props.mode=='Labs'||props.mode=='Scan'||props.mode=='Hospital'?
+           <Refers
+           index={props.index}
+        hideModal={props.hideModal}/>:null
+           
+           }
+            
+            
+            {props.mode=='cliniclist'&&<ClinicList clinicname={props.clinicname}
+                                                    setClinic={props.setClinic}
+                                                    hideModal={props.hideModal}
+            />}
+            
 
          
           
