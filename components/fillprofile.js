@@ -168,6 +168,7 @@ const Fillprofile = props => {
         console.log(error);
       });
   };
+  console.log(photo!==null,"photo")
   return (
     <View style={styles.editprofile}>
       <ScrollView>
@@ -180,7 +181,7 @@ const Fillprofile = props => {
           Fill Profile
         </Text>
         <View>
-          {photo ? (
+          {photo!==null && photo!==undefined ? (
             <TouchableOpacity
               onPress={() => {
                 console.log('i am pressed');

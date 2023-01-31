@@ -8,7 +8,7 @@ import Datebtn from '../../components/datebtn';
 import SelectModal from '../../components/selectmodal';
 import StatusTck from '../../components/statustck';
 import { horizontalScale, moderateScale, verticalScale } from '../dim';
-const Dashboard=()=>{
+const Dashboard=({navigation})=>{
     const [visible, setVisible] = useState(false);
     const [open,setOpen]=useState(false);
     const showModal = () => setVisible(true);
@@ -45,14 +45,10 @@ const Dashboard=()=>{
         useNativeDriver: true,
       }).start();
     };
-  
-
 
     return (
         <SafeAreaView style={{flex:1,
         }}>
-        
-   
             <DashHead/>
             <View style={{paddingHorizontal:horizontalScale(72),width:'100%',paddingVertical:verticalScale(24)}}>
             <View style={{flexDirection:'row',alignItems:'center',width:'98%',justifyContent:'space-between'}}>
@@ -70,7 +66,6 @@ const Dashboard=()=>{
                 <StatusTck txt='Total Appointment' num={60}/>
                 <StatusTck txt='Pending' num={32}/>
                 <StatusTck txt='Completed' num={28}/>
-                
             </View>
             <Text style={styles.apnheading}>
                 Appointments
@@ -84,12 +79,6 @@ const Dashboard=()=>{
            
             </ScrollView>
 
-
-           
-            
-                
-           
-          
         </View>
 
         <SelectModal visible={visible} 
@@ -103,13 +92,13 @@ const Dashboard=()=>{
                    <View style={{flexDirection:'row'}}>
                    <TouchableOpacity style={{backgroundColor:"#4BA5FA",marginHorizontal:4,width:horizontalScale(68),height:horizontalScale(68),borderRadius:horizontalScale(34),justifyContent:'center',alignItems:'center'}}>
                    <Icon name='account' size={40} color="#ffffff"/>
+                   
+                   </TouchableOpacity>
+                   <TouchableOpacity onPress={()=>{navigation.navigate("BookApp")}} style={{backgroundColor:"#4BA5FA",marginHorizontal:4,width:horizontalScale(68),height:horizontalScale(68),borderRadius:horizontalScale(34),justifyContent:'center',alignItems:'center'}}>
+                   <Icon name="account-clock" size={40} color="#ffffff"/>
    
                    </TouchableOpacity>
-                   <TouchableOpacity style={{backgroundColor:"#4BA5FA",marginHorizontal:4,width:horizontalScale(68),height:horizontalScale(68),borderRadius:horizontalScale(34),justifyContent:'center',alignItems:'center'}}>
-                   <Icon name='prescription' size={40} color="#ffffff"/>
-   
-                   </TouchableOpacity>
-                   <TouchableOpacity style={{backgroundColor:"#4BA5FA",marginHorizontal:4,width:horizontalScale(68),height:horizontalScale(68),borderRadius:horizontalScale(34),justifyContent:'center',alignItems:'center'}}>
+                   <TouchableOpacity onPress={()=>{navigation.navigate("Prescription")}} style={{backgroundColor:"#4BA5FA",marginHorizontal:4,width:horizontalScale(68),height:horizontalScale(68),borderRadius:horizontalScale(34),justifyContent:'center',alignItems:'center'}}>
                    <Icon name='prescription' size={40} color="#ffffff"/>
    
                    </TouchableOpacity>

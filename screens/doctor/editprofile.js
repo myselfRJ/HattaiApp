@@ -16,7 +16,8 @@ const Editprofile=({navigation})=>{
     const [visible, setVisible] = React.useState(false);
     const showModal = () => setVisible(true);
     const hideModal = () => setVisible(false);
-
+    //send to user page from clinic page
+    const [clinicId, setclinicId] = React.useState();
     //fill profile
     const [profilePhoto,setprofilePhoto] = useState()
     const [profileDocument,setprofileDocument] = useState()
@@ -75,6 +76,7 @@ setparentclinicTiming({...parentclincTiming,"weekday":weekdaydata,"weekend":week
             
             />):null}
             {mark==="110"?<Addclinic
+            setclinicId={setclinicId}
             parentclinicTiming={parentclincTiming}
             setMark={setMark}
             visible={visible}
@@ -82,11 +84,13 @@ setparentclinicTiming({...parentclincTiming,"weekday":weekdaydata,"weekend":week
             setComplete={setComplete}/>:null}
             {mark==="111"?<Adduser
             clinicTiming
+            clinicId={clinicId}
             setMark={setMark}
             visible={visible}
             showModal={showModal}
             setComplete={setComplete}/>:null}
              {mark==="1111"?<Setup
+             navigation={navigation}
             setMark={setMark}
             setComplete={setComplete}/>:null}
            </View>

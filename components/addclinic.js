@@ -22,6 +22,8 @@ const Addclinic=(props)=>{
     const [clinicWeekEndTiming,setclinicWeekEndTiming] = useState(props.parentclinicTiming["weekend"])
     const [clinicFees,setclinicFees] = useState()
     const [photo, setPhoto] = React.useState([]);
+    const [photocount, setPhotocount] = React.useState(0);
+    
   const [daySelect,setDay]=useState([{day:'M',select:false},
                                       {day:'T',select:false},
                                       {day:'W',select:false},
@@ -32,9 +34,9 @@ const Addclinic=(props)=>{
                                     ])
 
   useEffect(()=>{
-    console.log('Hello world')
+    console.log('Hello world useeffect on add clinic')
 
-  },[daySelect,photo.length,props])
+  },[daySelect,photocount,props])
   const saveClinic = () => {
 
     const clinic = {
@@ -57,6 +59,9 @@ const Addclinic=(props)=>{
         console.log(response.data);
         if (response.data['status'] === 'success') {
           console.log("inside success",photo)
+          global.CLINICID=response.data['data']['id']
+          global.CLINICNAME = clinicName
+          props.setclinicId({id:response.data['data']['id'],name:clinicName})
           if (photo){
             console.log("inside phor=to")
             for (let i = 0; i < photo.length; i++) {
@@ -77,6 +82,7 @@ const Addclinic=(props)=>{
           }}
           props.setComplete([true, true, false]);
           props.setMark('111');
+          
         } else {
           console.warn(response.data.message);
         }
@@ -96,6 +102,7 @@ const Addclinic=(props)=>{
         data.push(response.assets[0])
         console.log(data)
         setPhoto(data);
+        setPhotocount(photocount+1)
       }
       console.log(photo.length,"photo")
     });
@@ -196,13 +203,21 @@ const Addclinic=(props)=>{
            <View style={{...styles.child,justifyContent:'center',alignItems:'center'}}>
                 <Btn 
                 label='Save'
-                action={()=>{saveClinic()
+                action={()=>{
+                  console.log("triggered")
+                  props.setclinicId({id:"29",name:"clinic name"});
+                  props.setComplete([true, true, false]);
+                  props.setMark('111');//saveClinic
                 }}/>
            </View>
            
           
         </View>
-        <Addbtn text='Add Clinic' onPress={saveClinic} />
+       {props.parentclinicTiming["weekday"]&&clinicAddress&&clinicFees&&clinicName?
+       <Addbtn text='Add Clinic' onPress={()=>{props.setComplete([true, true, false]);
+        props.setMark('111');//saveClinic
+        }} />:<></>} 
+       
 
         </ScrollView>
         

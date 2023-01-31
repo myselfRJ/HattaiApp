@@ -19,6 +19,7 @@ const ClinicTiming=(props)=>{
     const [indexData,setIndexData] = useState(0)
     const [indexData2,setIndexData2] = useState(0)
     const [checked, setChecked] = React.useState(false);
+    console.log('clinic time selection')
     useEffect(()=>{
         console.log('Hello world2',timelist,timelist2)
       },[indexData,indexData2,reflect,timelist,timelist2])
