@@ -9,6 +9,7 @@ import Refers from './refers';
 import ClinicTiming from './clinictimeselection';
 import ClinicList from './cliniclist';
 import TimeSlotList from './timeSlotlist';
+import SpecialityName from './specialityselection';
 const SelectModal=(props)=>{
 
     const containerStyle = {backgroundColor: 'white',
@@ -69,7 +70,14 @@ padding:20};
                                                     settimeSlot={props.settimeSlot}
                                                     hideModal={props.hideModal}
             />}
-
+{
+            props.mode=='speciality'&&
+            <SpecialityName index={props.index}
+                hideModal={props.hideModal}
+                medication={props.medication}
+                setMedication={props.setMedication}
+            />
+           }
          
           
           </Modal>

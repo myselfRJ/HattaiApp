@@ -18,7 +18,7 @@ const Inp=(props)=>{
             value={props.value}
             onChangeText={props.onChangeText}
             inputMode={props.inputMode}
-            maxLength={props.maxLength?props.maxLength:10}
+            maxLength={props.maxLength?props.maxLength:25}
             mode='outlined'
             placeholderTextColor='#797B7E'
             outlineColor='#4BA5FA'

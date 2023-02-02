@@ -85,7 +85,10 @@ const saveUser=()=>{
            
            <View style={{...styles.child,flexDirection:'row',justifyContent:'space-around',alignItems:'center'}}>
                 <Btn 
-                label='Skip'/>
+                label='Skip'action={()=>{
+                  props.setComplete([true,true,true]);
+                  props.setMark('1111')}
+                  }/>
                  <Btn 
                 label='Save' 
                 action={()=>{saveUser()

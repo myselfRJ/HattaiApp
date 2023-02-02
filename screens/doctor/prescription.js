@@ -5,7 +5,7 @@ import {
   Text,
   Pressable,
   StyleSheet,
-  TextInput,
+  TextInput,ScrollView,Keyboard,TouchableOpacity
 } from 'react-native';
 import {Chip, DataTable, Button, Dialog, RadioButton, Checkbox} from 'react-native-paper';
 import DatePicker from 'react-native-date-picker';
@@ -153,6 +153,7 @@ console.log(props.route.params.data["patient_data"]["photo"],"photo")
       });
   }
   return (
+    <ScrollView onPress={Keyboard.dismiss}>
     <View style={{flex: 1, alignItems: 'center'}}>
       <DashHead url={practitionerData?practitionerData["photo"][0]["url"]:"https://cdn-icons-png.flaticon.com/512/2785/2785482.png"} name={practitionerData?practitionerData["name"]:"Welcome"} />
 
@@ -203,25 +204,25 @@ console.log(props.route.params.data["patient_data"]["photo"],"photo")
               paddingHorizontal: horizontalScale(16),
             }}>
             <View style={{marginRight: horizontalScale(16)}}>
-              <Inp placeholder="BP" value={bp} action={setbp} textAlign="left" height={56} width={120} />
-              <Inp placeholder="SPO2" value={spo2} action={setspo2} textAlign="left" height={56} width={120} />
-              <Inp placeholder="LMP" value={lmp} action={setlmp} textAlign="left" height={56} width={120} />
+              <Inp placeholder="BP" value={bp} onChangeText={setbp} textAlign="left" height={56} width={120} />
+              <Inp placeholder="SPO2" value={spo2} onChangeText={setspo2} textAlign="left" height={56} width={120} />
+              <Inp placeholder="LMP" value={lmp} onChangeText={setlmp} textAlign="left" height={56} width={120} />
             </View>
             <View>
               
               <Inp
-                placeholder="PR" value={pr} action={setpr}
+                placeholder="PR" value={pr} onChangeText={setpr}
                 textAlign="left"
                 height={56}
                 width={120}
               />
               <Inp
-                placeholder="TEMP" value={temp} action={settemp}
+                placeholder="TEMP" value={temp} onChangeText={settemp}
                 textAlign="left"
                 height={56}
                 width={120}
               />
-              <Inp placeholder="EDD" value={edd} action={setedd} textAlign="left" height={56} width={120} />
+              <Inp placeholder="EDD" value={edd} onChangeText={setedd} textAlign="left" height={56} width={120} />
             </View>
           </View>
         </View>
@@ -552,6 +553,13 @@ console.log(props.route.params.data["patient_data"]["photo"],"photo")
         setMedication={setMedication}
       />
     </View>
+    <TouchableOpacity style={{position:'absolute',
+           justifyContent:'center',
+           alignItems:"center",
+           padding:10,bottom:0,left:0,width:60,height:60,backgroundColor:'#7DBDFA',borderRadius:40}}  onPress={()=>{props.navigation.navigate("Dashboard") }}>
+                <Icon name='arrow-left' size={32} color='#fff'/>
+           </TouchableOpacity>
+    </ScrollView>
   );
 };
 

@@ -80,9 +80,9 @@ const Addclinic=(props)=>{
                 console.log(error);
               });
           }}
+          props.setclinicId({id:response.data['data']['id'],name:response.data['data']['clinic_name']});
           props.setComplete([true, true, false]);
           props.setMark('111');
-          
         } else {
           console.warn(response.data.message);
         }
@@ -205,9 +205,8 @@ const Addclinic=(props)=>{
                 label='Save'
                 action={()=>{
                   console.log("triggered")
-                  props.setclinicId({id:"29",name:"clinic name"});
-                  props.setComplete([true, true, false]);
-                  props.setMark('111');//saveClinic
+                  saveClinic();
+                  
                 }}/>
            </View>
            

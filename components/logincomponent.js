@@ -22,13 +22,13 @@ const LoginComponent = props => {
       </View>
    
       <View style={styles.child}>
-      <Inp placeholder="Phone" 
+      <Inp placeholder="Phone" maxLength={10}
       onChangeText={text => {props.setPhone(text)}}
       />
 
       </View>
       <View style={styles.child}>
-      <Inp placeholder="Password"
+      <Inp placeholder="Password" maxLength={20}
       pwdtoggle={()=>props.pwdtoggle()}
       onChangeText={text => {props.setPassword(text)}}
       passwordtoggle={props.passwordtoggle}/>

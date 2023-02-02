@@ -177,7 +177,7 @@ settimeSlot(weekday)
         patient: patientdata,
         fhir_patient:fhir_patient,
       };
-      console.log(photo.assets[0],"image uploaded");
+     
       PostApi('appointment/save', data, true)
         .then(function (response) {
           console.log(response.data);
@@ -200,7 +200,7 @@ settimeSlot(weekday)
                   console.log(error);
                 });
             }
-            //navigation.navigate("Dashboard")
+            navigation.navigate("Dashboard",{"data":"data"})
           } else {
             console.warn(response.data.message);
           }
@@ -213,6 +213,7 @@ settimeSlot(weekday)
     return (
         <SafeAreaView style={{flex: 1}}>
             <DashHead />
+            <ScrollView>
             <View style={{flexDirection: 'row'}}>
             <View
                 style={{
@@ -271,7 +272,7 @@ settimeSlot(weekday)
                     <View style={{marginTop: verticalScale(8)}}>
                     <Datebtn
                         action={() => setOpendob(!opendob)}
-                        text={dob.toString()===new Date().toString()?"DOB":dob.toDateString()}
+                        text={dob.toString()===new Date().toString()?"DOB":"DOB : "+dob.toDateString()}
                         name="calendar"
                     />
                     </View>
@@ -372,7 +373,7 @@ settimeSlot(weekday)
             </Pressable>
           )}
             </View>
-            </View>
+            </View></ScrollView>
             <SelectModal
             visible={visible}
             mode="cliniclist"

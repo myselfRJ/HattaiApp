@@ -13,7 +13,7 @@ import Inp from './inp';
 
 const OtpComponent = props => {
   const [otp, setOtp] = React.useState('');
-  const [counter, setCounter] = React.useState(5);
+  const [counter, setCounter] = React.useState(30);
   {
     counter > 0
       ? setTimeout(() => {

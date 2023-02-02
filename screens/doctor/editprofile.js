@@ -100,10 +100,12 @@ setparentclinicTiming({...parentclincTiming,"weekday":weekdaydata,"weekend":week
            padding:10,bottom:0,left:0,width:60,height:60,backgroundColor:'#7DBDFA',borderTopRightRadius:40}}>
                 <Icon name='arrow-left' size={24} color='#fff' onPress={()=>{prevComponent(mark)}}/>
            </TouchableOpacity>:<></>}
-           {mark==="100"&&<SelectModal visible={visible} 
-              showModal={showModal} 
+           {/* {mark==="100"&&<SelectModal visible={visible} 
+              index={1}
               hideModal={hideModal}
-              mode="drug"/>}
+              medication={profileSpeciality}
+              setMedication={setprofileSpeciality}
+              mode="speciality"/>} */}
               {mark==="110"&&<SelectModal visible={visible} 
               showModal={showModal} 
               hideModal={hideModal}

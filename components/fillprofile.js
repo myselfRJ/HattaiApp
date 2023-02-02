@@ -29,7 +29,7 @@ const Fillprofile = props => {
   const [profileGender, setprofileGender] = useState();
   const [profileDOB, setprofileDOB] = useState('DOB');
   const [profileMedNo, setprofileMedNo] = useState();
-  const [profileSpeciality, setprofileSpeciality] = useState('Pulmnologist');
+  const [profileSpeciality, setprofileSpeciality] = useState('General Physician');
   const [profileExp, setprofileExp] = useState();
   const [photo, setPhoto] = React.useState(null);
   const [value, setValue] = React.useState('first');
@@ -285,7 +285,7 @@ const Fillprofile = props => {
                 value={profileMedNo}
                 onChangeText={setprofileMedNo}
               />
-              <Btn
+              {/* <Btn
                 label="Upload Doc"
                 labelStyle={{
                   fontSize: moderateScale(12),
@@ -303,13 +303,13 @@ const Fillprofile = props => {
                   height: verticalScale(80),
                   width: horizontalScale(120),
                 }}
-              />
+              /> */}
             </View>
           </View>
 
           <View style={styles.child}>
             <Datebtn
-              text="Speciality"
+              text={"Speciality : "+profileSpeciality}
               action={() => {
                 props.showModal(!props.visible);
               }}
