@@ -1,5 +1,5 @@
-import React,{useRef,useState}from 'react';
-import {View,Text, StyleSheet, ScrollView, TouchableOpacity, Animated, Pressable} from 'react-native';
+import React,{useRef,useState,useEffect}from 'react';
+import {View,Text, StyleSheet, ScrollView, TouchableOpacity, Animated, Pressable, FlatList} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AppointTck from '../../components/apntck';
@@ -8,12 +8,35 @@ import Datebtn from '../../components/datebtn';
 import SelectModal from '../../components/selectmodal';
 import StatusTck from '../../components/statustck';
 import { horizontalScale, moderateScale, verticalScale } from '../dim';
+import { GetApi } from '../../api/postapi';
 const Dashboard=({navigation})=>{
+    const [appointmentData,setAppointmentData]=useState([]);
+    const [practitionerData,setPractitionerData]=useState();
+    const [clinicData,setClinicData]=useState([]);
     const [visible, setVisible] = useState(false);
     const [open,setOpen]=useState(false);
     const showModal = () => setVisible(true);
     const hideModal = () => setVisible(false);
+    const [clinicSelectid,setclinicselectid]=useState();
     const fadeAnim = useRef(new Animated.Value(horizontalScale(-424))).current;
+    useEffect(() => {
+        GetApi('data/init',true)//+global.CLINICID,true)
+        .then(function(response){
+           setPractitionerData(response.data)
+           setclinicselectid(response.data["clinic"][0]["id"])
+           global.CLINICID=response.data["clinic"][0]["id"]
+           global.practitionerData=response.data
+        global.fhir_practitioner_id=response.data["fhir_practitioner_id"]})
+            }, []);
+    useEffect(() => {
+        {clinicSelectid&&GetApi(`appointment/get/${clinicSelectid}/${new Date().toISOString().split('T')[0]}`,true)//+global.CLINICID,true)
+        .then(function(response){
+            setAppointmentData(response.data["data"])
+        console.log(response.data,"appointment data")
+        }).catch(function (error) {
+            console.log(error);
+        });}
+            }, [clinicSelectid]);
     console.log("outvalue",open)
    const handleAnim=()=>{
     if(!open){
@@ -45,45 +68,48 @@ const Dashboard=({navigation})=>{
         useNativeDriver: true,
       }).start();
     };
-
+const renderAppointment=(item)=>{
+    return <AppointTck index={item.index+1} item={item} action={navigation} />
+}
     return (
-        <SafeAreaView style={{flex:1,
+        <View style={{flex:1
         }}>
-            <DashHead/>
+            <DashHead url={practitionerData?practitionerData["photo"][0]["url"]:"https://cdn-icons-png.flaticon.com/512/2785/2785482.png"} name={practitionerData?practitionerData["name"]:"Welcome"} />
             <View style={{paddingHorizontal:horizontalScale(72),width:'100%',paddingVertical:verticalScale(24)}}>
             <View style={{flexDirection:'row',alignItems:'center',width:'98%',justifyContent:'space-between'}}>
-            <Datebtn name='medical-bag' text='Healthcare Abudance name' 
+            <Datebtn name='medical-bag' text={practitionerData?practitionerData["clinic"][0]["clinic_name"]:"Clinic"} 
                 action={showModal}/>
             <View style={{flexDirection:'row',}}>
-                <Text>
-                    01 Nov
+                <Text style={{fontSize:14,fontWeight:400,color:"black",alignItems:"center"}}>
+                    {new Date().toDateString()}
                 </Text>
-                <Icon name='calendar' size={24} color="#000000"/>
+                <Icon name='calendar' size={24} color={global.themecolor}/>
             </View>
 
             </View>
             <View style={{flexDirection:'row',marginVertical:verticalScale(24)}}>
-                <StatusTck txt='Total Appointment' num={60}/>
-                <StatusTck txt='Pending' num={32}/>
-                <StatusTck txt='Completed' num={28}/>
+                <StatusTck txt='Total Appointment' num={appointmentData.length}/>
+                <StatusTck txt='Pending' num={appointmentData.length}/>
+                <StatusTck txt='Completed' num={0}/>
             </View>
             <Text style={styles.apnheading}>
                 Appointments
             </Text>
-            <ScrollView>
 
-           
-            <AppointTck/>
-            <AppointTck/>
-      
-           
-            </ScrollView>
+            <FlatList
+          data={appointmentData}
+          renderItem={renderAppointment}
+          scrollEnabled={true}
+          keyExtractor={(item, index) => index}
+         // style={{height:"60%",borderWidth:1}}
+        />
+
 
         </View>
 
-        <SelectModal visible={visible} 
+        {/* <SelectModal visible={visible} 
               showModal={showModal} 
-              hideModal={hideModal}/>
+              hideModal={hideModal}/> */}
 
 <View style={{position:'absolute',bottom:verticalScale(80),right:horizontalScale(24),flexDirection:'row'}}>
                 
@@ -98,7 +124,7 @@ const Dashboard=({navigation})=>{
                    <Icon name="account-clock" size={40} color="#ffffff"/>
    
                    </TouchableOpacity>
-                   <TouchableOpacity onPress={()=>{navigation.navigate("Prescription")}} style={{backgroundColor:"#4BA5FA",marginHorizontal:4,width:horizontalScale(68),height:horizontalScale(68),borderRadius:horizontalScale(34),justifyContent:'center',alignItems:'center'}}>
+                   <TouchableOpacity onPress={()=>{navigation.navigate("Prescription",{new:true})}} style={{backgroundColor:"#4BA5FA",marginHorizontal:4,width:horizontalScale(68),height:horizontalScale(68),borderRadius:horizontalScale(34),justifyContent:'center',alignItems:'center'}}>
                    <Icon name='prescription' size={40} color="#ffffff"/>
    
                    </TouchableOpacity>
@@ -120,7 +146,7 @@ const Dashboard=({navigation})=>{
             </View>
     
 
-        </SafeAreaView>
+        </View>
     )
 }
 

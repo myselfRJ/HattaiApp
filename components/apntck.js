@@ -1,53 +1,57 @@
-import {View,Text, StyleSheet,Image} from 'react-native';
+import {View,Text, StyleSheet,Image, Pressable} from 'react-native';
 
 import { horizontalScale, verticalScale ,moderateScale} from '../screens/dim';
 
-const AppointTck=()=>{
+const AppointTck=(props)=>{
+    const calculateAge = (birthday) => {
+        const ageDifMs = Date.now() - new Date(birthday).getTime();
+        const ageDate = new Date(ageDifMs);
+        return Math.abs(ageDate.getUTCFullYear() - 1970);
+      }
     return(
-        <View style={styles.main}>
+        <Pressable style={styles.main} onPress={()=>{console.log("pressed prt");props.action.navigate("Prescription",{data:props.item.item,new:false})}}>
             <View style={styles.token}>
                 <Text>
                     Token
                 </Text>
                 <Text>
-                    0001
+                   {("00"+props.index)}
                 </Text>
             </View>
-            <View>
+            <View >
                 <View style={{paddingLeft:horizontalScale(100),
                     paddingVertical:verticalScale(16),
                     flexDirection:'row'}}>
                     <View 
                     >
-                        <Image style={{width:horizontalScale(48),height:horizontalScale(48),borderRadius:horizontalScale(24)}}source={require('../resources/images/profile.jpg')} />
+                        <Image style={{width:horizontalScale(48),height:horizontalScale(48),borderRadius:horizontalScale(24)}}
+                        source={props.item.item["patient_data"]["photo"].length>0&&props.item.item["patient_data"]["photo"][0]["url"]?{uri: `${props.item.item["patient_data"]["photo"][0]["url"]}`}:require('../resources/images/healthcare.png')} />
 
                     </View>
                     <View style={{marginLeft:horizontalScale(8),paddingTop:verticalScale(8)}}>
 
                     
-                    <Text style={styles.name}>Chatvakular</Text>
-                    <Text style={styles.info}>Age 26 | F</Text>
-                    <Text style={styles.diagnosis}>Lorem ipsum dolor sit amet, 
-                        consectetur adipiscing elit. Cras et turpis 
-                        metus.Quisque vestibulum molestie ipsum id sagittis. Quisque vestibulum molestie ipsum id sagittis.</Text>
+                    <Text style={styles.name}>{props.item.item["patient_data"]["name"]}</Text>
+                    <Text style={styles.info}>Age {calculateAge(props.item.item["patient_data"]["birthDate"])} | {props.item.item["patient_data"]["gender"]==="male"?"M": props.item.item["patient_data"]["gender"]==="female"?"F":"UNK"}</Text>
+                    <Text style={styles.diagnosis}>{props.item.item["serviceCategory"]}</Text>
                     </View>
                 </View>   
 
             </View>
 
-            <View style={styles.paid}>
-                        <Text style={styles.paidtxt}>Paid</Text>
+            <View style={props.item.item["is_paid"]?styles.paid:styles.due}>
+                        <Text style={styles.paidtxt}>{props.item.item["is_paid"]?"Paid":"Due"}</Text>
                     </View>
             <View style={styles.penview}>
                 <View style={styles.peninner} onPress={() => console.log('Pressed')}>
                    <Text style={{fontSize:moderateScale(10)}}>Pending</Text>
                    </View>
 
-                        <Text style={styles.timetxt}>6:30pm - 7:00pm</Text>
+                        <Text style={styles.timetxt}>{props.item.item["timeslot"][0].slice(11,16)} - {props.item.item["timeslot"][1].slice(11,16)}</Text>
                 
                     </View>
          
-        </View>
+        </Pressable>
     )
 }
 const styles=StyleSheet.create({
@@ -81,6 +85,21 @@ const styles=StyleSheet.create({
                 width:horizontalScale(72),
                 height:verticalScale(32),
                 backgroundColor:"#32BF40",
+                borderColor:'#4BA5FA',
+                borderWidth:0.5,
+                borderTopLeftRadius:horizontalScale(32),
+                borderBottomLeftRadius:horizontalScale(32)
+
+    },
+    due:{
+        alignItems:'center',
+                position:'absolute',
+                bottom:0,
+                right:0,
+                justifyContent:'center',
+                width:horizontalScale(72),
+                height:verticalScale(32),
+                backgroundColor:"#ffd966",
                 borderColor:'#4BA5FA',
                 borderWidth:0.5,
                 borderTopLeftRadius:horizontalScale(32),

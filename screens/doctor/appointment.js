@@ -5,7 +5,7 @@ import {
   Text,
   View,
   Pressable,
-  ScrollView,
+  ScrollView,TouchableOpacity,Image
 } from 'react-native';
 import { RadioButton } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -16,12 +16,13 @@ import Datebtn from '../../components/datebtn';
 import Inp from '../../components/inp';
 import {horizontalScale, moderateScale, verticalScale} from '../dim';
 import SelectModal from '../../components/selectmodal';
-import { PostApi,GetApi } from '../../api/postapi';
-const BookingApp = () => {
+import { PostApi,GetApi,PostForm } from '../../api/postapi';
+import {launchCamera,launchImageLibrary} from 'react-native-image-picker';
+const BookingApp = ({navigation}) => {
 
     const [name, setName] = useState();
     const [phone, setPhone] = useState();
-    const [gender, setGender] = useState();
+    const [gender, setGender] = useState('male');
     const [complaint, setComplaint] = useState();
     const [clinicname, setClinic] = useState(global.CLINICNAME);
     const [fee, setFee] = useState();
@@ -40,9 +41,18 @@ const BookingApp = () => {
     const hideModalSlot = () => setOpentm(false);
     const [daySelect, setdaySelect] = useState();
     const [timeSlot, settimeSlot] = useState([]);
-    console.log(date.toISOString())
+    const [photo, setPhoto] = React.useState(null);
+    const handleChoosePhoto = () => {
+      console.log("camera opened")
+      launchCamera({noData: true}, response => {
+        console.log(response);
+        if (response.assets) {
+          setPhoto(response);
+        }
+      });
+    };
     useEffect(() => {
-GetApi('clinic/slot/3',true)//+global.CLINICID,true)
+GetApi('clinic/slot/'+global.CLINICID,true)//+global.CLINICID,true)
 .then(function(response){
 console.log(response.data,"slot data")
 setdaySelect(response.data["daySelect"])
@@ -56,16 +66,20 @@ settimeSlot(weekday)
     const saveAppointmrnt = () => {
       const patientdata = {
         gender: gender,
-        birthDate: dob,
+        birthDate: dob.toISOString().split('T')[0],
         phone_number: phone,
         name: name,
       };
       const localdata = {
-        start:date.toISOString().split('T')[0]+time+":00Z",
+        start:date.toISOString().split('T')[0]+'T'+time+":00Z",
         minutesduration:"30",
         serviceCategory:"General medical practice",
-        clinic:3//global.CLINICID,
+        is_paid:fee?true:false,
+        clinic:global.CLINICID,
       };
+      // const enddate=date
+      // enddate.setMinutes(enddate.getMinutes() + 30)
+      // console.log(date,enddate,"date")
       const fhir = {
         //edit qualification code and display
         "meta" : {
@@ -118,61 +132,75 @@ settimeSlot(weekday)
         "participant" : [
           {
             "actor" : {
-              "reference" : "Patient/"+patientId//edit fhir id or abha
+              "reference" : "Patient/101"//edit fhir id or abha
             },
             "status" : "accepted"
           },
           {
             "actor" : {
-              "reference" : "Practitioner/"+practitionerId//edit fhir id or abha
+              "reference" : "Practitioner/"+global.fhir_practitioner_id//edit fhir id or abha
             },
             "status" : "accepted"
           }
         ],//edit here
         resourceType: 'Appointment',
-        start:date.toISOString().split('T')[0]+time+":00Z",//datetime here
+        start:date.toISOString().split('T')[0]+'T'+time+":00Z",//datetime here
+        end:date.toISOString().split('T')[0]+'T'+time+":59Z",//datetime here
         status:"booked",//cancelled or booked
         description:complaint//chief complaint and reason for booking
       };
+      const fhir_patient ={
+        "resourceType" : "Patient",
+        "meta" : {
+          "profile" : [
+            "https://nrces.in/ndhm/fhir/r4/StructureDefinition/Patient"
+          ]
+        },
+        "name" : [
+          {
+            "text" : name
+          }
+        ],
+        "telecom" : [
+          {
+            "system" : "phone",
+            "value" : phone,
+            "use" : "home"
+          }
+        ],
+        "gender" : gender,
+        "birthDate" : dob.toISOString().split('T')[0]
+      }
       const data = {
         fhir: fhir,
         local: localdata,
         patient: patientdata,
+        fhir_patient:fhir_patient,
       };
-      console.log(data);
-      PostApi('data/names/save', data, true)
+      console.log(photo.assets[0],"image uploaded");
+      PostApi('appointment/save', data, true)
         .then(function (response) {
           console.log(response.data);
           if (response.data['status'] === 'success') {
             if (photo) {
+              console.log(photo.assets[0])
               var FormData = require('form-data');
               var data = new FormData();
-              data.append('contentType', `image/${photo.assets[0].uri
-                .split('/')
-                .pop()
-                .split('.')
-                .pop()}`);
+              data.append('contentType', "image/jpeg");
               data.append('language', 'en-US');
-              data.append('url', {
-                uri: photo.assets[0].uri, //Your Image File Path
-                type: `image/+${photo.assets[0].uri
-                  .split('/')
-                  .pop()
-                  .split('.')
-                  .pop()}`,
-                name: photo.assets[0].uri.split('/').pop(),
-              });
-              data.append('title', profileName + "'s picture");
-              PostForm('data/names/media/' + response.data['data']['id'], data)
+              data.append('url', photo.assets[0].uri); 
+              data.append('title', name + "'s picture");
+              console.log(data["url"],"uimage data send")
+              PostForm('patient/media/' + response.data['patientId'], data)
                 .then(function (response) {
                   console.log('image saved');
+                  console.log(response.data)
                 })
                 .catch(function (error) {
                   console.log(error);
                 });
             }
-            props.setComplete([true, false, false]);
-            props.setMark('110');
+            //navigation.navigate("Dashboard")
           } else {
             console.warn(response.data.message);
           }
@@ -319,17 +347,30 @@ settimeSlot(weekday)
                         width: horizontalScale(480),
                         alignItems: 'flex-end',
                     }}>
-                    <Btn label="Submit" />
+                    <Btn label="Submit" action={saveAppointmrnt} />
                     </View>
                 </View>
                 </ScrollView>
             </View>
             <View style={{paddingTop: verticalScale(85)}}>
-                <Pressable
-                onPress={() => console.log('i am pressed')}
-                style={style.img}>
-                <Icon name="image-plus" size={40} color="#4BA5FA" />
-                </Pressable>
+            {photo!==null && photo!==undefined ? (
+            <TouchableOpacity
+              onPress={() => {
+                console.log('i am pressed');
+                handleChoosePhoto();
+              }}>
+              <Image source={{uri: photo.assets[0].uri}} style={style.img} />
+            </TouchableOpacity>
+          ) : (
+            <Pressable
+              onPress={() => {
+                console.log('i am pressed');
+                handleChoosePhoto();
+              }}
+              style={style.img}>
+              <Icon name="image-plus" size={40} color="#4BA5FA" />
+            </Pressable>
+          )}
             </View>
             </View>
             <SelectModal

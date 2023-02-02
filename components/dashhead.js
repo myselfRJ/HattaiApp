@@ -1,8 +1,9 @@
+import { useLinkProps } from '@react-navigation/native';
 import { View,Text, StyleSheet, Image, Pressable} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { horizontalScale, moderateScale, verticalScale } from '../screens/dim';
 
-const DashHead=()=>{
+const DashHead=(props)=>{
 
 
     return (
@@ -10,13 +11,13 @@ const DashHead=()=>{
             <Image 
             style={{height:verticalScale(87),width:horizontalScale(156)}} source={require('../resources/images/blattai.png')} />
             <Text style={styles.wlctxt}>
-            Good Morning, Dr.Muthu
+            Good Morning, {props.name}
             </Text>
             <Pressable onPress={()=>console.log('I am Doctor')}style={{flexDirection:'row',alignItems:'center',marginLeft:horizontalScale(40)}}>
 
             
-            <Image  style={styles.avatar}source={require('../resources/images/profile.jpg')}/>
-            <Text style={styles.profilename}>Dr.Prayanka murli Kumaran</Text>
+            <Image  style={styles.avatar}source={{uri:props.url}}/>
+            <Text style={styles.profilename}>{props.name}</Text>
             <Icon name='menu-down' size={24} color="#ffffff"></Icon>
             </Pressable>
         </View>

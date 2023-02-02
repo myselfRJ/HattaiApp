@@ -21,7 +21,9 @@ import MuInp from '../../components/muinp';
 import SelectModal from '../../components/selectmodal';
 import TimeGroup from '../../components/timegp';
 import {horizontalScale, moderateScale, verticalScale} from '../dim';
-const Prescription = () => {
+import { PostApi } from '../../api/postapi';
+const Prescription = (props,{navigation}) => {
+console.log(props.route.params.data["patient_data"]["photo"],"photo")
   const refers = [
     {type: 'Doctor', icon: 'medical-bag'},
     {type: 'Labs', icon: 'flask'},
@@ -48,7 +50,15 @@ const Prescription = () => {
   const [shareDialog,setShare]=useState(false);
   const [checked, setChecked] = useState([false,false]);
 
-
+  const [bp, setbp] = useState();
+  const [pr, setpr] = useState();
+  const [spo2, setspo2] = useState();
+  const [temp, settemp] = useState();
+  const [lmp, setlmp] = useState();
+  const [edd, setedd] = useState();
+  const [fees, setfees] = useState();
+  const [feeshow, setfeeshow] = useState(true);
+ // {!props.route.params.new?props.route.params.data["is_paid"]?setfeeshow(false):null:null}
   const [id, SetId] = useState(null);
   const showModal = () => setVisible(true);
   const hideModal = () => {
@@ -103,9 +113,48 @@ const Prescription = () => {
     SetId(value);
     showDialog();
   }
+  const calculateAge = (birthday) => {
+    const ageDifMs = Date.now() - new Date(birthday).getTime();
+    const ageDate = new Date(ageDifMs);
+    return Math.abs(ageDate.getUTCFullYear() - 1970);
+  }
+  const shareBtnFinal=()=>{
+    //setShare(!shareDialog);
+    console.log(diagnosis,"diagnosis")
+    console.log(medication,"medication")
+    console.log(time,"time")
+    console.log(date,"date")
+    data={
+      name:props.route.params.data["patient_data"]["name"],
+      patient_id:props.route.params.data["patient_id"],
+      appointment_id:props.route.params.data["id"],
+      fhir_appointment_id:props.route.params.data["fhir_appointment_id"],
+      diagnosis:diagnosis,
+      bp:bp,
+      pr:pr,
+      spo2:spo2,
+      temp:temp,
+      lmp:lmp,
+      edd:edd,
+      medication:medication,
+    }
+    PostApi('patient/prescription/save', data, true)
+      .then(function (response) {
+        console.log(response.data);
+        if (response.status === 201) {
+          console.log("inside success")
+          props.navigation.navigate("Dashboard")      
+        } else {
+          console.warn(response.data.message);
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
   return (
     <View style={{flex: 1, alignItems: 'center'}}>
-      <DashHead />
+      <DashHead url={practitionerData?practitionerData["photo"][0]["url"]:"https://cdn-icons-png.flaticon.com/512/2785/2785482.png"} name={practitionerData?practitionerData["name"]:"Welcome"} />
 
       <View style={styles.main}>
         <View
@@ -123,7 +172,7 @@ const Prescription = () => {
           </View>
           <View>
             <Image
-              source={require('../../resources/images/profile.jpg')}
+              source={{uri:props.route.params.data["patient_data"]["photo"]["url"]?props.route.params.data["patient_data"]["photo"][0]["url"]:"https://cdn-icons-png.flaticon.com/512/4320/4320385.png"}}
               style={{
                 height: horizontalScale(48),
                 width: horizontalScale(48),
@@ -132,11 +181,10 @@ const Prescription = () => {
             />
           </View>
           <View style={{marginLeft: horizontalScale(8)}}>
-            <Text style={styles.name}>Heeralal Chand</Text>
-            <Text style={styles.info}>26 Years | Male</Text>
+            <Text style={styles.name}>{props.route.params.data["patient_data"]["name"]}</Text>
+            <Text style={styles.info}>{calculateAge(props.route.params.data["patient_data"]["birthDate"])} Years | {props.route.params.data["patient_data"]["gender"].toUpperCase()} </Text>
             <Text style={styles.diagnosis}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras et
-              turpis metus. Quisque vestibulum molestie ipsum id sagittis.
+              {props.route.params.data["serviceCategory"]}
             </Text>
           </View>
         </View>
@@ -155,24 +203,25 @@ const Prescription = () => {
               paddingHorizontal: horizontalScale(16),
             }}>
             <View style={{marginRight: horizontalScale(16)}}>
-              <Inp placeholder="BP" textAlign="left" height={56} width={120} />
-              <Inp
-                placeholder="SPO2"
-                textAlign="left"
-                height={56}
-                width={120}
-              />
-              <Inp placeholder="LMP" textAlign="left" height={56} width={120} />
+              <Inp placeholder="BP" value={bp} action={setbp} textAlign="left" height={56} width={120} />
+              <Inp placeholder="SPO2" value={spo2} action={setspo2} textAlign="left" height={56} width={120} />
+              <Inp placeholder="LMP" value={lmp} action={setlmp} textAlign="left" height={56} width={120} />
             </View>
             <View>
-              <Inp placeholder="PR" textAlign="left" height={56} width={120} />
+              
               <Inp
-                placeholder="TEMP"
+                placeholder="PR" value={pr} action={setpr}
                 textAlign="left"
                 height={56}
                 width={120}
               />
-              <Inp placeholder="EDD" textAlign="left" height={56} width={120} />
+              <Inp
+                placeholder="TEMP" value={temp} action={settemp}
+                textAlign="left"
+                height={56}
+                width={120}
+              />
+              <Inp placeholder="EDD" value={edd} action={setedd} textAlign="left" height={56} width={120} />
             </View>
           </View>
         </View>
@@ -373,6 +422,7 @@ const Prescription = () => {
             />
             <DatePicker
               mode="time"
+              minuteInterval={30}
               modal
               open={opentm}
               date={time}
@@ -386,12 +436,12 @@ const Prescription = () => {
             />
           </View>
               <View style={{marginTop:verticalScale(8),marginBottom:verticalScale(8)}}>
-              <Inp placeholder="Fees" textAlign="left" />
+             {feeshow&& <Inp value={fees} action={setfees} placeholder="Fees" textAlign="left" />}
 
 
               </View>
               <View style={{alignItems:'flex-end',marginTop:verticalScale(8),marginBottom:verticalScale(8)}}>
-              <Btn label="Share"  action={()=>showShare(!shareDialog)}/>
+              <Btn label="Submit"  action={()=>{shareBtnFinal()}}/>
 
               </View>
         
@@ -446,7 +496,7 @@ const Prescription = () => {
       </Dialog>
       <Dialog
       visible={shareDialog}
-      onDismiss={showShare}
+      onDismiss={hideShare}
       >
         <Dialog.Title>
           Share With

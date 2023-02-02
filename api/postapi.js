@@ -2,12 +2,12 @@ import axios from 'axios';
 
 
 const PostApi = async (url,req_data,secure) => {
-  console.log(url,"url")
+  console.log(url,"url",global.globalurl+url)
     const headers = {
         'Content-Type': 'application/json',
       };
       if (secure){
-          headers['Authorization'] = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjc1MjQ2NTYxLCJpYXQiOjE2NzUxNjAxNjEsImp0aSI6IjE5NzIxY2VkZTM2NDQ0YTNhZmQyZjRhNTgwOWZiODM4IiwidXNlcl9pZCI6Ijk5OTk5OTk5OTkifQ.Ebo8FRikkYZ5sCQTneyqxunWM-aB2dQ1j0VkGfulZvI'//+global.user_session
+          headers['Authorization'] = 'Bearer '+global.user_session
       }
     const result = await axios.post(global.globalurl+url, 
  JSON.stringify(req_data),{headers}
@@ -21,7 +21,7 @@ const PostApi = async (url,req_data,secure) => {
  const PostForm = async(url,form_data)=>{
     console.log(url,"url",form_data)
     const headers = { 
-      'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjc1MjQ2NTYxLCJpYXQiOjE2NzUxNjAxNjEsImp0aSI6IjE5NzIxY2VkZTM2NDQ0YTNhZmQyZjRhNTgwOWZiODM4IiwidXNlcl9pZCI6Ijk5OTk5OTk5OTkifQ.Ebo8FRikkYZ5sCQTneyqxunWM-aB2dQ1j0VkGfulZvI',//+global.user_session, 
+      'Authorization': 'Bearer '+global.user_session, 
       "Content-Type": "multipart/form-data"
     };
     const result = await axios.post(global.globalurl+url, 
@@ -36,7 +36,7 @@ const PostApi = async (url,req_data,secure) => {
           'Content-Type': 'application/json',
         };
         if (secure){
-            headers['Authorization'] = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjc1MjQ2NTYxLCJpYXQiOjE2NzUxNjAxNjEsImp0aSI6IjE5NzIxY2VkZTM2NDQ0YTNhZmQyZjRhNTgwOWZiODM4IiwidXNlcl9pZCI6Ijk5OTk5OTk5OTkifQ.Ebo8FRikkYZ5sCQTneyqxunWM-aB2dQ1j0VkGfulZvI'//+global.user_session
+            headers['Authorization'] = 'Bearer '+global.user_session
         }
       const result = await axios.get(global.globalurl+url, 
       {headers}

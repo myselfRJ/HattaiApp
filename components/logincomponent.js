@@ -8,7 +8,7 @@ import styles from './signupss';
 import Btn from './btn';
 import Inp from './inp';
 const LoginComponent = props => {
-  console.log(global.user_session,"user")
+  console.log(global.user_session,"user",props)
   return (
     <View style={styles.main}>
       <View style={styles.child}>
@@ -22,21 +22,21 @@ const LoginComponent = props => {
       </View>
    
       <View style={styles.child}>
-      <Inp placeholder="8218513243" 
-      onChangeText={text => props.setPhone(text)}
+      <Inp placeholder="Phone" 
+      onChangeText={text => {props.setPhone(text)}}
       />
 
       </View>
       <View style={styles.child}>
       <Inp placeholder="Password"
       pwdtoggle={()=>props.pwdtoggle()}
-      onChangeText={text => props.setPassword(text)}
+      onChangeText={text => {props.setPassword(text)}}
       passwordtoggle={props.passwordtoggle}/>
 
       </View>
      <View style={styles.child}>
      <Btn label='Login'
-     action={()=>props.loginserver()}/>
+     action={()=>{props.loginserver()}}/>
 
      </View>
      <Text style={styles.child}>

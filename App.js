@@ -14,6 +14,15 @@ import axios from 'axios';
 const Stack = createNativeStackNavigator();
 
 function App(){
+  axios.get("https://raw.githack.com/myselfRJ/mcqdata/main/ip.json") .then(function (response) {
+    // handle success
+    console.log(response.data["ip"]);
+    global.globalurl=response.data["ip"]+"/api/v1/"
+  })
+  .catch(function (error) {
+    // handle error
+    console.log(error);
+  })
   async function retrieveUserSession() {
     try {   
         const session = await EncryptedStorage.getItem("user_session");
@@ -69,13 +78,14 @@ function App(){
       <Stack.Navigator screenOptions={{
     headerShown: false
   }}>
-     <Stack.Screen name="Dashboard" component={Dashboard} />
     <Stack.Screen name="Signup" component={Signuppageview} />
-      <Stack.Screen name="EditProfile" component={Editprofile} />
-    
-      <Stack.Screen name='Prescription' component={Prescription}/>
-    <Stack.Screen name="BookApp" component={BookingApp} />
     <Stack.Screen name="Profile" component={ProfilePage} />
+    <Stack.Screen name="EditProfile" component={Editprofile} />
+     <Stack.Screen name="Dashboard" component={Dashboard} />
+     <Stack.Screen name="BookApp" component={BookingApp} />
+      <Stack.Screen name='Prescription' component={Prescription}/>
+    
+   
   </Stack.Navigator>
   </NavigationContainer>
   );

@@ -12,7 +12,7 @@ import SignupComponent from '../../components/signupcomponent';
 import {pwdCheck} from '../../auth/pwdauth';
 import {horizontalScale, verticalScale} from '../dim';
 import SelectModal from '../../components/selectmodal';
-import PostApi from '../../api/postapi';
+import {PostApi} from '../../api/postapi';
 import EncryptedStorage from 'react-native-encrypted-storage';
 
 const Signuppageview = ({navigation}) => {
@@ -34,7 +34,7 @@ const Signuppageview = ({navigation}) => {
   }, [pagenum]);
 
   const requestFailed = () => {
-    console.log('error');
+    console.log('error',phone,password);
     setloading(false);
   };
   //function to call when signup button pressed on signup component and navigate to otp component
@@ -93,6 +93,7 @@ const Signuppageview = ({navigation}) => {
           // There was an error on the native side
       }
   }
+  console.log(phone,password,"data",globalurl)
     {
       phone && password
         ? PostApi('signup/token/',
@@ -104,17 +105,19 @@ const Signuppageview = ({navigation}) => {
             .then(function (response) {
               console.log(response.data);
               if (response.status===200){
+                console.log("loged in")
               setloading(false);
+              global.user_session=response.data["access"]
               storeUserSession(response.data,phone);
               navigation.navigate('Profile', {name: 'Jane'});}
             })
             .catch(function (error) {
-              console.log(error);
+              console.log(error,phone,password);
               requestFailed();
             })
         : requestFailed();
     }
-    //
+    
   };
   const signupserver = async (phone, otp) => {
     setloading(!loading);

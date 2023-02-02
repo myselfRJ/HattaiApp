@@ -214,8 +214,7 @@ const Addclinic=(props)=>{
           
         </View>
        {props.parentclinicTiming["weekday"]&&clinicAddress&&clinicFees&&clinicName?
-       <Addbtn text='Add Clinic' onPress={()=>{props.setComplete([true, true, false]);
-        props.setMark('111');//saveClinic
+       <Addbtn text='Add Clinic' onPress={()=>{saveClinic()
         }} />:<></>} 
        
 
