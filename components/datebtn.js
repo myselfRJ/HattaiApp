@@ -1,5 +1,5 @@
 import { useLinkProps } from "@react-navigation/native";
-import { StyleSheet, Pressable,Text } from "react-native";
+import { StyleSheet, Pressable,Text ,Image} from "react-native";
 import { Chip } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { horizontalScale, verticalScale, moderateScale } from "../screens/dim";
@@ -7,9 +7,16 @@ import { horizontalScale, verticalScale, moderateScale } from "../screens/dim";
 const Datebtn=(props)=>{
 console.log(props.name,props.text,"btn date")
 let Arr = props.timelist!==undefined&&props.timelist.length>0?props.timelist.map((a, i) => {
-    console.log(a,"a")
+    console.log(a[0].split(":")[0]>14,"a")
     return (
-        <Chip key={i}  mode="outlined" style={{height:30}} compact={true} onPress={() => console.log('Pressed')}>{a.toString().replace(",","-")}</Chip>
+        <Chip
+        icon={({ size=12, color="red" }) => (
+            <Image
+              source={a[0].split(":")[0]>14?require('../resources/images/night.png'):require('../resources/images/sun.png')}
+              style={{ width: size, height: size, tintColor: a[0].split(":")[0]>14?"yellow":"orange" }}
+            />)}//icon={a[0].split(":")[0]>14?require('../resources/images/night.png'):require('../resources/images/sun.png')}
+         key={i}  mode="outlined" textStyle={{lineHeight:15,color:a[0].split(":")[0]>14?"white":"black"}} 
+         style={{height:30,backgroundColor:a[0].split(":")[0]>14?"#8e8d8a":"#fffb76"}} compact={true} onPress={() => console.log('Pressed')}>{a.toString().replace(",","-")}</Chip>
     )}):(<Text style={styles.text}>
         {props.text}
         </Text>)

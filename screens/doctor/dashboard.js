@@ -15,6 +15,7 @@ import { Chip } from 'react-native-paper';
 import PatienthistoryComponent from '../../components/patientHistory';
 const Dashboard=({navigation,route})=>{
     const [appointmentData,setAppointmentData]=useState([]);
+    const [appointmentDataDone,setAppointmentDataDone]=useState([]);
     const [practitionerData,setPractitionerData]=useState();
     const [clinicData,setClinicData]=useState([]);
     const [visible, setVisible] = useState(false);
@@ -39,6 +40,7 @@ const Dashboard=({navigation,route})=>{
         {clinicSelectid&&GetApi(`appointment/get/${clinicSelectid}/${new Date().toISOString().split('T')[0]}`,true)//+global.CLINICID,true)
         .then(function(response){
             setAppointmentData(response.data["data"])
+            setAppointmentDataDone(response.data["data_done"])
         console.log(response.data,"appointment data")
         }).catch(function (error) {
             console.log(error);
@@ -122,9 +124,9 @@ const renderSearchpatient=(item)=>{
 
             </View>
             <View style={{flexDirection:'row',marginVertical:verticalScale(24)}}>
-                <StatusTck txt='Total Appointment' num={appointmentData.length}/>
+                <StatusTck txt='Total Appointment' num={appointmentData.length+appointmentDataDone.length}/>
                 <StatusTck txt='Pending' num={appointmentData.length}/>
-                <StatusTck txt='Completed' num={0}/>
+                <StatusTck txt='Completed' num={appointmentDataDone.length}/>
             </View>
             <View style={{flexDirection:"row",alignItems:"center"}}><Text style={{...styles.apnheading,marginRight:10}}>
                 Appointments   
@@ -138,7 +140,13 @@ const renderSearchpatient=(item)=>{
           keyExtractor={(item, index) => index}
          // style={{height:"60%",borderWidth:1}}
         />
-
+<FlatList
+          data={appointmentDataDone}
+          renderItem={renderAppointment}
+          scrollEnabled={true}
+          keyExtractor={(item, index) => index}
+         // style={{height:"60%",borderWidth:1}}
+        />
 
         </View>}
         {page==="search"&&<TouchableWithoutFeedback onPress={Keyboard.dismiss}><View style={{paddingHorizontal:horizontalScale(72),width:'100%',paddingVertical:verticalScale(24),height:"80%"}}>

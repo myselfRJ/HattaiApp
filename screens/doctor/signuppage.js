@@ -134,7 +134,7 @@ const Signuppageview = ({navigation}) => {
               console.log(response.data);
               if (response.data['status'] === 'success') {
                 setloading(false);
-                navigation.navigate('Signup', {name: 'Jane'});
+                setPagenum(3);
               } else {
                 console.warn(response.data.message);
               }

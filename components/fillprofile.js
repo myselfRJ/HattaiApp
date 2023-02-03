@@ -79,7 +79,7 @@ const Fillprofile = props => {
               {
                 system: 'http://snomed.info/sct',
                 code: '416555',
-                display: 'Pulmnologist',
+                display: 'General Practitioner',
                 userSelected: true,
               },
             ],
@@ -311,7 +311,7 @@ const Fillprofile = props => {
             <Datebtn
               text={"Speciality : "+profileSpeciality}
               action={() => {
-                props.showModal(!props.visible);
+                console.log("gp")//props.showModal(!props.visible);
               }}
             />
 
@@ -333,7 +333,7 @@ const Fillprofile = props => {
             }}>
             <Btn
               label="Save"
-              action={() => {
+              action={() => {//props.setMark('110');
                saveProfile();
               }}
             />
