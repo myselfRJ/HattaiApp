@@ -9,7 +9,8 @@ const AppointTck=(props)=>{
         return Math.abs(ageDate.getUTCFullYear() - 1970);
       }
     return(
-        <Pressable style={styles.main} onPress={()=>{console.log("pressed prt");props.action.navigate("Prescription",{data:props.item.item,new:false})}}>
+        <Pressable style={styles.main} onPress={()=>{console.log("pressed prt");
+        props.item.item["is_complete"]?console.log("done"):props.action.navigate("Prescription",{data:props.item.item,new:false})}}>
             <View style={styles.token}>
                 <Text>
                     Token

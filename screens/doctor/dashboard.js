@@ -1,5 +1,5 @@
 import React,{useRef,useState,useEffect}from 'react';
-import {View,Text, StyleSheet, Image, TouchableOpacity, Animated, Pressable, FlatList,TouchableWithoutFeedback,Keyboard} from 'react-native';
+import {Image,View,Text, StyleSheet,  TouchableOpacity, Animated, Pressable, FlatList,TouchableWithoutFeedback,Keyboard} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AppointTck from '../../components/apntck';
@@ -105,8 +105,9 @@ const renderAppointment=(item)=>{
     return <AppointTck index={item.index+1} item={item} action={navigation} />
 }
 const renderSearchpatient=(item)=>{
-    return <SearchPatientComponent index={item.index+1} item={item} action={(data)=>{setPage("patient");console.log("pa");setSearchselectData(data)}} />
+    return <SearchPatientComponent index={item.index+1} item={item} action={(data)=>{console.log("pa",data);setSearchselectData(data);setPage("patient");}} />
 }
+// console.log(searchselectData,"@@@")
     return (
         <View style={{flex:1
         }}>
@@ -193,7 +194,7 @@ const renderSearchpatient=(item)=>{
            <Chip icon="phone" mode="flat" textStyle={{fontSize:24,lineHeight:30}} style={{height:60,width:"46%"}}>Mob : {searchselectData["phone_number"]}</Chip>
            <Chip icon="calendar" mode="flat" textStyle={{fontSize:24,lineHeight:30}} style={{height:60,width:"46%"}}>DOB : {searchselectData["birthDate"]}</Chip>
            </View>
-           <Chip icon={() => (
+           <Chip icon={({size,color}) => (
     <Image
       source={require('../../resources/images/fingerprint.png')}
       style={{ width: 34, height: 34, tintColor: "#4BA5FA" }}
