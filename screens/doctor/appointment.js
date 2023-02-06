@@ -5,7 +5,7 @@ import {
   Text,
   View,
   Pressable,
-  ScrollView,TouchableOpacity,Image
+  ScrollView,TouchableOpacity,Image, BackHandler,Alert
 } from 'react-native';
 import { RadioButton } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -33,6 +33,7 @@ const BookingApp = ({navigation}) => {
     const [open, setOpen] = useState(false);
     const [opentm, setOpentm] = useState(false);
     const [time, setTime] = useState('Time');
+    const [bookedtime, setBookedTime] = useState([]);//list of already booked slot from server
     const [visible, setVisible] = useState(false);
     const [loading, setloading] = useState(false);
     const showModal = () => setVisible(true);
@@ -51,6 +52,33 @@ const BookingApp = ({navigation}) => {
         }
       });
     };
+    useEffect(() => {
+      console.log(navigation.isFocused(),"id focus")
+      
+    
+  const onBackPress = () => {
+      if (!navigation.isFocused()) {
+      return false;
+    }
+                      console.log('.......stop going to dashboard page');
+                      if (navigation.canGoBack() ) {
+                          Alert.alert('H-Attai', 'Do you want to discard Appointment?', [
+                              {text: 'Dashboard', onPress: () => navigation.navigate("Dashboard")},
+                              {
+                                text: 'Cancel',
+                                onPress: () => console.log('Cancel Pressed'),
+                                style: 'cancel',
+                              },
+                             
+                              
+                            ],{backgroundColor:"red"})
+                            return true;
+                      } else BackHandler.exitApp();
+                      return true;
+                    };
+  const backHandler = BackHandler.addEventListener('hardwareBackPress', onBackPress);
+  return () => backHandler.remove();
+}, [navigation]);
     useEffect(() => {
 GetApi('clinic/slot/'+global.CLINICID,true)//+global.CLINICID,true)
 .then(function(response){
@@ -209,10 +237,23 @@ settimeSlot(weekday)
           console.log(error);
         });
     };
-
+const fetchBookedSlot=(dateString)=>{
+  GetApi(`appointment/get/slot/${CLINICID}/${dateString}`, true)
+        .then(function (response) {
+          console.log(response.data);
+          if (response.data['status'] === 'success') {
+setBookedTime(response.data["data"]["timeslot"])
+          } else {
+            console.warn(response.data.message);
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+}
     return (
         <SafeAreaView style={{flex: 1}}>
-            <DashHead />
+            <DashHead url={practitionerData?practitionerData["photo"][0]["url"]:"https://cdn-icons-png.flaticon.com/512/2785/2785482.png"} name={practitionerData?practitionerData["name"]:"Welcome"}/>
             <ScrollView>
             <View style={{flexDirection: 'row'}}>
             <View
@@ -303,9 +344,11 @@ settimeSlot(weekday)
                     minimumDate={new Date()}
                     open={open}
                     date={date}
-                    onConfirm={date => {
+                    onConfirm={date2 => {
+                      fetchBookedSlot(date2.toISOString().split('T')[0])
+                        
+                        setDate(date2);
                         setOpen(false);
-                        setDate(date);
                     }}
                     onCancel={() => {
                         setOpen(false);
@@ -397,6 +440,7 @@ settimeSlot(weekday)
             hideModal={hideModalSlot}
             timeslot={time}
             timeslotList={timeSlot}
+            bookedslotList={bookedtime}
             settimeSlot={setTime}
             />
         </SafeAreaView>

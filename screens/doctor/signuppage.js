@@ -133,8 +133,10 @@ const Signuppageview = ({navigation}) => {
             .then(function (response) {
               console.log(response.data);
               if (response.data['status'] === 'success') {
+                
                 setloading(false);
                 setPagenum(3);
+                hideModal()
               } else {
                 console.warn(response.data.message);
               }

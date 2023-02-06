@@ -2,7 +2,7 @@ import * as React from 'react';
 import {
   TextInput,
   Image,
-  StyleSheet,
+  ActivityIndicator,
   Text,
   View,
   TouchableOpacity,
@@ -26,7 +26,8 @@ const ProfilePage = ({navigation}) => {
         onPress={() => {
       console.log("here")
         }}>
-        <Image source={{uri:"https://cdn-icons-png.flaticon.com/512/8999/8999447.png"}}/>
+        <ActivityIndicator size={48} color={global.themecolor}/>
+        <Text>Data is Loading.....</Text>
       </TouchableOpacity>
     </View>
   );

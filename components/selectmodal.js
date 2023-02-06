@@ -69,6 +69,7 @@ padding:20};
             {props.mode=='timeslotlist'&&<TimeSlotList timeslot={props.timeslot} timeslotList={props.timeslotList}
                                                     settimeSlot={props.settimeSlot}
                                                     hideModal={props.hideModal}
+                                                    bookedslotList={props.bookedslotList}
             />}
 {
             props.mode=='speciality'&&

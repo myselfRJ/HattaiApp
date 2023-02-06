@@ -1,5 +1,5 @@
 import React,{useRef,useState,useEffect}from 'react';
-import {Image,View,Text, StyleSheet,  TouchableOpacity, Animated, Pressable, FlatList,TouchableWithoutFeedback,Keyboard} from 'react-native';
+import {Alert,Image,View,Text, StyleSheet,  TouchableOpacity, Animated, Pressable, FlatList,TouchableWithoutFeedback,Keyboard,BackHandler} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AppointTck from '../../components/apntck';
@@ -49,7 +49,33 @@ const Dashboard=({navigation,route})=>{
     useEffect(() => {
                 console.log(page,"page changed to")
                     }, [page]);
-    console.log("outvalue",open)
+    useEffect(() => {
+        console.log(navigation.isFocused(),"id focus")
+        
+      
+    const onBackPress = () => {
+        if (!navigation.isFocused()) {
+        return false;
+      }
+                        console.log('.......stop going to profile page',route);
+                        if (navigation.canGoBack() ) {
+                            Alert.alert('H-Attai', 'Do you want to exit App?', [
+                                {text: 'Dashboard', onPress: () => setPage("dash")},
+                                {
+                                  text: 'Cancel',
+                                  onPress: () => console.log('Cancel Pressed'),
+                                  style: 'cancel',
+                                },
+                                {text: 'Exit', onPress: () => BackHandler.exitApp()},
+                                
+                              ],{backgroundColor:"red"})
+                              return true;
+                        } else BackHandler.exitApp();
+                        return true;
+                      };
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', onBackPress);
+    return () => backHandler.remove();
+}, [navigation]);
    const handleAnim=()=>{
     if(!open){
         fadeIn()

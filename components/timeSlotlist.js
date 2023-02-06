@@ -30,7 +30,7 @@ console.log(props.timeslotList,"lkist")
                         return(
                             <TouchableHighlight key={index}
                             underlayColor='#85C1FA'
-                            style={styles.clinic} onPress={()=>setTime(value)}>
+                            style={props.bookedslotList.includes(value)?styles.disabledclinic:styles.clinic} onPress={()=>{props.bookedslotList.includes(value)?console.log("disabled"):setTime(value)}}>
                             <Text style={styles.clinictext}>
                             {value}
         
@@ -68,6 +68,17 @@ const styles=StyleSheet.create({
         borderWidth:0.5,
         borderRadius:4,
         borderColor:'#4BA5FA'
+    },
+    disabledclinic:{
+        width:'100%',
+        height:verticalScale(56),
+        justifyContent:'center', paddingHorizontal:horizontalScale(16),
+        paddingVertical:verticalScale(8),
+        marginBottom:verticalScale(4),
+        borderWidth:0.5,
+        borderRadius:4,
+        borderColor:'#4BA5FA',
+        backgroundColor:"grey"
 
 
     },
@@ -76,6 +87,7 @@ const styles=StyleSheet.create({
         fontWeight:'500',
         color:'#000000'
     },
+
     searchbar:{
         paddingVertical:verticalScale(16)
 
