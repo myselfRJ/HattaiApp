@@ -13,6 +13,7 @@ import { IconButton, Searchbar } from 'react-native-paper';
 import SearchPatientComponent from '../../components/searchPatientComponent';
 import { Chip } from 'react-native-paper';
 import PatienthistoryComponent from '../../components/patientHistory';
+import PatientRecord from '../../components/patientrecord';
 const Dashboard=({navigation,route})=>{
     const [appointmentData,setAppointmentData]=useState([]);
     const [appointmentDataDone,setAppointmentDataDone]=useState([]);
@@ -138,7 +139,7 @@ const renderSearchpatient=(item)=>{
         <View style={{flex:1
         }}>
             <DashHead url={practitionerData?practitionerData["photo"][0]["url"]:"https://cdn-icons-png.flaticon.com/512/2785/2785482.png"} name={practitionerData?practitionerData["name"]:"Welcome"} />
-            {page==="dash"&&<View style={{paddingHorizontal:horizontalScale(72),width:'100%',paddingVertical:verticalScale(24)}}>
+            {page==="dash"&&<View style={{paddingHorizontal:horizontalScale(72),width:'100%',paddingVertical:verticalScale(80)}}>
             <View style={{flexDirection:'row',alignItems:'center',width:'98%',justifyContent:'space-between'}}>
             <Datebtn name='medical-bag' text={practitionerData?practitionerData["clinic"][0]["clinic_name"]:"Clinic"} 
                 action={showModal}/>
@@ -176,7 +177,8 @@ const renderSearchpatient=(item)=>{
         />
 
         </View>}
-        {page==="search"&&<TouchableWithoutFeedback onPress={Keyboard.dismiss}><View style={{paddingHorizontal:horizontalScale(72),width:'100%',paddingVertical:verticalScale(24),height:"80%"}}>
+        {page==="search"&&<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View style={{paddingHorizontal:horizontalScale(72),width:'100%',paddingVertical:verticalScale(24),height:"80%"}}>
             <View style={{flexDirection:'row',alignItems:'center',width:'98%',justifyContent:'space-between'}}>
             <Searchbar
             loading={searchLoading}
@@ -207,7 +209,12 @@ const renderSearchpatient=(item)=>{
 
 
         </View></TouchableWithoutFeedback>}
-        {page==="patient"&&<TouchableWithoutFeedback onPress={Keyboard.dismiss}><View style={{paddingHorizontal:horizontalScale(72),width:'100%',paddingVertical:verticalScale(24),height:"80%"}}>
+        {page==="patient"&&
+       
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+             <PatientRecord patientdata={searchselectData}/>
+
+            {/* <View style={{paddingHorizontal:horizontalScale(72),width:'100%',paddingVertical:verticalScale(24),height:"80%"}}>
             <View style={{flexDirection:'column',alignItems:'center',width:'98%',justifyContent:'center'}}>
            <View style={{width:"100%",flexDirection:"row",justifyContent:"space-between"}}>
            <Chip icon="account" mode="flat" textStyle={{fontSize:24,lineHeight:30}} style={{height:60,width:"46%"}}>{searchselectData["name"]}</Chip>
@@ -238,7 +245,10 @@ const renderSearchpatient=(item)=>{
             <PatienthistoryComponent data={searchselectData} name={"calendar"} action={()=>console.log("open")}/>
 
 
-        </View></TouchableWithoutFeedback>}
+        </View>  */}
+        </TouchableWithoutFeedback>
+        
+        }
         {/* <SelectModal visible={visible} 
               showModal={showModal} 
               hideModal={hideModal}/> */}

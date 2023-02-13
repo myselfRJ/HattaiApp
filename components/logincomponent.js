@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {
+  ActivityIndicator,
   Image,
   Text,
   View,
@@ -35,8 +36,9 @@ const LoginComponent = props => {
 
       </View>
      <View style={styles.child}>
-     <Btn label='Login'
+     <Btn label='Login' loading={props.loading}
      action={()=>{props.loginserver()}}/>
+     {/* {props.loading&&<ActivityIndicator size={48} color={global.themecolor}/>} */}
 
      </View>
      <Text style={styles.child}>

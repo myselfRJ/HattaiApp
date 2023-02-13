@@ -17,7 +17,7 @@ const PatienthistoryComponent=(props)=>{
 console.log(response.status,response.data[0])
 setMedlist(response.data)
             }).catch(function(error){
-                console.log(error,"patient serach error")
+                console.log(error,"patient search error")
             })
     }
 const renderMedicationList=(item)=>{

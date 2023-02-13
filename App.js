@@ -11,6 +11,7 @@ import BookingApp from './screens/doctor/appointment';
 import Prescription from './screens/doctor/prescription';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import axios from 'axios';
+import Tabs from './navigation/tabnavigator';
 const Stack = createNativeStackNavigator();
 
 function App(){
@@ -82,8 +83,9 @@ function App(){
     <Stack.Screen name="Profile" component={ProfilePage} />
     <Stack.Screen name="EditProfile" component={Editprofile} />
      <Stack.Screen name="Dashboard" component={Dashboard} />
-     <Stack.Screen name="BookApp" component={BookingApp} />
-      <Stack.Screen name='Prescription' component={Prescription}/>
+     {/* <Stack.Screen name="BookApp" component={BookingApp} />
+      <Stack.Screen name='Prescription' component={Prescription}/> */}
+    <Stack.Screen name='Tabs'  component={Tabs} />
     
    
   </Stack.Navigator>

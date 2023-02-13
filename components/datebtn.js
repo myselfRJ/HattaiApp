@@ -1,4 +1,3 @@
-import { useLinkProps } from "@react-navigation/native";
 import { StyleSheet, Pressable,Text ,Image} from "react-native";
 import { Chip } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -22,14 +21,14 @@ let Arr = props.timelist!==undefined&&props.timelist.length>0?props.timelist.map
         </Text>)
 
     return (
-        <Pressable   onPress={()=>{props.action();console.log("pressed")}} style={{...styles.bg,width:props.width?props.width: horizontalScale(480)}}
+        <Pressable   onPress={()=>{props.action();console.log("pressed")}} style={{...styles.bg,width:props.width?props.width: horizontalScale(480),height:props.height?props.height: verticalScale(78)}}
         >
            {props.mode==="add clinic page"?<>
             {Arr}
-           </> :<Text style={styles.text}>
+           </> :<Text style={{...styles.text,fontSize:props.fontSize?props.fontSize:moderateScale(16)}}>
             {props.text}
             </Text>}
-            <Icon key={props.name} name={props.name} size={verticalScale(40)} color='#4BA5FA'/>
+            <Icon key={props.name} name={props.name} size={props.iconsize?props.iconsize:verticalScale(40)} color='#4BA5FA'/>
             
         </Pressable>
     )
@@ -41,8 +40,8 @@ const styles=StyleSheet.create({
             borderRadius: 4,
             justifyContent:'space-between',
             alignItems:'center',
-            fontSize: moderateScale(24),
-            borderWidth:0.5,
+            fontSize: moderateScale(16),
+            // borderWidth:0.5,
             lineHeight:32,
             backgroundColor:'#ffff',
             paddingHorizontal:horizontalScale(16),

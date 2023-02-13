@@ -10,6 +10,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@react-navigation/bottom-tabs": "^6.5.4",
     "@react-navigation/native": "*",
     "@react-navigation/native-stack": "*",
     "axios": "^1.2.5",

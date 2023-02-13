@@ -9,16 +9,16 @@ const DashHead=(props)=>{
     return (
         <View style={styles.main}>
             <Image 
-            style={{height:verticalScale(87),width:horizontalScale(156)}} source={require('../resources/images/blattai.png')} />
+            style={{position:'absolute',top:verticalScale(24),left:horizontalScale(16),height:verticalScale(65),width:horizontalScale(127)}} source={require('../resources/images/blattai.png')} />
             <Text style={styles.wlctxt}>
             Good Morning, {props.name}
             </Text>
-            <Pressable onPress={()=>console.log('I am Doctor')}style={{flexDirection:'row',alignItems:'center',marginLeft:horizontalScale(40)}}>
+            <Pressable onPress={()=>console.log('I am Doctor')}style={{position:'absolute',top:verticalScale(48),right:horizontalScale(56),alignItems:'center',borderRadius:horizontalScale(160/2),marginLeft:horizontalScale(40)}}>
 
             
             <Image  style={styles.avatar}source={{uri:props.url}}/>
-            <Text style={styles.profilename}>{props.name}</Text>
-            <Icon name='menu-down' size={24} color="#ffffff"></Icon>
+            {/* <Text style={styles.profilename}>{props.name}</Text>
+            <Icon name='menu-down' size={24} color="#ffffff"></Icon> */}
             </Pressable>
         </View>
     )
@@ -35,16 +35,21 @@ const styles = StyleSheet.create({
         alignItems:'center'
     },
     wlctxt:{
-        fontSize:moderateScale(28),
-        lineHeight:moderateScale(42),
-        fontWeight:'700',
+        position:'absolute',
+        zIndex:2,
+        top:verticalScale(96),
+        left:horizontalScale(100),
+        fontSize:moderateScale(16),
+        lineHeight:moderateScale(22),
+        fontWeight:'600',
         color:"#fff"
     },
     avatar:{
-        width:horizontalScale(32),
-        height:horizontalScale(32),
-        borderRadius:horizontalScale(32/2),
-        marginRight:horizontalScale(8)
+       
+        width:horizontalScale(160),
+        height:horizontalScale(160),
+        borderRadius:horizontalScale(160/2),
+      
     },
     profilename:{
         fontSize:moderateScale(14),

@@ -54,6 +54,7 @@ const SignupComponent = props => {
         ) : (
           <Btn
             label="Signup"
+            loading={props.loading}
             action={() => {
               props.otpbtn();
             }}

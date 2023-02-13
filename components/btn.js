@@ -7,6 +7,7 @@ const Btn=(props)=>{
         <Button 
         style={props.BtnBG?props.BtnBG:styles.BtnBG} 
         mode="contained"
+        loading={props.loading}
         labelStyle={props.labelStyle?props.labelStyle:styles.BtnText} 
         contentStyle={props.contentStyle?props.contentStyle:styles.contentstyle}
         icon={props.icon?props.icon:null}

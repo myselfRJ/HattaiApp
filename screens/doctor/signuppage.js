@@ -230,7 +230,6 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
-    borderWidth: 1,
     backgroundColor:'#4BA5FA'
   },
   image: {

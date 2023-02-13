@@ -259,9 +259,9 @@ setBookedTime(response.data["data"]["timeslot"])
             <View
                 style={{
                 paddingHorizontal: horizontalScale(80),
-                paddingVertical: verticalScale(24),
-                }}>
-                <Text style={style.Bap}>Booking Appointment</Text>
+                paddingTop: verticalScale(80),
+                }}>                 
+                <Text style={style.Bap}>Book Appointment</Text>
                 <ScrollView>
                 <View style={style.form}>
                     <Datebtn

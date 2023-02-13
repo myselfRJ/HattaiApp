@@ -22,8 +22,7 @@ const styles=StyleSheet.create({
     textinp:{
         justifyContent:'flex-start',
         textAlignVertical: 'top',
-        width:horizontalScale(400),
-        height:verticalScale(224)}})
+        maxHeight:verticalScale(112)}})
 
 
 
