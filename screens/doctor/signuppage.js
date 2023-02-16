@@ -109,7 +109,7 @@ const Signuppageview = ({navigation}) => {
               setloading(false);
               global.user_session=response.data["access"]
               storeUserSession(response.data,phone);
-              navigation.navigate('Profile', {name: 'Jane'});}
+              navigation.navigate('Tabs', {name: 'Jane'});}
             })
             .catch(function (error) {
               console.log(error,phone,password);
@@ -160,7 +160,8 @@ const Signuppageview = ({navigation}) => {
           alignItems: 'center',
           justifyContent: 'flex-start',
           flexDirection: 'column',
-          backgroundColor: 'white',
+          // backgroundColor: 'white',
+          backgroundColor:'#f8f8f8'
         }}>
         <View style={{...styles.container}}>
           <Image

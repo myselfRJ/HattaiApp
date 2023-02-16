@@ -13,10 +13,10 @@ export default StyleSheet.create({
     },
     text: {
       color: 'black',
-      fontSize: moderateScale(32),
-      lineHeight: 38,
+      fontSize: moderateScale(16),
+      lineHeight: moderateScale(22),
       fontWeight: 'bold',
-      textAlign: 'center',
+      textAlign: 'left',
     },
     text2: {
       color: 'black',

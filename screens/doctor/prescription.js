@@ -24,8 +24,12 @@ import {horizontalScale, moderateScale, verticalScale} from '../dim';
 import { PostApi } from '../../api/postapi';
 import CheckBoxLabel from '../../components/checkboxlable';
 import MedList from '../../components/medlist';
+import { useSelector } from 'react-redux';
 const Prescription = (props,{navigation}) => {
-console.log(props.route.params.data["patient_data"]["photo"],"photo")
+// console.log(apnData["patient_data"]["photo"],"photo")
+
+  const apnData=useSelector(state=>state.apnData.currentapn)
+  console.log("appointment data",apnData)
   const refers = [
     {type: 'Doctor', icon: 'medical-bag'},
     {type: 'Labs', icon: 'flask'},
@@ -132,11 +136,11 @@ console.log(props.route.params.data["patient_data"]["photo"],"photo")
     console.log(medication,"medication")
     console.log(time,"time")
     console.log(date,"date")
-    data={
-      name:props.route.params.data["patient_data"]["name"],
-      patient_id:props.route.params.data["patient_id"],
-      appointment_id:props.route.params.data["id"],
-      fhir_appointment_id:props.route.params.data["fhir_appointment_id"],
+    const data={
+      name:apnData["patient_data"]["name"],
+      patient_id:apnData["patient_id"],
+      appointment_id:apnData["id"],
+      fhir_appointment_id:apnData["fhir_appointment_id"],
       diagnosis:diagnosis,
       bp:bp,
       pr:pr,
@@ -172,12 +176,12 @@ console.log(props.route.params.data["patient_data"]["photo"],"photo")
             </View>
       <View style={styles.psection}>
                 <View style={styles.perdetails}>
-                    <Image style={styles.psecimg} source={{uri:props.route.params.data["patient_data"]["photo"]["url"]?props.route.params.data["patient_data"]["photo"][0]["url"]:"https://cdn-icons-png.flaticon.com/512/4320/4320385.png"}}/>
+                    <Image style={styles.psecimg} source={{uri:apnData["patient_data"]["photo"]["url"]?apnData["patient_data"]["photo"][0]["url"]:"https://cdn-icons-png.flaticon.com/512/4320/4320385.png"}}/>
                    
                    <View style={styles.nsec}> 
                     <View>
-                        <Text style={styles.name}>{props.route.params.data["patient_data"]["name"]}</Text>
-                        <Text style={styles.id}>{calculateAge(props.route.params.data["patient_data"]["birthDate"])} Years | {props.route.params.data["patient_data"]["gender"].toUpperCase()} </Text>
+                        <Text style={styles.name}>{apnData["patient_data"]["name"]}</Text>
+                        <Text style={styles.id}>{calculateAge(apnData["patient_data"]["birthDate"])} Years | {apnData["patient_data"]["gender"].toUpperCase()} </Text>
                     </View>
                     {/* <View>
                         <Text style={styles.contact}>Contact</Text>
@@ -214,7 +218,7 @@ console.log(props.route.params.data["patient_data"]["photo"],"photo")
           </View>
           <View>
             <Image
-              source={{uri:props.route.params.data["patient_data"]["photo"]["url"]?props.route.params.data["patient_data"]["photo"][0]["url"]:"https://cdn-icons-png.flaticon.com/512/4320/4320385.png"}}
+              source={{uri:apnData["patient_data"]["photo"]["url"]?apnData["patient_data"]["photo"][0]["url"]:"https://cdn-icons-png.flaticon.com/512/4320/4320385.png"}}
               style={{
                 height: horizontalScale(48),
                 width: horizontalScale(48),
@@ -223,10 +227,10 @@ console.log(props.route.params.data["patient_data"]["photo"],"photo")
             />
           </View>
           <View style={{marginLeft: horizontalScale(8)}}>
-            <Text style={styles.name}>{props.route.params.data["patient_data"]["name"]}</Text>
-            <Text style={styles.info}>{calculateAge(props.route.params.data["patient_data"]["birthDate"])} Years | {props.route.params.data["patient_data"]["gender"].toUpperCase()} </Text>
+            <Text style={styles.name}>{apnData["patient_data"]["name"]}</Text>
+            <Text style={styles.info}>{calculateAge(apnData["patient_data"]["birthDate"])} Years | {apnData["patient_data"]["gender"].toUpperCase()} </Text>
             <Text style={styles.diagnosis}>
-              {props.route.params.data["serviceCategory"]}
+              {apnData["serviceCategory"]}
             </Text>
           </View>
         </View> */}
@@ -798,12 +802,7 @@ console.log(props.route.params.data["patient_data"]["photo"],"photo")
         setMedication={setMedication}
       />
     </View>
-    <TouchableOpacity style={{position:'absolute',
-           justifyContent:'center',
-           alignItems:"center",
-           padding:10,bottom:0,left:0,width:60,height:60,backgroundColor:'#7DBDFA',borderRadius:40}}  onPress={()=>{props.navigation.navigate("Dashboard") }}>
-                <Icon name='arrow-left' size={32} color='#fff'/>
-    </TouchableOpacity>
+    
     </ScrollView>
   );
 };

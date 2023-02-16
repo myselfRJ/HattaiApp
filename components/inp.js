@@ -12,23 +12,25 @@ const Inp=(props)=>{
                 height:props.height?verticalScale(props.height):verticalScale(78),
                 width:props.width?horizontalScale(props.width):horizontalScale(480),
                 fontSize: props.fontSize?moderateScale(props.fontSize):moderateScale(24),
-                textAlign:props.textAlign?props.textAlign:'center'}}
+                textAlign:props.textAlign?props.textAlign:'left'}}
             placeholder={props.placeholder}
             keyboardType={props.keyboardType}
             value={props.value}
             onChangeText={props.onChangeText}
             inputMode={props.inputMode}
             maxLength={props.maxLength?props.maxLength:25}
-            mode='outlined'
+
             placeholderTextColor='#797B7E'
+            underlineColor='#ffffff'
+            activeUnderlineColor='#4BA5FA'
             outlineColor='#4BA5FA'
             activeOutlineColor='#4BA5FA'
             secureTextEntry={ props.passwordtoggle}
             right={props.pwdtoggle?
             <TextInput.Icon 
-            style={{fontSize:24}} 
+            style={{fontSize:24,color:'#4BA5FA'}} 
             onPress={props.pwdtoggle} 
-            icon={props.passwordtoggle?'eye':'eye-off'}/>:null}
+            icon={props.passwordtoggle?'eye-off':'eye'}/>:null}
         >
 
         </TextInput>
@@ -44,6 +46,8 @@ const styles = StyleSheet.create({
       
       lineHeight:32,
       borderColor: '#4BA5FA',
+      backgroundColor:'#ffffff',
+      marginVertical:4
 
     },
     
