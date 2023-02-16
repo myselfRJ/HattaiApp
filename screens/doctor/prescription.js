@@ -193,8 +193,7 @@ const Prescription = (props,{navigation}) => {
                 <View style={styles.perdetailsec}>
 
                     <View>
-                    <Text style={styles.pertext}>Lorem ipsum dolor sit amet consectetur. 
-                    Vitae fames risus sapien cras in bibendum elit nisl sapien. Eget massa integer hac et nulla cras a tristique. Nec justo nisl sed metus eget. Orci pharetra diam egestas quis interdum ut.</Text>
+                    <Text style={styles.pertext}>{apnData.serviceCategory}</Text>
                     
 
                     </View>
