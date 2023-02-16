@@ -91,6 +91,21 @@ settimeSlot(weekday)
   console.log(error);
 });
     }, []);
+    const emptyAppointment=()=>{
+      setName()
+      setPhone()
+      setGender('male')
+      setDob(new Date())
+      setDate(new Date())
+      setTime("Time")
+      setPhoto(null)
+      setComplaint()
+    }
+    const showToast = (title,message,okaction) => {
+      Alert.alert(title, message, [
+        {text: 'OK', onPress: () => okaction},
+      ])
+    };
     const saveAppointmrnt = () => {
       const patientdata = {
         gender: gender,
@@ -101,7 +116,7 @@ settimeSlot(weekday)
       const localdata = {
         start:date.toISOString().split('T')[0]+'T'+time+":00Z",
         minutesduration:"30",
-        serviceCategory:"General medical practice",
+        serviceCategory:complaint,
         is_paid:fee?true:false,
         clinic:global.CLINICID,
       };
@@ -205,8 +220,15 @@ settimeSlot(weekday)
         patient: patientdata,
         fhir_patient:fhir_patient,
       };
-     
-      PostApi('appointment/save', data, true)
+     const checkData =()=>{
+      console.log("checking")
+      if (name&&phone&&dob&&gender&&complaint&&time!=="Time"&&date){
+        return true
+      }
+      showToast("Warning","Fill all Details.",console.log("empty field"))
+      return false
+     }
+      {checkData()&&PostApi('appointment/save', data, true)
         .then(function (response) {
           console.log(response.data);
           if (response.data['status'] === 'success') {
@@ -228,14 +250,17 @@ settimeSlot(weekday)
                   console.log(error);
                 });
             }
-            navigation.navigate("Dashboard",{"data":"data"})
+            showToast("Success","Appointment booked Successfully.",emptyAppointment)
+            // navigation.navigate("Dashboard",{"data":"data"})
           } else {
+            showToast("Warning",response.data.message,console.log("warning"))
             console.warn(response.data.message);
           }
         })
         .catch(function (error) {
+          showToast("Error","Appointment booking failed",console.log("error occured"))
           console.log(error);
-        });
+        });}
     };
 const fetchBookedSlot=(dateString)=>{
   GetApi(`appointment/get/slot/${CLINICID}/${dateString}`, true)

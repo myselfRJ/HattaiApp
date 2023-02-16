@@ -4,7 +4,7 @@ import {
   StyleSheet,
   View,
   TouchableWithoutFeedback,
-  Keyboard
+  Keyboard,Alert
 } from 'react-native';
 import LoginComponent from '../../components/logincomponent';
 import OtpComponent from '../../components/otpcomponent';
@@ -53,16 +53,22 @@ const Signuppageview = ({navigation}) => {
         .then(function (response) {
           console.log(response.data);
           if (response.status === 201) {
+            showToast("Success",response.data.message);
             setloading(false);
             setVisible(!visible);
           } else {
+            showToast("Warning",response.data.message);
             requestFailed();
           }
         })
         .catch(function (error) {
+          showToast("Error","Signup failed.");
           requestFailed();
           console.log(error.response.data, 'l');
         });
+    }
+    else{
+      showToast("Error","Password mismatch.");
     }
   };
  // login text press function in signupcomponent to enable logincomponent
@@ -109,15 +115,28 @@ const Signuppageview = ({navigation}) => {
               setloading(false);
               global.user_session=response.data["access"]
               storeUserSession(response.data,phone);
+              showToast("Success","Successfull logged in.");
               navigation.navigate('Tabs', {name: 'Jane'});}
+              else{showToast("Warning",response.data.message);}
             })
             .catch(function (error) {
               console.log(error,phone,password);
+              showToast("Error","Phone or Password incorrect.");
               requestFailed();
             })
         : requestFailed();
     }
     
+  };
+  const showToast = (title,message) => {
+    Alert.alert(title, message, [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {text: 'OK', onPress: () => console.log('OK Pressed')},
+    ])
   };
   const signupserver = async (phone, otp) => {
     setloading(!loading);
@@ -133,16 +152,19 @@ const Signuppageview = ({navigation}) => {
             .then(function (response) {
               console.log(response.data);
               if (response.data['status'] === 'success') {
-                
+                showToast("Success","Successfull logged in.");
                 setloading(false);
                 setPagenum(3);
                 hideModal()
               } else {
+                showToast("Warning",response.data.message);
                 console.warn(response.data.message);
               }
             })
             .catch(function (error) {
+              showToast("Error","OTP verification failed.");
               console.log(error);
+              
               requestFailed();
             })
         : requestFailed();
