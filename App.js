@@ -9,10 +9,15 @@ import Editprofile from './screens/doctor/editprofile';
 import Dashboard from './screens/doctor/dashboard';
 import BookingApp from './screens/doctor/appointment';
 import Prescription from './screens/doctor/prescription';
+import PatientHistory from './screens/doctor/patientrecord';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import axios from 'axios';
 import Tabs from './navigation/tabnavigator';
+import { Provider } from 'react-redux';
+import store from './redux/store';
 const Stack = createNativeStackNavigator();
+
+
 
 function App(){
   axios.get("https://raw.githack.com/myselfRJ/mcqdata/main/ip.json") .then(function (response) {
@@ -36,6 +41,12 @@ function App(){
     } catch (error) {
         return error// There was an error on the native side
     }
+}
+
+const session =retrieveUserSession();
+
+if (session){
+  
 }
 // var config = {
 //   method: 'get',
@@ -75,6 +86,7 @@ function App(){
 // }
 // else{
   return (
+    <Provider store={store}>
     <NavigationContainer>
       <Stack.Navigator screenOptions={{
     headerShown: false
@@ -82,14 +94,16 @@ function App(){
     <Stack.Screen name="Signup" component={Signuppageview} />
     <Stack.Screen name="Profile" component={ProfilePage} />
     <Stack.Screen name="EditProfile" component={Editprofile} />
-     <Stack.Screen name="Dashboard" component={Dashboard} />
-     {/* <Stack.Screen name="BookApp" component={BookingApp} />
-      <Stack.Screen name='Prescription' component={Prescription}/> */}
+     {/* <Stack.Screen name="Dashboard" component={Dashboard} />
+     <Stack.Screen name="BookApp" component={BookingApp} />*/}
+      <Stack.Screen name='Prescription' component={Prescription}/>
+      <Stack.Screen name='PatientHistory' component={PatientHistory}/>
     <Stack.Screen name='Tabs'  component={Tabs} />
     
    
   </Stack.Navigator>
   </NavigationContainer>
+  </Provider>
   );
 }
 

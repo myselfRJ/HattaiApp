@@ -1,8 +1,17 @@
 import {View,Text, StyleSheet,Image, Pressable} from 'react-native';
+import { useDispatch } from 'react-redux';
+import {currentApn} from '../redux/apnslice';
 
 import { horizontalScale, verticalScale ,moderateScale} from '../screens/dim';
 
 const AppointTck=(props)=>{
+    const dispatch=useDispatch()
+
+    const loadData=()=>{
+        dispatch(currentApn(props.item.item))
+        props.action.navigate("Prescription")
+
+    }
     const calculateAge = (birthday) => {
         const ageDifMs = Date.now() - new Date(birthday).getTime();
         const ageDate = new Date(ageDifMs);
@@ -10,7 +19,7 @@ const AppointTck=(props)=>{
       }
     return(
         <Pressable style={styles.main} onPress={()=>{console.log("pressed prt");
-        props.item.item["is_complete"]?console.log("done"):props.action.navigate("Prescription",{data:props.item.item,new:false})}}>
+        props.item.item["is_complete"]?console.log("done"):loadData()}}>
             <View style={styles.token}>
                 <Text>
                     Token
@@ -60,9 +69,10 @@ const styles=StyleSheet.create({
         position:'relative',
         width:horizontalScale(672),
         height:verticalScale(120),
-        marginBottom:verticalScale(4),
-        borderWidth:0.5,
-        borderColor:'#4BA5FA',
+        marginBottom:verticalScale(8),
+        backgroundColor:'#ffffff',
+        // borderWidth:0.5,
+        // borderColor:'#4BA5FA',
         borderRadius:4,
         
     },
@@ -87,7 +97,7 @@ const styles=StyleSheet.create({
                 height:verticalScale(32),
                 backgroundColor:"#32BF40",
                 borderColor:'#4BA5FA',
-                borderWidth:0.5,
+                // borderWidth:0.5,
                 borderTopLeftRadius:horizontalScale(32),
                 borderBottomLeftRadius:horizontalScale(32)
 
@@ -102,7 +112,7 @@ const styles=StyleSheet.create({
                 height:verticalScale(32),
                 backgroundColor:"#ffd966",
                 borderColor:'#4BA5FA',
-                borderWidth:0.5,
+                // borderWidth:0.5,
                 borderTopLeftRadius:horizontalScale(32),
                 borderBottomLeftRadius:horizontalScale(32)
 

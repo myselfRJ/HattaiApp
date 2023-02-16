@@ -11,7 +11,7 @@ const DashHead=(props)=>{
             <Image 
             style={{position:'absolute',top:verticalScale(24),left:horizontalScale(16),height:verticalScale(65),width:horizontalScale(127)}} source={require('../resources/images/blattai.png')} />
             <Text style={styles.wlctxt}>
-            Good Morning, {props.name}
+            Welcome, {props.name}
             </Text>
             <Pressable onPress={()=>console.log('I am Doctor')}style={{position:'absolute',top:verticalScale(48),right:horizontalScale(56),alignItems:'center',borderRadius:horizontalScale(160/2),marginLeft:horizontalScale(40)}}>
 

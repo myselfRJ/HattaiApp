@@ -1,14 +1,15 @@
 import React from "react";
 import {StyleSheet} from 'react-native';
 import {Button} from 'react-native-paper';
+import '../screens/globlevariable';
 import {horizontalScale,verticalScale,moderateScale} from '../screens/dim';
 const Btn=(props)=>{
     return(
         <Button 
-        style={props.BtnBG?props.BtnBG:styles.BtnBG} 
-        mode="contained"
+        style={props.mode!='outlined'?styles.BtnBG:{borderRadius:4,borderColor:global.themecolor}} 
+        mode={props.mode}
         loading={props.loading}
-        labelStyle={props.labelStyle?props.labelStyle:styles.BtnText} 
+        labelStyle={props.mode!='outlined'?props.labelStyle?props.labelStyle:styles.BtnText:{...styles.BtnText,color:global.themecolor}} 
         contentStyle={props.contentStyle?props.contentStyle:styles.contentstyle}
         icon={props.icon?props.icon:null}
       
@@ -16,7 +17,7 @@ const Btn=(props)=>{
             {props.label}
         </Button>
     )
-}
+  }
 
 const styles = StyleSheet.create({
     container: {
@@ -24,36 +25,28 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       alignItems: 'center',
     },
-    image: {
-      flex: 1,
-      justifyContent: 'center',
-    },
+    // image: {
+    //   flex: 1,
+    //   justifyContent: 'center',
+    // },
     
  
     BtnBG: {
         backgroundColor: '#4BA5FA',
         borderRadius:4,
+        borderColor:global.themecolor
         
-        height:verticalScale(80),
-        width: horizontalScale(240)
     },
     contentstyle:{  
-      height:verticalScale(80),
-      width: horizontalScale(240)
+      paddingHorizontal:horizontalScale(16),
+      paddingVertical:verticalScale(8)
         
     },
     BtnText: {
         fontSize: moderateScale(24),
-        lineHeight:32,
+        lineHeight:28,
         fontWeight: 500,
         color: 'white',
-    },
-    text2: {
-      color: 'black',
-      fontSize: 16,
-      lineHeight: 31,
-      fontWeight: '400',
-      textAlign: 'center',
     },
   });
 

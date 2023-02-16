@@ -9,11 +9,14 @@ import SelectModal from '../../components/selectmodal';
 import StatusTck from '../../components/statustck';
 import { horizontalScale, moderateScale, verticalScale } from '../dim';
 import { GetApi } from '../../api/postapi';
-import { IconButton, Searchbar } from 'react-native-paper';
+import {Searchbar } from 'react-native-paper';
 import SearchPatientComponent from '../../components/searchPatientComponent';
 import { Chip } from 'react-native-paper';
 import PatienthistoryComponent from '../../components/patientHistory';
+import {prData} from '../../redux/prslice';
+import {apnData} from '../../redux/apnslice';
 import PatientRecord from '../../components/patientrecord';
+import { useDispatch, useSelector } from 'react-redux';
 const Dashboard=({navigation,route})=>{
     const [appointmentData,setAppointmentData]=useState([]);
     const [appointmentDataDone,setAppointmentDataDone]=useState([]);
@@ -26,11 +29,16 @@ const Dashboard=({navigation,route})=>{
     const [clinicSelectid,setclinicselectid]=useState();
     const [page,setPage]=useState("dash")//dash,search,patient
     const fadeAnim = useRef(new Animated.Value(horizontalScale(-424))).current;
+    const prdata=useSelector(state=>state.practionerData.data);
+
+    console.log('reducer state',prdata)
+    const dispatch=useDispatch()
     useEffect(() => {
         GetApi('data/init',true)//+global.CLINICID,true)
         .then(function(response){
             console.log(response.data,"pract")
            setPractitionerData(response.data)
+           dispatch(prData(response.data))
            setclinicselectid(response.data["clinic"][0]["id"])
            global.CLINICID=response.data["clinic"][0]["id"]
            global.CLINICNAME=response.data["clinic"][0]["clinic_name"]
@@ -42,6 +50,7 @@ const Dashboard=({navigation,route})=>{
         .then(function(response){
             setAppointmentData(response.data["data"])
             setAppointmentDataDone(response.data["data_done"])
+            dispatch(apnData(response.data.data))
         console.log(response.data,"appointment data")
         }).catch(function (error) {
             console.log(error);
@@ -121,7 +130,7 @@ const Dashboard=({navigation,route})=>{
 console.log(response.status)
 setSearchData(response.data)
             }).catch(function(error){
-                console.log(error,"patient serach error")
+                console.log(error,"patient search error")
             })
     }
     /////////////for patient page
@@ -136,21 +145,17 @@ const renderSearchpatient=(item)=>{
 }
 // console.log(searchselectData,"@@@")
     return (
-        <View style={{flex:1
+        <View style={{flex:1,backgroundColor:'#F8F8F8'
         }}>
             <DashHead url={practitionerData?practitionerData["photo"][0]["url"]:"https://cdn-icons-png.flaticon.com/512/2785/2785482.png"} name={practitionerData?practitionerData["name"]:"Welcome"} />
-            {page==="dash"&&<View style={{paddingHorizontal:horizontalScale(72),width:'100%',paddingVertical:verticalScale(80)}}>
+            <View style={{paddingHorizontal:horizontalScale(72),width:'100%',marginTop:verticalScale(80),backgroundColor:'#F8F8F8'}}>
             <View style={{flexDirection:'row',alignItems:'center',width:'98%',justifyContent:'space-between'}}>
             <Datebtn name='medical-bag' text={practitionerData?practitionerData["clinic"][0]["clinic_name"]:"Clinic"} 
                 action={showModal}/>
-            <View style={{flexDirection:'row',}}>
-                <Text style={{fontSize:14,fontWeight:400,color:"black",alignItems:"center"}}>
-                    {new Date().toDateString()}
-                </Text>
-                <Icon name='calendar' size={24} color={global.themecolor}/>
-            </View>
+         
 
             </View>
+            
             <View style={{flexDirection:'row',marginVertical:verticalScale(24)}}>
                 <StatusTck txt='Total Appointment' num={appointmentData.length+appointmentDataDone.length}/>
                 <StatusTck txt='Pending' num={appointmentData.length}/>
@@ -159,7 +164,19 @@ const renderSearchpatient=(item)=>{
             <View style={{flexDirection:"row",alignItems:"center"}}><Text style={{...styles.apnheading,marginRight:10}}>
                 Appointments   
             </Text>
+            
             <Icon name="reload" size={18} /></View>
+            <View style={{flexDirection:'row',
+            width:horizontalScale(240),
+            justifyContent:'space-between',
+            alignItems:'center',paddingHorizontal:horizontalScale(24),
+            paddingVertical:verticalScale(8),
+            backgroundColor:'#E0F0FF',borderRadius:4,marginBottom:verticalScale(16)}}>
+                <Text style={{fontSize:moderateScale(16),fontWeight:"500",color:"black",textAlign:"left"}}>
+                    {new Date().toDateString()}
+                </Text>
+                <Icon name='calendar' size={48} color={global.themecolor}/>
+            </View>
 
             <FlatList
           data={appointmentData}
@@ -176,8 +193,8 @@ const renderSearchpatient=(item)=>{
          // style={{height:"60%",borderWidth:1}}
         />
 
-        </View>}
-        {page==="search"&&<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        </View>
+        {/* {page==="search"&&<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={{paddingHorizontal:horizontalScale(72),width:'100%',paddingVertical:verticalScale(24),height:"80%"}}>
             <View style={{flexDirection:'row',alignItems:'center',width:'98%',justifyContent:'space-between'}}>
             <Searchbar
@@ -208,52 +225,13 @@ const renderSearchpatient=(item)=>{
         />
 
 
-        </View></TouchableWithoutFeedback>}
-        {page==="patient"&&
-       
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-             <PatientRecord patientdata={searchselectData}/>
-
-            {/* <View style={{paddingHorizontal:horizontalScale(72),width:'100%',paddingVertical:verticalScale(24),height:"80%"}}>
-            <View style={{flexDirection:'column',alignItems:'center',width:'98%',justifyContent:'center'}}>
-           <View style={{width:"100%",flexDirection:"row",justifyContent:"space-between"}}>
-           <Chip icon="account" mode="flat" textStyle={{fontSize:24,lineHeight:30}} style={{height:60,width:"46%"}}>{searchselectData["name"]}</Chip>
-           <Chip icon={require('../../resources/images/id.png')} mode="flat" textStyle={{fontSize:24,lineHeight:30}} style={{height:60,width:"20%"}}>ID : {searchselectData["id"]}</Chip>
-           {searchselectData["gender"]==="male"?<Image source={require('../../resources/images/male.png')} mode="contain"
-      style={{ height:60,width:60, tintColor: "#4BA5FA" }}/>:<Image source={require('../../resources/images/female.png')} mode="contain"
-      style={{ height:60,width:60, tintColor: "#f25278" }}/>}
-           </View>
-           <View style={{marginVertical:25,width:"100%",flexDirection:"row",justifyContent:"space-between"}}>
-           <Chip icon="phone" mode="flat" textStyle={{fontSize:24,lineHeight:30}} style={{height:60,width:"46%"}}>Mob : {searchselectData["phone_number"]}</Chip>
-           <Chip icon="calendar" mode="flat" textStyle={{fontSize:24,lineHeight:30}} style={{height:60,width:"46%"}}>DOB : {searchselectData["birthDate"]}</Chip>
-           </View>
-           <Chip icon={({size,color}) => (
-    <Image
-      source={require('../../resources/images/fingerprint.png')}
-      style={{ width: 34, height: 34, tintColor: "#4BA5FA" }}
-    />
-  )} mode="flat" textStyle={{fontSize:24,lineHeight:30}} style={{height:60,width:"100%"}}>{searchselectData["fhir_patient_id"]}</Chip>
-            </View>
-
-            <View style={{flexDirection:"row",alignItems:"center"}}>
-            
-                {searchData&&<Text style={{...styles.apnheading,marginRight:10,marginTop:25}}>
-                Medical Records
-            </Text>}
-          </View>
-
-            <PatienthistoryComponent data={searchselectData} name={"calendar"} action={()=>console.log("open")}/>
-
-
-        </View>  */}
-        </TouchableWithoutFeedback>
-        
-        }
+        </View></TouchableWithoutFeedback>} */}
+      
         {/* <SelectModal visible={visible} 
               showModal={showModal} 
               hideModal={hideModal}/> */}
 
-<View style={{position:'absolute',bottom:verticalScale(80),right:horizontalScale(24),flexDirection:'row'}}>
+{/* <View style={{position:'absolute',bottom:verticalScale(80),right:horizontalScale(24),flexDirection:'row'}}>
                 
                 <Animated.View style={[styles.fading,{transform:[{translateX:fadeAnim}]}]} >
                    
@@ -275,20 +253,19 @@ const renderSearchpatient=(item)=>{
                    <Icon name='prescription' size={40} color="#ffffff"/>
    
                    </TouchableOpacity> */}
-                   <TouchableOpacity style={{backgroundColor:"#4BA5FA",marginHorizontal:4,width:horizontalScale(68),height:horizontalScale(68),borderRadius:horizontalScale(34),justifyContent:'center',alignItems:'center'}}>
+                   {/* <TouchableOpacity style={{backgroundColor:"#4BA5FA",marginHorizontal:4,width:horizontalScale(68),height:horizontalScale(68),borderRadius:horizontalScale(34),justifyContent:'center',alignItems:'center'}}>
                    <Icon name='prescription' size={40} color="#ffffff"/>
    
                    </TouchableOpacity>
                   
                    </View>
    
-           </Animated.View>
-           <Pressable  onPress={handleAnim}style={{backgroundColor:"#4BA5FA",width:horizontalScale(68),height:horizontalScale(68),borderRadius:horizontalScale(34),justifyContent:'center',alignItems:'center'}}>
+           </Animated.View> */}
+           {/* <Pressable  onPress={handleAnim}style={{backgroundColor:"#4BA5FA",width:horizontalScale(68),height:horizontalScale(68),borderRadius:horizontalScale(34),justifyContent:'center',alignItems:'center'}}>
                 <Icon name={open?'close':'menu'} size={40} color="#ffffff"/>
 
-                </Pressable>
-            
-            </View>
+                </Pressable> */}
+       
     
 
         </View>
