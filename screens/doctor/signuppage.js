@@ -57,12 +57,12 @@ const Signuppageview = ({navigation}) => {
             setloading(false);
             setVisible(!visible);
           } else {
-            showToast("Error",response.data.message);
+            showToast("Warning",response.data.message);
             requestFailed();
           }
         })
         .catch(function (error) {
-          showToast("Error",error.response.data.message);
+          showToast("Error","Signup failed.");
           requestFailed();
           console.log(error.response.data, 'l');
         });
@@ -117,6 +117,7 @@ const Signuppageview = ({navigation}) => {
               storeUserSession(response.data,phone);
               showToast("Success","Successfull logged in.");
               navigation.navigate('Tabs', {name: 'Jane'});}
+              else{showToast("Warning",response.data.message);}
             })
             .catch(function (error) {
               console.log(error,phone,password);
@@ -156,12 +157,12 @@ const Signuppageview = ({navigation}) => {
                 setPagenum(3);
                 hideModal()
               } else {
-                showToast("Error",response.data.message);
+                showToast("Warning",response.data.message);
                 console.warn(response.data.message);
               }
             })
             .catch(function (error) {
-              showToast("Error","error");
+              showToast("Error","OTP verification failed.");
               console.log(error);
               
               requestFailed();
