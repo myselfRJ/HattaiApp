@@ -36,20 +36,42 @@ const Prescription = (props,{navigation}) => {
     {type: 'Scan', icon: 'radiology-box'},
     {type: 'Hospital', icon: 'hospital-building'},
   ];
-  const med = {
-    medicine: 'Choose Med',
-    dose: 'dose',
-    time: 'time',
-    frequency: 'frequency',
-    duration: [false, false, false],
-  };
+  const medilist=['Paracetamol','Avil','Amoxicillin',"Aggrenox",
+  "Akineton",
+  "Alamast",
+  "Albenza",
+  "Aldactazide",
+  "Aldactone",
+  "Aldoril",
+  "Aldurazyme",]
+  const doselist=['500mg','600mg','700mg','800mg'];
+  const foodtimelist=['After food','Before food','With food'];
+  const durlist=['Morning','Afternoon','Evening'];
+  const frelist=['Daily','Alternatly','Weekly'];
+
+ 
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
   const [opentm, setOpentm] = useState(false);
   const [time, setTime] = useState(new Date());
   const [grp, setGrp] = useState(null);
+  const [dose,setDose] =useState('500mg');
+  const [foodtime,setFoodtime] =useState('After food');
+  const [fre,setFreq] =useState('Daily');
+  const [dur,setDur] =useState([false,false,false]);
+  const [quantity,setQuantity]=useState();
+  const [medicine,setMedicine] =useState();
   const [ind, setInd] = useState(null);
   const [diagnosis, setDiagnosis] = useState();
+  const med = {
+    medicine: medicine,
+    dose: dose,
+    time: foodtime,
+    frequency: fre,
+    duration: dur,
+    quantity:quantity
+    
+  };
   const [medication, setMedication] = useState([med]);
   const [visible, setVisible] = useState(false);
   const [visibledia, setDia] = useState(false);
@@ -72,6 +94,8 @@ const Prescription = (props,{navigation}) => {
   const [id, SetId] = useState(null);
   const [medbtn,setMedbtn]=useState('med'); //med,dos,tim,fre,dur,qua 
   const [inputmode,setInputmode]=useState('tap');
+
+
   const showModal = () => setVisible(true);
   const hideModal = () => {
     setInd(null);
@@ -83,7 +107,11 @@ const Prescription = (props,{navigation}) => {
     SetId(id);
     showModal();
   };
-
+  const handleDur=(index)=>{
+    var duration=[...dur]
+    duration[index]?duration[index]=false:duration[index]=true;
+    setDur(duration)
+  }
   const handleDialog = (id, ind) => {
     setGrp(id);
     setInd(ind);
@@ -183,10 +211,6 @@ const Prescription = (props,{navigation}) => {
                         <Text style={styles.name}>{apnData["patient_data"]["name"]}</Text>
                         <Text style={styles.id}>{calculateAge(apnData["patient_data"]["birthDate"])} Years | {apnData["patient_data"]["gender"].toUpperCase()} </Text>
                     </View>
-                    {/* <View>
-                        <Text style={styles.contact}>Contact</Text>
-                        <Text style={styles.name}>{props.patientdata.phone_number}</Text>
-                    </View> */}
                     </View>
                 </View>
                 <Divider style={styles.divider}/>
@@ -239,43 +263,11 @@ const Prescription = (props,{navigation}) => {
                 <Text style={styles.subheading}>Diagnosis/Consultation note</Text>
           </View>
         <View style={styles.note}>
-          {/* <MuInp
-            placeholder="Diagnosis / Consultation Notes"
-            onChangeText={setDiagnosis}
-          /> */}
+      
           <TextInput
           multiline 
-          style={{width:"100%",height:'100%',textAlignVertical:'top'}} placeholder='Diagnosis/Consultaion Notes'/>
-          {/* <View
-            style={{
-              flexDirection: 'row',
-
-              justifyContent: 'center',
-              alignItems: 'center',
-              paddingHorizontal: horizontalScale(16),
-            }}>
-            <View style={{marginRight: horizontalScale(16)}}>
-              <Inp placeholder="BP" value={bp} onChangeText={setbp} textAlign="left" height={56} width={120} />
-              <Inp placeholder="SPO2" value={spo2} onChangeText={setspo2} textAlign="left" height={56} width={120} />
-              <Inp placeholder="LMP" value={lmp} onChangeText={setlmp} textAlign="left" height={56} width={120} />
-            </View>
-            <View>
-              
-              <Inp
-                placeholder="PR" value={pr} onChangeText={setpr}
-                textAlign="left"
-                height={56}
-                width={120}
-              />
-              <Inp
-                placeholder="TEMP" value={temp} onChangeText={settemp}
-                textAlign="left"
-                height={56}
-                width={120}
-              />
-              <Inp placeholder="EDD" value={edd} onChangeText={setedd} textAlign="left" height={56} width={120} />
-            </View>
-          </View> */}
+          style={{width:"100%",height:'100%',textAlignVertical:'top'}} placeholder='Diagnosis/Consultaion Notes'
+          onChangeText={setDiagnosis}/>
         </View>
         <View style={{...styles.headSec,marginTop:verticalScale(30)}}>
                 <Icon name='heart-pulse' size={horizontalScale(24)} color="#FF6161"/>
@@ -368,9 +360,25 @@ const Prescription = (props,{navigation}) => {
                 <Searchbar 
                 style={{fontSize:moderateScale(12),width:horizontalScale(220),backgroundColor:'#F8F8F8',borderRadius:40,elevation:0,shadowColor:'#ffffff'}}/>
                 <View>
+                  
                   <Text style={styles.medicbblockhead}>
                     Recommendation
                   </Text>
+
+                  {
+                    medilist.map((value,index)=>{
+                      if(index<6){
+                        return(
+                          <Pressable onPress={()=>setMedicine(value)}>
+                            <Text style={{color:medicine==value ? global.themecolor:'#000000'}}>
+                              {value}
+                            </Text>
+                          </Pressable>
+                          
+                        )
+                      }
+                    })
+                  }
                 </View>
                   </View>
                   
@@ -382,21 +390,82 @@ const Prescription = (props,{navigation}) => {
                   </View>
                 
                 </View>}
-              {medbtn==='dos'&&<View style={styles.medsection}>
-                  <CheckBoxLabel label='500'/>
-                </View>}
+              {medbtn==='dos'&&
+                <RadioButton.Group onValueChange={newValue => setDose(newValue)} value={dose}>
+                  <View style={styles.medsection}>
+
+                 
+
                 
-              {medbtn==='tim'&&<View style={styles.medsection}>
-                <CheckBoxLabel label='After food'/>
-                </View>}
-              {medbtn==='fre'&&<View style={styles.medsection}>
-                <CheckBoxLabel label='After food'/>
-                </View>}
-              {medbtn==='dur'&&<View style={styles.medsection}>
-                <CheckBoxLabel label='After food'/>
-                </View>}
+              {doselist.map((value,index)=>{return(
+                <View  key={index}style={{flexDirection:'row',justifyContent:'center',alignItems:'center',marginHorizontal:horizontalScale(8)}}>
+
+                
+                <RadioButton  color={global.themecolor}value={value} />
+                <Text>{value}</Text>
+               
+                </View>
+              // <CheckBoxLabel key={index}  id={index}data={med}label={value}/>
+              )})}
+               </View>
+              </RadioButton.Group>
+               }
+                
+              {medbtn==='tim'&&<RadioButton.Group onValueChange={newValue => setFoodtime(newValue)} value={foodtime}>
+                  <View style={styles.medsection}>
+
+                 
+
+                
+              {foodtimelist.map((value,index)=>{return(
+                <View  key={index}style={{flexDirection:'row',justifyContent:'center',alignItems:'center',marginHorizontal:horizontalScale(8)}}>
+
+                
+                <RadioButton  color={global.themecolor}value={value} />
+                <Text>{value}</Text>
+               
+                </View>
+              // <CheckBoxLabel key={index}  id={index}data={med}label={value}/>
+              )})}
+               </View>
+              </RadioButton.Group>}
+              {medbtn==='fre'&&<RadioButton.Group onValueChange={newValue => setFreq(newValue)} value={fre}>
+                  <View style={styles.medsection}>
+
+                 
+
+                
+              {frelist.map((value,index)=>{return(
+                <View  key={index}style={{flexDirection:'row',justifyContent:'center',alignItems:'center',marginHorizontal:horizontalScale(8)}}>
+
+                
+                <RadioButton  color={global.themecolor}value={value} />
+                <Text>{value}</Text>
+               
+                </View>
+              // <CheckBoxLabel key={index}  id={index}data={med}label={value}/>
+              )})}
+               </View>
+              </RadioButton.Group>}
+              {medbtn==='dur'&&
+                  <View style={styles.medsection}>
+
+                 
+
+                
+              {durlist.map((value,index)=>{return(
+                <View  key={index}style={{flexDirection:'row',justifyContent:'center',alignItems:'center',marginHorizontal:horizontalScale(8)}}>
+                <RadioButton  color={global.themecolor}value={dur[index]}
+                status={dur[index]?'checked':'unchecked'}
+                onPress={()=>handleDur(index)} />
+                <Text>{value}</Text>
+                </View>
+              // <CheckBoxLabel key={index}  id={index}data={med}label={value}/>
+              )})}
+               </View>
+              }
               {medbtn==='qua'&&<View  style={styles.medsection}>
-                <TextInput placeholder='quantity'/>
+                <TextInput placeholder='quantity' onChangeText={setQuantity}/>
                 </View>}
 
             </View></>}
@@ -404,14 +473,23 @@ const Prescription = (props,{navigation}) => {
               
               </View>}
             <View  style={{paddingRight:horizontalScale(16),alignItems:'flex-end',width:horizontalScale(686)}}>
-            <Icon name='plus' size={moderateScale(32)} color={global.themecolor}/>
+            <Icon onPress={Addmed}name='plus' size={moderateScale(32)} color={global.themecolor}/>
 
             </View>
             
             <Divider />
             <View>
               
-             <MedList/>
+             {medication.map((value,index)=>{return(
+             <MedList key={index} medicine={value.medicine}
+                      dose={value.dose}
+                      foodtime={value.time}
+                      dur={value.duration}
+                      fre={value.frequency}
+                      quantity={value.quantity}
+                      remove={()=>Removemed(index)}
+             />
+             )})}
             </View>
 
           </View>
@@ -450,7 +528,7 @@ const Prescription = (props,{navigation}) => {
           <View style={{...styles.headSec,marginTop:verticalScale(30)}}>
           
                 <Icon name='walk' size={horizontalScale(24)} color={global.themecolor}/>
-                <Text style={styles.subheading}>Next Vist</Text>
+                <Text style={styles.subheading}>Next Visit</Text>
                 <Checkbox color={global.themecolor}onPress={()=>setVisitcheck(!vistcheck)}status={vistcheck?'checked':'unchecked'}size={horizontalScale(24)}/>
           </View>
           {vistcheck &&     <View
@@ -479,6 +557,34 @@ const Prescription = (props,{navigation}) => {
                 text={date.toLocaleDateString()}
                 width={horizontalScale(232)}
               />
+               <DatePicker
+              mode="date"
+              modal
+              minDate={new Date()}
+              open={open}
+              date={date}
+              onConfirm={date => {
+                setOpen(false);
+                setDate(date);
+              }}
+              onCancel={() => {
+                setOpen(false);
+              }}
+            />
+            <DatePicker
+              mode="time"
+              minuteInterval={30}
+              modal
+              open={opentm}
+              date={time}
+              onConfirm={date => {
+                setOpentm(false);
+                setTime(date);
+              }}
+              onCancel={() => {
+                setOpentm(false);
+              }}
+            />
             </View>}
 
             <View style={{...styles.headSec,marginTop:verticalScale(30)}}>
