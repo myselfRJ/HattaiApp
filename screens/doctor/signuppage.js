@@ -124,11 +124,12 @@ const Signuppageview = ({navigation}) => {
               showToast("Error","Phone or Password incorrect.");
               requestFailed();
             })
-        : requestFailed();
+        :showToast("Error","Enter valid Phone and Password");
     }
     
   };
   const showToast = (title,message) => {
+    setloading(false)
     Alert.alert(title, message, [
       {
         text: 'Cancel',

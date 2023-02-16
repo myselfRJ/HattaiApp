@@ -1,11 +1,11 @@
-import {useState} from 'react';
+import {useState,useEffect} from 'react';
 import {
   View,
   Image,
   Text,
   Pressable,
   StyleSheet,
-  TextInput,ScrollView,Keyboard,TouchableOpacity
+  TextInput,ScrollView,Keyboard,Alert,BackHandler,ActivityIndicator
 } from 'react-native';
 import {Chip, DataTable,Divider, Button, Dialog, RadioButton, Checkbox, Searchbar} from 'react-native-paper';
 import DatePicker from 'react-native-date-picker';
@@ -47,7 +47,7 @@ const Prescription = (props,{navigation}) => {
   const doselist=['500mg','600mg','700mg','800mg'];
   const foodtimelist=['After food','Before food','With food'];
   const durlist=['Morning','Afternoon','Evening'];
-  const frelist=['Daily','Alternatly','Weekly'];
+  const freqlist=['Daily','Alternatly','Weekly'];
 
  
   const [date, setDate] = useState(new Date());
@@ -94,8 +94,34 @@ const Prescription = (props,{navigation}) => {
   const [id, SetId] = useState(null);
   const [medbtn,setMedbtn]=useState('med'); //med,dos,tim,fre,dur,qua 
   const [inputmode,setInputmode]=useState('tap');
-
-
+  const [savingPrescription, setSavingPrescription] = useState(false);
+  useEffect(() => {
+    console.log(props.navigation.isFocused(),"id focus")
+    
+  
+const onBackPress = () => {
+    if (!props.navigation.isFocused()) {
+    return false;
+  }
+                    console.log('.......stop going to dashboard page');
+                    if (props.navigation.canGoBack() ) {
+                        Alert.alert('H-Attai', 'Do you want to discard Prescription?', [
+                            {text: 'Dashboard', onPress: () => props.navigation.navigate("Dashboard")},
+                            {
+                              text: 'Cancel',
+                              onPress: () => console.log('Cancel Pressed'),
+                              style: 'cancel',
+                            },
+                           
+                            
+                          ],{backgroundColor:"red"})
+                          return true;
+                    } else BackHandler.exitApp();
+                    return true;
+                  };
+const backHandler = BackHandler.addEventListener('hardwareBackPress', onBackPress);
+return () => backHandler.remove();
+}, [navigation]);
   const showModal = () => setVisible(true);
   const hideModal = () => {
     setInd(null);
@@ -178,19 +204,34 @@ const Prescription = (props,{navigation}) => {
       edd:edd,
       medication:medication,
     }
+    setSavingPrescription(true)
     PostApi('patient/prescription/save', data, true)
       .then(function (response) {
         console.log(response.data);
         if (response.status === 201) {
           console.log("inside success")
-          props.navigation.navigate("Dashboard")      
+          props.navigation.navigate("Dashboard",{"data":"data"})      
         } else {
           console.warn(response.data.message);
         }
       })
       .catch(function (error) {
         console.log(error);
+      }).finally(function(){
+        setSavingPrescription(false)
       });
+  }
+  const alertOk=()=>{
+    return Alert.alert('H-Attai', 'Do you want to save Prescription?', [
+      {text: 'Save', onPress: () => {shareBtnFinal()}},
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+     
+      
+    ],{backgroundColor:"red"})
   }
   return (
     <ScrollView onPress={Keyboard.dismiss}>
@@ -368,7 +409,7 @@ const Prescription = (props,{navigation}) => {
                     medilist.map((value,index)=>{
                       if(index<6){
                         return(
-                          <Pressable onPress={()=>setMedicine(value)}>
+                          <Pressable key={index} onPress={()=>setMedicine(value)}>
                             <Text style={{color:medicine==value ? global.themecolor:'#000000'}}>
                               {value}
                             </Text>
@@ -434,7 +475,7 @@ const Prescription = (props,{navigation}) => {
                  
 
                 
-              {frelist.map((value,index)=>{return(
+              {freqlist.map((value,index)=>{return(
                 <View  key={index}style={{flexDirection:'row',justifyContent:'center',alignItems:'center',marginHorizontal:horizontalScale(8)}}>
 
                 
@@ -598,7 +639,7 @@ const Prescription = (props,{navigation}) => {
 
               </View>
               <View style={{alignItems:'flex-end',marginTop:verticalScale(8),marginBottom:verticalScale(8)}}>
-              <Btn label="Submit"  action={()=>{shareBtnFinal()}}/>
+              {savingPrescription?<ActivityIndicator size="large" color={global.themecolor}/>: <Btn label="Submit"  action={()=>{alertOk()}}/>}
 
               </View>
 

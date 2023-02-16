@@ -46,6 +46,7 @@ const Dashboard=({navigation,route})=>{
         global.fhir_practitioner_id=response.data["fhir_practitioner_id"]})
             }, []);
     useEffect(() => {
+        console.log("@@@@@@@##########",clinicSelectid)
         {clinicSelectid&&GetApi(`appointment/get/${clinicSelectid}/${new Date().toISOString().split('T')[0]}`,true)//+global.CLINICID,true)
         .then(function(response){
             setAppointmentData(response.data["data"])
@@ -55,7 +56,7 @@ const Dashboard=({navigation,route})=>{
         }).catch(function (error) {
             console.log(error);
         });}
-            }, [clinicSelectid,route.params]);
+            }, [clinicSelectid,route.params,navigation]);
     useEffect(() => {
                 console.log(page,"page changed to")
                     }, [page]);
@@ -183,14 +184,14 @@ const renderSearchpatient=(item)=>{
           renderItem={renderAppointment}
           scrollEnabled={true}
           keyExtractor={(item, index) => index}
-         // style={{height:"60%",borderWidth:1}}
+         style={{height:"25%"}}
         />
 <FlatList
           data={appointmentDataDone}
           renderItem={renderAppointment}
           scrollEnabled={true}
           keyExtractor={(item, index) => index}
-         // style={{height:"60%",borderWidth:1}}
+         style={{height:"25%"}}
         />
 
         </View>

@@ -5,7 +5,7 @@ import {
   Text,
   View,
   Pressable,
-  ScrollView,TouchableOpacity,Image, BackHandler,Alert
+  ScrollView,TouchableOpacity,Image, BackHandler,Alert,ActivityIndicator
 } from 'react-native';
 import { RadioButton } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -43,6 +43,7 @@ const BookingApp = ({navigation}) => {
     const [daySelect, setdaySelect] = useState();
     const [timeSlot, settimeSlot] = useState([]);
     const [photo, setPhoto] = React.useState(null);
+    const [savingAppointment, setSavingAppointment] = React.useState(false);
     const handleChoosePhoto = () => {
       console.log("camera opened")
       launchCamera({noData: true}, response => {
@@ -92,21 +93,24 @@ settimeSlot(weekday)
 });
     }, []);
     const emptyAppointment=()=>{
-      setName()
-      setPhone()
+      console.log("emptying data........")
+      setName('')
+      setPhone('')
       setGender('male')
       setDob(new Date())
       setDate(new Date())
       setTime("Time")
       setPhoto(null)
-      setComplaint()
+      setComplaint('')
+      navigation.navigate("Dashboard",{"data":"data"})
     }
     const showToast = (title,message,okaction) => {
       Alert.alert(title, message, [
-        {text: 'OK', onPress: () => okaction},
+        {text: 'OK', onPress: () => {okaction()}},
       ])
     };
     const saveAppointmrnt = () => {
+      
       const patientdata = {
         gender: gender,
         birthDate: dob.toISOString().split('T')[0],
@@ -223,9 +227,10 @@ settimeSlot(weekday)
      const checkData =()=>{
       console.log("checking")
       if (name&&phone&&dob&&gender&&complaint&&time!=="Time"&&date){
+        setSavingAppointment(true)
         return true
       }
-      showToast("Warning","Fill all Details.",console.log("empty field"))
+      showToast("Warning","Fill all Details.")
       return false
      }
       {checkData()&&PostApi('appointment/save', data, true)
@@ -250,7 +255,7 @@ settimeSlot(weekday)
                   console.log(error);
                 });
             }
-            showToast("Success","Appointment booked Successfully.",emptyAppointment)
+            showToast("Success","Appointment booked Successfully. Go to Dashboard.",emptyAppointment)
             // navigation.navigate("Dashboard",{"data":"data"})
           } else {
             showToast("Warning",response.data.message,console.log("warning"))
@@ -260,7 +265,10 @@ settimeSlot(weekday)
         .catch(function (error) {
           showToast("Error","Appointment booking failed",console.log("error occured"))
           console.log(error);
-        });}
+        }).finally(function(){
+          setSavingAppointment(false)}
+        );}
+
     };
 const fetchBookedSlot=(dateString)=>{
   GetApi(`appointment/get/slot/${CLINICID}/${dateString}`, true)
@@ -296,8 +304,8 @@ setBookedTime(response.data["data"]["timeslot"])
                     }
                     />
 
-                    <Inp onChangeText={setName} placeholder="Name" textAlign="left" />
-                    <Inp onChangeText={setPhone} placeholder="Phone" textAlign="left" />
+                    <Inp value={name} onChangeText={setName} placeholder="Name" textAlign="left" />
+                    <Inp value={phone} onChangeText={setPhone} placeholder="Phone" textAlign="left" />
                     <Text
               style={{
                 ...style.text,
@@ -408,15 +416,15 @@ setBookedTime(response.data["data"]["timeslot"])
                     }}
                     /> */}
 
-                    <Inp onChangeText={setComplaint} placeholder="Chief Complaints" textAlign="left" />
-                    <Inp onChangeText={setFee} placeholder="Fee" textAlign="left" />
+                    <Inp value={complaint} onChangeText={setComplaint} placeholder="Chief Complaints" textAlign="left" />
+                    <Inp value={fee} onChangeText={setFee} placeholder="Fee" textAlign="left" />
                     <View
                     style={{
                         marginTop: verticalScale(16),
                         width: horizontalScale(480),
                         alignItems: 'flex-end',
                     }}>
-                    <Btn label="Submit" action={saveAppointmrnt} />
+                   {savingAppointment?<ActivityIndicator size="large" color={global.themecolor}/>: <Btn label="Submit" action={saveAppointmrnt} />}
                     </View>
                 </View>
                 </ScrollView>
