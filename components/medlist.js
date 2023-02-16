@@ -3,12 +3,12 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { horizontalScale,verticalScale,moderateScale} from '../screens/dim';
 
 
-const MedList=()=>{
+const MedList=(props)=>{
     return(
         <View style={styles.main
            }>
-        <Text style={styles.text}>Paracetamol 500mg AF 1-0-1 120</Text>
-        <Icon  style={styles.icon}name='delete' size={moderateScale(24)}/>
+        <Text style={styles.text}>{props.medicine} {props.dose} {props.foodtime}  {props.fre} {props.dur[0]?1:0}-{props.dur[1]?1:0}-{props.dur[2]?1:0}  {props.quantity} </Text>
+        <Icon  onPress={props.remove} style={styles.icon}name='delete' size={moderateScale(24)}/>
       </View>
     )
 }
