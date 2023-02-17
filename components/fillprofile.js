@@ -52,8 +52,8 @@ const Fillprofile = props => {
 
   const handleChoosePhoto = () => {
     launchImageLibrary({noData: true}, response => {
-      console.log(response);
-      if (response) {
+      console.log(response,"final");
+      if (!response.didCancel) {
         setPhoto(response);
       }
     });

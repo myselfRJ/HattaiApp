@@ -13,7 +13,7 @@ const Setup=(props)=>{
                 <Icon name='check' size={40} color='#fff'/>
             </View>
             <Text style={styles.successtext}> Account setup Successfully</Text>
-            <Btn label='Done' action={()=>props.navigation.navigate("Dashboard")}/>
+            <Btn label='Done' action={()=>props.navigation.navigate("Tabs")}/>
         </View>
     )
 }
