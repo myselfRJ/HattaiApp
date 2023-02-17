@@ -13,7 +13,7 @@ const ProfilePage = ({navigation}) => {
     GetApi('data/check',true)//+global.CLINICID,true)
     .then(function(response){
       if(response.status===201){
-        navigation.navigate("Dashboard")
+        navigation.navigate("Tabs")
       }else{
         navigation.navigate("EditProfile")
       }

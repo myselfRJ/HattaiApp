@@ -48,7 +48,7 @@ const Dashboard=({navigation,route})=>{
             }, []);
     useEffect(() => {
         console.log("@@@@@@@##########",clinicSelectid)
-        {clinicSelectid&&GetApi(`appointment/get/${clinicSelectid}/${new Date("2023-02-16").toISOString().split('T')[0]}`,true)//+global.CLINICID,true)
+        {clinicSelectid&&GetApi(`appointment/get/${clinicSelectid}/${new Date().toISOString().split('T')[0]}`,true)//+global.CLINICID,true)
         .then(function(response){
             setAppointmentData(response.data["data"])
             setAppointmentDataDone(response.data["data_done"])
@@ -175,7 +175,7 @@ const renderSearchpatient=(item)=>{
             paddingVertical:verticalScale(8),
             backgroundColor:'#E0F0FF',borderRadius:4,marginBottom:verticalScale(16)}}>
                 <Text style={{fontSize:moderateScale(16),fontWeight:"500",color:"black",textAlign:"left"}}>
-                    {new Date("2023-02-16").toDateString()}
+                    {new Date().toDateString()}
                 </Text>
                 <Icon name='calendar' size={48} color={global.themecolor}/>
             </View>

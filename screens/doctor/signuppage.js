@@ -116,7 +116,7 @@ const Signuppageview = ({navigation}) => {
               global.user_session=response.data["access"]
               storeUserSession(response.data,phone);
               showToast("Success","Successfull logged in.");
-              navigation.navigate('Tabs', {name: 'Jane'});}
+              navigation.navigate('Profile', {name: 'Jane'});}
               else{showToast("Warning",response.data.message);}
             })
             .catch(function (error) {
@@ -153,7 +153,7 @@ const Signuppageview = ({navigation}) => {
             .then(function (response) {
               console.log(response.data);
               if (response.data['status'] === 'success') {
-                showToast("Success","Successfull logged in.");
+                showToast("Success","OTP verification successful.");
                 setloading(false);
                 setPagenum(3);
                 hideModal()
