@@ -1,6 +1,6 @@
 import React,{useRef,useState,useEffect}from 'react';
 import {Alert,Image,View,Text, StyleSheet,  TouchableOpacity, Animated, Pressable, FlatList,TouchableWithoutFeedback,Keyboard,BackHandler} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SegmentedButtons } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AppointTck from '../../components/apntck';
 import DashHead from '../../components/dashhead';
@@ -30,6 +30,7 @@ const Dashboard=({navigation,route})=>{
     const [page,setPage]=useState("dash")//dash,search,patient
     const fadeAnim = useRef(new Animated.Value(horizontalScale(-424))).current;
     const prdata=useSelector(state=>state.practionerData.data);
+    const [segmentValue, setSegmentValue] = React.useState('pending');
 
     console.log('reducer state',prdata)
     const dispatch=useDispatch()
@@ -47,7 +48,7 @@ const Dashboard=({navigation,route})=>{
             }, []);
     useEffect(() => {
         console.log("@@@@@@@##########",clinicSelectid)
-        {clinicSelectid&&GetApi(`appointment/get/${clinicSelectid}/${new Date().toISOString().split('T')[0]}`,true)//+global.CLINICID,true)
+        {clinicSelectid&&GetApi(`appointment/get/${clinicSelectid}/${new Date("2023-02-16").toISOString().split('T')[0]}`,true)//+global.CLINICID,true)
         .then(function(response){
             setAppointmentData(response.data["data"])
             setAppointmentDataDone(response.data["data_done"])
@@ -174,25 +175,46 @@ const renderSearchpatient=(item)=>{
             paddingVertical:verticalScale(8),
             backgroundColor:'#E0F0FF',borderRadius:4,marginBottom:verticalScale(16)}}>
                 <Text style={{fontSize:moderateScale(16),fontWeight:"500",color:"black",textAlign:"left"}}>
-                    {new Date().toDateString()}
+                    {new Date("2023-02-16").toDateString()}
                 </Text>
                 <Icon name='calendar' size={48} color={global.themecolor}/>
             </View>
-
-            <FlatList
+            <SegmentedButtons
+        value={segmentValue}
+        onValueChange={setSegmentValue}
+        style={{marginBottom:10}}
+        // density="high"
+        buttons={[
+          {
+            value: 'pending',
+            label: 'Pending',
+            icon:   'calendar-clock',
+            showSelectedCheck: true,
+            style:{backgroundColor:segmentValue==="pending"?global.themecolor:"white"}
+          },
+          {
+            value: 'completed',
+            label: 'Completed',
+            icon:   'calendar-check',
+            showSelectedCheck: true,
+            style:{backgroundColor:segmentValue==="completed"?global.themecolor:"white"}
+          },
+        ]}
+      />
+{segmentValue==="pending"&&<FlatList
           data={appointmentData}
           renderItem={renderAppointment}
           scrollEnabled={true}
           keyExtractor={(item, index) => index}
-         style={{height:"25%"}}
-        />
-<FlatList
+         style={{height:"50%"}}
+        />}
+{segmentValue==="completed"&&<FlatList
           data={appointmentDataDone}
           renderItem={renderAppointment}
           scrollEnabled={true}
           keyExtractor={(item, index) => index}
-         style={{height:"25%"}}
-        />
+         style={{height:"50%"}}
+        />}
 
         </View>
         {/* {page==="search"&&<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
