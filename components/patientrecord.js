@@ -1,11 +1,11 @@
 import React,{useState} from 'react';
 import { View, Text, StyleSheet, Image, Pressable } from 'react-native';
-import { Divider } from 'react-native-paper';
+import { Divider,Modal,TextInput ,List,Button} from 'react-native-paper';
 import DatePicker from 'react-native-date-picker';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import '../screens/globlevariable';
 import { horizontalScale, moderateScale, verticalScale } from '../screens/dim';
-import { GetApi } from '../api/postapi';
+import { GetApi,PostApi } from '../api/postapi';
 
 
 const PatientRecord=(props)=>{
@@ -13,7 +13,20 @@ const PatientRecord=(props)=>{
     const [open, setOpen] = useState(false);
     const [medlist, setMedlist] = useState([]);
     const [state,setState]=useState('pres') //pres,blood,scan
+    const [visible, setVisible] = React.useState(false);
+    const [spouse_name, setSpouseName] = React.useState(props.patientdata.spouse_name);
+    const [bloodgroup, setBloodGroup] = React.useState(props.patientdata.bloodgroup);
+    const [expanded, setExpanded] = React.useState(false);
+
+    const handlePress = () => setExpanded(!expanded);
+  const showModal = () => setVisible(true);
+  const hideModal = () => {setBloodGroup(props.patientdata.bloodgroup);setSpouseName(props.patientdata.spouse_name);setVisible(false)};
+  const containerStyle = {backgroundColor: 'white', padding: 20,elevation:20};
     console.log(props,"props in med hist")
+React.useEffect(()=>{
+    fetchMedData(new Date())
+},[])
+
     const fetchMedData=(date2)=>{
         GetApi('patient/prescription/get/'+props.patientdata.id+'/'+date2.toISOString().split('T')[0],true).then(
             function(response){
@@ -24,6 +37,20 @@ setMedlist(response.data)
             })
     }
 
+    const updatePatientProfile=()=>{
+        const data={
+            "bloodgroup":bloodgroup,
+            "name":spouse_name
+        }
+        {bloodgroup!=="NA"&&PostApi('patient/update/'+props.patientdata.id,data,true).then(
+            function(response){
+console.log(response.status,response.data)
+            }).catch(function(error){
+                console.log(error,"patient update error")
+            })}
+            {bloodgroup==="NA"&&setSpouseName(props.patientdata.spouse_name)}
+            setVisible(false)
+    }
     return(
         <View style={styles.main}>
             <View style={styles.headSec}>
@@ -49,8 +76,8 @@ setMedlist(response.data)
                 <View style={styles.perdetailsec}>
                     <View>
                     <Text style={styles.pertext}>Spouse/Father</Text>
-                    <Text style={styles.perdetailtext}>{props.patientdata.name}</Text>
-
+                    <Text style={styles.perdetailtext}>{spouse_name}</Text>
+                                           
                     </View>
                     <View>
                     <Text style={styles.pertext}>DOB</Text>
@@ -59,7 +86,10 @@ setMedlist(response.data)
                     </View>
                     <View>
                     <Text style={styles.pertext}>Blood Group</Text>
-                    <Text style={styles.perdetailtext}>B+</Text>
+                    {<View style={{flexDirection:"row",alignItems:"center",justifyContent:"space-between"}}><Text style={styles.perdetailtext}>{bloodgroup}</Text>
+                    <Icon name='account-edit' size={moderateScale(17)} color={themecolor}
+                    onPress={showModal}
+                    /></View>}
 
                     </View>
                 
@@ -67,6 +97,28 @@ setMedlist(response.data)
                 </View>
                 
             </View>
+            <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
+                <TextInput
+      label="Spouse/Father's Name"
+      value={spouse_name}
+      onChangeText={text => setSpouseName(text)}
+    />
+    <List.Accordion
+        title="Select Blood Group"
+        left={props => <List.Icon {...props} icon="blood-bag" />}
+        expanded={expanded}
+        onPress={handlePress}>
+        <List.Item title="A+" style={{borderRadius:5,backgroundColor:bloodgroup=="A+"?"lightblue":"white"}} onPress={()=>setBloodGroup("A+")} />
+        <List.Item title="B+" style={{borderRadius:5,backgroundColor:bloodgroup=="B+"?"lightblue":"white"}} onPress={()=>setBloodGroup("B+")} />
+        <List.Item title="AB+" style={{borderRadius:5,backgroundColor:bloodgroup=="AB+"?"lightblue":"white"}} onPress={()=>setBloodGroup("AB+")} />
+        <List.Item title="O+" style={{borderRadius:5,backgroundColor:bloodgroup=="O+"?"lightblue":"white"}} onPress={()=>setBloodGroup("O+")} />
+        <List.Item title="A-" style={{borderRadius:5,backgroundColor:bloodgroup=="A-"?"lightblue":"white"}} onPress={()=>setBloodGroup("A-")} />
+        <List.Item title="B-" style={{borderRadius:5,backgroundColor:bloodgroup=="B-"?"lightblue":"white"}} onPress={()=>setBloodGroup("B-")} />
+        <List.Item title="AB-" style={{borderRadius:5,backgroundColor:bloodgroup=="AB-"?"lightblue":"white"}} onPress={()=>setBloodGroup("AB-")} />
+        <List.Item title="O-" style={{borderRadius:5,backgroundColor:bloodgroup=="O-"?"lightblue":"white"}} onPress={()=>setBloodGroup("O-")} />
+      </List.Accordion>
+      <Button mode="contained-tonal" compact={true} onPress={updatePatientProfile} >Update</Button>
+        </Modal>
             <View style={styles.rsection}>
                 <View style={styles.datesec}>
                     <Text style={styles.date}>{date.toLocaleDateString()} </Text>
@@ -417,7 +469,8 @@ const styles=StyleSheet.create({
         borderRadius:8,
         paddingHorizontal:horizontalScale(24),
         paddingVertical:verticalScale(24),
-        backgroundColor:'#ffffff'
+        backgroundColor:'#ffffff',
+        zIndex:-1
 
     },
     perdetails:{

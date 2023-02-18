@@ -60,6 +60,7 @@ setSearchData(response.data)
       placeholder="Search Patient by name or phone"
       onChangeText={onChangeSearch}
       value={searchQuery}
+      onSubmitEditing={fetchSearchData}
     />
             </View>
 

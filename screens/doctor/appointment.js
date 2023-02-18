@@ -106,7 +106,7 @@ settimeSlot(weekday)
     }
     const showToast = (title,message,okaction) => {
       Alert.alert(title, message, [
-        {text: 'OK', onPress: () => {okaction()}},
+        {text: 'OK', onPress: okaction},
       ])
     };
     const saveAppointmrnt = () => {
