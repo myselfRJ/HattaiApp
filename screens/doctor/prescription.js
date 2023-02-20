@@ -23,6 +23,7 @@ import {horizontalScale, moderateScale, verticalScale} from '../dim';
 import { PostApi } from '../../api/postapi';
 import MedList from '../../components/medlist';
 import { useSelector } from 'react-redux';
+import WritingPad from '../../components/writingpad';
 const Prescription = (props,{navigation}) => {
 
   const apnData=useSelector(state=>state.apnData.currentapn)
@@ -224,10 +225,13 @@ return () => backHandler.remove();
       
     ],{backgroundColor:"red"})
   }
+  const getImage=(e)=>{
+console.log("image data captured")
+  }
   return (
     <ScrollView onPress={Keyboard.dismiss}>
     <View style={{flex: 1, alignItems: 'center'}}>
-      <DashHead url={practitionerData?practitionerData["photo"][0]["url"]:"https://cdn-icons-png.flaticon.com/512/2785/2785482.png"} name={practitionerData?practitionerData["name"]:"Welcome"} />
+      <DashHead url={"https://cdn-icons-png.flaticon.com/512/2785/2785482.png"} name={practitionerData?practitionerData["name"]:"Welcome"} /> 
      
       <View style={styles.main}>
       <View style={styles.headSec}>
@@ -469,8 +473,8 @@ return () => backHandler.remove();
                 </View>}
 
             </View></>}
-            {inputmode==='pen'&&<View style={{height:verticalScale(218)}}>
-              
+            {inputmode==='pen'&&<View style={{height:verticalScale(218),width:horizontalScale(686)}}>
+              <WritingPad text={"Write down medicine name"} onOK={getImage} />
               </View>}
             <View  style={{paddingRight:horizontalScale(16),alignItems:'flex-end',width:horizontalScale(686)}}>
             <Icon onPress={Addmed}name='plus' size={moderateScale(32)} color={global.themecolor}/>

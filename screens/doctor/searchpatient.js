@@ -44,7 +44,7 @@ setSearchData(response.data)
             <>
             <View>
             <DashHead 
-            url={prData?prData["photo"][0]["url"]:"https://cdn-icons-png.flaticon.com/512/2785/2785482.png"} 
+            url={prData?"https://cdn-icons-png.flaticon.com/512/2785/2785482.png":"https://cdn-icons-png.flaticon.com/512/2785/2785482.png"} 
             name={prData?prData["name"]:"Welcome"} />
             </View>
             

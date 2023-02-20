@@ -19,7 +19,6 @@ import SelectModal from '../../components/selectmodal';
 import { PostApi,GetApi,PostForm } from '../../api/postapi';
 import {launchCamera,launchImageLibrary} from 'react-native-image-picker';
 const BookingApp = ({navigation}) => {
-
     const [name, setName] = useState();
     const [phone, setPhone] = useState();
     const [gender, setGender] = useState('male');
@@ -286,7 +285,7 @@ setBookedTime(response.data["data"]["timeslot"])
 }
     return (
         <SafeAreaView style={{flex: 1}}>
-            <DashHead url={practitionerData?practitionerData["photo"][0]["url"]:"https://cdn-icons-png.flaticon.com/512/2785/2785482.png"} name={practitionerData?practitionerData["name"]:"Welcome"}/>
+            <DashHead url={"https://cdn-icons-png.flaticon.com/512/2785/2785482.png"} name={practitionerData?practitionerData["name"]:"Welcome"}/>
             <ScrollView>
             <View style={{flexDirection: 'row'}}>
             <View
