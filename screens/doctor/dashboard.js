@@ -149,7 +149,7 @@ const renderSearchpatient=(item)=>{
     return (
         <View style={{flex:1,backgroundColor:'#F8F8F8'
         }}>
-            <DashHead url={practitionerData?practitionerData["photo"][0]["url"]:"https://cdn-icons-png.flaticon.com/512/2785/2785482.png"} name={practitionerData?practitionerData["name"]:"Welcome"} />
+            <DashHead url={"https://cdn-icons-png.flaticon.com/512/2785/2785482.png"} name={practitionerData?practitionerData["name"]:"Welcome"} />
             <View style={{paddingHorizontal:horizontalScale(72),width:'100%',marginTop:verticalScale(80),backgroundColor:'#F8F8F8'}}>
             <View style={{flexDirection:'row',alignItems:'center',width:'98%',justifyContent:'space-between'}}>
             <Datebtn name='medical-bag' text={practitionerData?practitionerData["clinic"][0]["clinic_name"]:"Clinic"} 
