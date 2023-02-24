@@ -423,7 +423,7 @@ setBookedTime(response.data["data"]["timeslot"])
                         width: horizontalScale(480),
                         alignItems: 'flex-end',
                     }}>
-                   {savingAppointment?<ActivityIndicator size="large" color={global.themecolor}/>: <Btn label="Submit" action={saveAppointmrnt} />}
+                   <Btn loading={savingAppointment} label="Submit" action={saveAppointmrnt} />
                     </View>
                 </View>
                 </ScrollView>

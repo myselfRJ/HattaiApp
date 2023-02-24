@@ -21,7 +21,7 @@ const Signuppageview = ({navigation}) => {
   const [password, setPassword] = React.useState('');
   const [passwordtoggle, setPasswordtoggle] = React.useState(false);
   const [password2, setPassword2] = React.useState('');
-  const [pagenum, setPagenum] = React.useState(0); //[0,1,2,3]=signup,otp,success,login
+  const [pagenum, setPagenum] = React.useState(3); //[0,1,2,3]=signup,otp,success,login
   const [visible, setVisible] = React.useState(false);
   const [loading, setloading] = React.useState(false);
   const showModal = () => setVisible(true);

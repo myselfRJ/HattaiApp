@@ -167,7 +167,7 @@ const renderSearchpatient=(item)=>{
                 Appointments   
             </Text>
             
-            <Icon name="reload" size={18} /></View>
+            <Icon name="reload" size={18} /></View> 
             <View style={{flexDirection:'row',
             width:horizontalScale(240),
             justifyContent:'space-between',
@@ -182,7 +182,7 @@ const renderSearchpatient=(item)=>{
             <SegmentedButtons
         value={segmentValue}
         onValueChange={setSegmentValue}
-        style={{marginBottom:10}}
+        style={{marginBottom:10,borderColor:null}}
         // density="high"
         buttons={[
           {
@@ -190,14 +190,14 @@ const renderSearchpatient=(item)=>{
             label: 'Pending',
             icon:   'calendar-clock',
             showSelectedCheck: true,
-            style:{backgroundColor:segmentValue==="pending"?global.themecolor:"white"}
+            style:{backgroundColor:segmentValue==="pending"?global.themecolor:"white",borderWidth:0}
           },
           {
             value: 'completed',
             label: 'Completed',
             icon:   'calendar-check',
             showSelectedCheck: true,
-            style:{backgroundColor:segmentValue==="completed"?global.themecolor:"white"}
+            style:{backgroundColor:segmentValue==="completed"?global.themecolor:"white",borderWidth:0}
           },
         ]}
       />
