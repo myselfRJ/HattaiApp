@@ -19,6 +19,7 @@ import {
   RadioButton,
   Checkbox,
   Searchbar,
+  Modal,
 } from 'react-native-paper';
 import {Canvas, Path, useCanvasRef} from '@shopify/react-native-skia';
 import {
@@ -111,6 +112,7 @@ const Prescription = (props, {navigation}) => {
   const [id, SetId] = useState(null);
   const [medbtn, setMedbtn] = useState('med'); //med,dos,tim,fre,dur,qua
   const [inputmode, setInputmode] = useState('tap');
+  const [visiblePad, setVisiblePad] = useState(false);
   const [savingPrescription, setSavingPrescription] = useState(false);
   const [path, setPath] = useState([]);
 
@@ -123,20 +125,18 @@ const Prescription = (props, {navigation}) => {
       setPath([...path, `L ${g.x} ${g.y}`]);
     })
     .onEnd(g => {
-      const image = imgref.current?.makeImageSnapshot();
+      console.log("end")
+    })
+    .minDistance(1);
+const getImagefromText=()=>{
+  const image = imgref.current?.makeImageSnapshot();
       if (image) {
-      
-        let bytes = image.encodeToBase64().replace("data:image/png;base64,", "");
-        
-        console.log(bytes)
-      PostApi('patient/image/text', {image:bytes}, false)
-      .then(function (response) { setPath(() => [])})
+      PostApi('patient/image/text2', {image:image.encodeToBase64()}, false)
+      .then(function (response) { setMedicine(response.data.data[0].description);setPath([])})
       .catch(function(error){console.log(error,"image convert error")})
         ;
       }
-    })
-    .minDistance(1);
-
+}
   useEffect(() => {
     // console.log(props.navigation.isFocused(),"id focus")
 
@@ -265,7 +265,7 @@ const Prescription = (props, {navigation}) => {
     // console.log("image data captured")
   };
   return (
-    <ScrollView onPress={Keyboard.dismiss}
+    <ScrollView scrollEnabled={!visiblePad} onPress={Keyboard.dismiss}
     >
     <View style={{flex: 1, alignItems: 'center'}}>
       <DashHead
@@ -422,14 +422,14 @@ const Prescription = (props, {navigation}) => {
           </View>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <Icon
-              onPress={() => setInputmode('tap')}
+              onPress={() => {setInputmode('tap');setVisiblePad(false)}}
               style={{marginRight: verticalScale(8)}}
               name="gesture-double-tap"
               size={horizontalScale(24)}
               color={inputmode === 'tap' ? global.themecolor : '#C5E0FA'}
             />
             <Icon
-              onPress={() => setInputmode('pen')}
+              onPress={() => {setInputmode('pen');setVisiblePad(true)}}
               style={{marginRight: verticalScale(8)}}
               name="draw-pen"
               size={horizontalScale(24)}
@@ -712,7 +712,7 @@ const Prescription = (props, {navigation}) => {
               style={{height: verticalScale(218), width: horizontalScale(686)}}>
               <GestureHandlerRootView style={{flex: 1}}>
                 <GestureDetector gesture={pan}>
-                  <View style={{flex: 1, backgroundColor: '#f8f8f8'}}>
+                  <View style={{height:200, backgroundColor: '#f8f8f8',borderWidth:2,borderColor:"red"}}>
                     <Canvas style={{flex: 1}} ref={imgref}>
                       <Path
                         path={path.join(' ')}
@@ -721,6 +721,7 @@ const Prescription = (props, {navigation}) => {
                         color="#000000"
                       />
                     </Canvas>
+                    <Button onPress={getImagefromText}>Convert</Button>
                   </View>
                 </GestureDetector>
               </GestureHandlerRootView>
