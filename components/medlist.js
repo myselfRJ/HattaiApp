@@ -8,7 +8,7 @@ const MedList=(props)=>{
         <View style={styles.main
            }>
         <Text style={styles.text}>{props.medicine} {props.dose} {props.foodtime}  {props.fre} {props.dur[0]?1:0}-{props.dur[1]?1:0}-{props.dur[2]?1:0}  {props.quantity} </Text>
-        <Icon  onPress={props.remove} style={styles.icon}name='delete' size={moderateScale(24)}/>
+        {props.delete&&<Icon  onPress={props.remove} style={styles.icon}name='delete' size={moderateScale(24)}/>}
       </View>
     )
 }

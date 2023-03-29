@@ -178,6 +178,7 @@ const getImagefromText=()=>{
     setVisible(false);
   };
   const handleModal = (id, ind) => {
+    console.log(ind,id)
     setInd(ind);
     SetId(id);
     showModal();
@@ -742,7 +743,19 @@ const getImagefromText=()=>{
             />
           </View>
 
-          <Divider />
+          <Divider style={{borderWidth:0.2,margin:5}} />
+          <View style={{backgroundColor:"#B5DBFF",borderRadius:10,width:"60%",opacity:0.5}}><MedList
+                  key={1}
+                  medicine={med.medicine}
+                  dose={med.dose}
+                  foodtime={med.time}
+                  dur={med.duration}
+                  fre={med.frequency}
+                  quantity={med.quantity}
+                  delete={false}
+                  remove={() => console.log("removed")}
+                /></View>
+                <Divider style={{borderWidth:0.2,margin:5}}/>
           <View>
             {medication.map((value, index) => {
               return (
@@ -754,6 +767,7 @@ const getImagefromText=()=>{
                   dur={value.duration}
                   fre={value.frequency}
                   quantity={value.quantity}
+                  delete={true}
                   remove={() => Removemed(index)}
                 />
               );

@@ -109,7 +109,7 @@ const Signuppageview = ({navigation}) => {
               },false
             )
             .then(function (response) {
-              console.log(response.data);
+              console.log(response.data,"data");
               if (response.status===200){
                 console.log("loged in")
               setloading(false);

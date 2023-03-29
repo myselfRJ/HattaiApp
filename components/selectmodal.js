@@ -10,8 +10,9 @@ import ClinicTiming from './clinictimeselection';
 import ClinicList from './cliniclist';
 import TimeSlotList from './timeSlotlist';
 import SpecialityName from './specialityselection';
+import EmptyView from './empty';
 const SelectModal=(props)=>{
-
+console.log(props)
     const containerStyle = {backgroundColor: 'white',
     position:'absolute',
     bottom:0,
@@ -55,10 +56,10 @@ padding:20};
             hideModal={props.hideModal}/>}
            
            {props.mode=='Doctor'||props.mode=='Labs'||props.mode=='Scan'||props.mode=='Hospital'?
-           <Refers
-           index={props.index}
-        hideModal={props.hideModal}/>:null
-           
+        //    <Refers
+        //    index={props.index}
+        // hideModal={props.hideModal}/>:null
+           <EmptyView mode={props.mode}/>:null
            }
             
             
